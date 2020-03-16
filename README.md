@@ -1,2 +1,3 @@
-# master_thesis
-Multiple imputation for the longitudinal networks: a sensitivity study
+# Master Thesis
+
+Topic: Multiple imputation for the longitudinal networks: a sensitivity study
