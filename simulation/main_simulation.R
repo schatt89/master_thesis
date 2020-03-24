@@ -107,8 +107,8 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(seed = 500)
 # Finally, estimate the model; the whole command is put in parentheses
 # to have the results printed directly to the screen.
 
-(ans <- siena07( myCoEvAlgorithm, data = myCoEvolutionData,
-                 effects = myCoEvolutionEff ))
+(ans <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
+                             eff = myCoEvolutionEff, threshold = 0.20))
 
 ################################################################################
 #######                                                                   ######
@@ -158,7 +158,7 @@ myCoEvolutionEff
 # The defaults are adequate. You only have to specify the filename
 # that will receive the results in text format.
 
-myCoEvAlgorithm <- sienaAlgorithmCreate(seed = 500)
+myCoEvAlgorithm <- sienaAlgorithmCreate(seed = 300)
 
 (ans <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
-                 eff = myCoEvolutionEff, threshold = 0.25))
+                 eff = myCoEvolutionEff, threshold = 0.20))
