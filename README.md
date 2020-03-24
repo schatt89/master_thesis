@@ -17,9 +17,14 @@ So it is ((100 nets X 3 missings options X 4 hypothesis) + 2 complete models) X 
 
 **OR** if we use only 2 missings options, it is **1604 models**.
 
+Possible datasets:
+'Teenage Friends and Lifestyle Study' data - select 30 actors and **another** 60 actors from 129 non-missing actors.
+
 ### Hypothesis
 
 4 models, combining selection no/yes and influence no/yes, where the "yes" is with a parameter value so that power is high but not extreme, e.g., about 80% power.
+
+
 
 
 
