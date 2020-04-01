@@ -41,8 +41,8 @@ SimulateNetworksBehavior <- function(n, M, c, rate, dens, rec, tt, c3,
   # With this data structure, we now can create the data.
   Va <- coCovar(V0)
   Vb <- coCovar(V1)
-  X   <- sienaDependent(XX, allowOnly = FALSE)
-  Z   <- sienaDependent(ZZ, type="behavior", allowOnly = FALSE)
+  X  <- sienaDependent(XX, allowOnly = FALSE)
+  Z  <- sienaDependent(ZZ, type="behavior", allowOnly = FALSE)
   InitData <- sienaDataCreate(X, Z, Va, Vb)
   InitEff0 <- getEffects(InitData)
   # sink to avoid printing to the screen

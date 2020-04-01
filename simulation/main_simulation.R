@@ -30,7 +30,7 @@ friendship.3 <- friendship.3[not_missing, not_missing]
 alcohol <- alcohol[not_missing, ]
 tobacco <- tobacco[not_missing, ]
 age <- age[not_missing]
-sex.F <- sex.F[not_missing]
+sex.F <- sex.F[not_missing] - 1 # to 0s and 1s 
 
 ############################# Smaller dataset ##################################
 
@@ -64,8 +64,8 @@ friendship <- sienaDependent(array(c(fr.30.1, fr.30.2, fr.30.3),
                                      dim = c(30, 30, 3)))
 
 drinkingbeh <- sienaDependent(alco.30, type = "behavior" )
-smoke1 <- coCovar(toba.30[, 1])
 gender <- coCovar(sex.F.30)
+smoke1 <- coCovar(toba.30[, 1])
 
 myCoEvolutionData <- sienaDataCreate(friendship, gender, smoke1, drinkingbeh)
 myCoEvolutionEff <- getEffects(myCoEvolutionData)
@@ -90,14 +90,13 @@ myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff,
                                     name = "drinkingbeh",
-                                    avAlt,indeg, outdeg,
+                                    avAlt, indeg, outdeg,
                                     interaction1 = "friendship" )
 
 # Check what effects you have decided to include:
 
 myCoEvolutionEff
 
-#
 # Now we have to define the algorithm settings.
 # The defaults are adequate. You only have to specify the filename
 # that will receive the results in text format.
@@ -146,14 +145,14 @@ myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff,
                                    name = "drinkingbeh",
-                                   avAlt,indeg, outdeg,
+                                   avAlt, indeg, outdeg,
                                    interaction1 = "friendship" )
 
 # Check what effects you have decided to include:
 
 myCoEvolutionEff
 
-#
+
 # Now we have to define the algorithm settings.
 # The defaults are adequate. You only have to specify the filename
 # that will receive the results in text format.
@@ -162,3 +161,6 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(seed = 300)
 
 (ans <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
                  eff = myCoEvolutionEff, threshold = 0.20))
+
+V0 <- rep(0, 30)
+V0[2*(1:(30 %/% 2))] <- 1 # equal binary
