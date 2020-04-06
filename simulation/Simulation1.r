@@ -70,28 +70,28 @@ smoke1 <- coCovar(toba.30[, 1])
 myCoEvolutionData <- sienaDataCreate(friendship, gender, smoke1, drinkingbeh)
 myCoEvolutionEff <- getEffects(myCoEvolutionData)
 
-print01Report(myCoEvolutionData, modelname = 'complete_data_model')
+print01Report(myCoEvolutionData, modelname = 'complete_data_model_30')
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff, transTrip, cycle3)
 
 
-myCoEvolutionEff <- includeEffects(myCoEvolutionEff, simX,
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
                                     interaction1 = "smoke1" )
-myCoEvolutionEff <- includeEffects(myCoEvolutionEff, sameX,
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
                                    interaction1 = "gender")
 
 # If we want to parse out whether there is a selection or influence (or both)
 # effect for drinking behaviour,
 # we need to also include sender, receiver and homophily effects
 # of drinking for friendship formation:
-
-myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
-                                   interaction1 = "drinkingbeh" )
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff,
+                                    name = "drinkingbeh", avAlt,
+                                    interaction1= "friendship")
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff,
                                     name = "drinkingbeh",
-                                    avAlt, indeg, outdeg,
-                                    interaction1 = "friendship" )
+                                    quad, avAlt,
+                                    interaction1=c("","friendship"))
 
 # Check what effects you have decided to include:
 
@@ -101,12 +101,12 @@ myCoEvolutionEff
 # The defaults are adequate. You only have to specify the filename
 # that will receive the results in text format.
 
-myCoEvAlgorithm <- sienaAlgorithmCreate(seed = 500)
+myCoEvAlgorithm <- sienaAlgorithmCreate(projname="model_30", seed = 500)
 
 # Finally, estimate the model; the whole command is put in parentheses
 # to have the results printed directly to the screen.
 
-(ans <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
+(ans30 <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
                              eff = myCoEvolutionEff, threshold = 0.20))
 
 ################################################################################
@@ -125,14 +125,14 @@ gender <- coCovar(sex.F.60)
 myCoEvolutionData <- sienaDataCreate(friendship, gender, smoke1, drinkingbeh)
 myCoEvolutionEff <- getEffects(myCoEvolutionData)
 
-print01Report(myCoEvolutionData, modelname = 'complete_data_model')
+print01Report(myCoEvolutionData, modelname = 'complete_data_model_60')
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff, transTrip, cycle3)
 
 
-myCoEvolutionEff <- includeEffects(myCoEvolutionEff, simX,
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
                                    interaction1 = "smoke1" )
-myCoEvolutionEff <- includeEffects(myCoEvolutionEff, sameX,
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
                                    interaction1 = "gender")
 
 # If we want to parse out whether there is a selection or influence (or both)
@@ -140,13 +140,14 @@ myCoEvolutionEff <- includeEffects(myCoEvolutionEff, sameX,
 # we need to also include sender, receiver and homophily effects
 # of drinking for friendship formation:
 
-myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
-                                   interaction1 = "drinkingbeh" )
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff,
+                                   name = "drinkingbeh", avAlt,
+                                   interaction1="friendship")
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff,
                                    name = "drinkingbeh",
-                                   avAlt, indeg, outdeg,
-                                   interaction1 = "friendship" )
+                                   quad, avAlt,
+                                   interaction1=c("","friendship"))
 
 # Check what effects you have decided to include:
 
@@ -157,10 +158,7 @@ myCoEvolutionEff
 # The defaults are adequate. You only have to specify the filename
 # that will receive the results in text format.
 
-myCoEvAlgorithm <- sienaAlgorithmCreate(seed = 300)
+myCoEvAlgorithm <- sienaAlgorithmCreate(projname="model_60", seed = 300)
 
-(ans <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
+(ans60 <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
                  eff = myCoEvolutionEff, threshold = 0.20))
-
-V0 <- rep(0, 30)
-V0[2*(1:(30 %/% 2))] <- 1 # equal binary

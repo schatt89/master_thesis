@@ -1,12 +1,12 @@
 							************************
-									 complete_data_model.txt
+									 complete_data_model_60.txt
 							************************
 
-Filename is complete_data_model.txt.
+Filename is complete_data_model_60.txt.
 
-This file contains primary output for SIENA project <<complete_data_model>>.
+This file contains primary output for SIENA project <<complete_data_model_60>>.
 
-Date and time: 24/03/2020 14:57:46 
+Date and time: 06/04/2020 14:53:15 
 
 RSiena version 1.2-23 (12 01 2020)
 
@@ -125,7 +125,7 @@ smoke1          0 	( 0.0 %)
 
 Information about covariates:
               minimum  maximum	  mean  centered 
-gender          1.0     2.0      1.450    Y 
+gender          0.0     1.0      0.450    Y 
 smoke1          1.0     3.0      1.133    Y 
 The mean values are subtracted from the covariates.
 
@@ -218,4 +218,4 @@ Changes
 
 For this variable, the standard initial behavioral tendency parameter is   0.4616
 
-Initialisation of project <<complete_data_model>> executed succesfully.
+Initialisation of project <<complete_data_model_60>> executed succesfully.

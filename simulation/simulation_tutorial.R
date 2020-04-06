@@ -367,17 +367,21 @@ SimulateNetworksBehavior <- function(n, M, c, rate, dens, rec, tt, c3,
 # Trial values:
 n <- 20
 M <- 4
+
 rate <- 2
 dens <- -1.9
 rec <- 2
 tt <- 0.3
 c3 <- -0.3
+
 Vaego <- 0
 Vaalt <- 0
 Vasim <- 0.6
+
 Vbego <- 0.5
 Vbalt <- -0.5
 Vbsim <- 0.5
+
 c <- 4
 rate.b <- 1
 lin.b <- 0.1

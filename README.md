@@ -34,7 +34,9 @@ Possible datasets:
 
 4 models, combining selection no/yes and influence no/yes, where the "yes" is with a parameter value so that power is high but not extreme, e.g., about 80% power.
 
+All selection effects ('altX', 'altSqX', 'egoX', 'egoSqX', 'egoXaltX', 'simX', 'diffX', 'diffSqX', 'higher', 'sameX', 'egoDiffX', 'egoPlusAltX')
 
+All influence effects ('linear', 'quad', 'avAlt', 'avSim', 'totAlt', 'totSim')
 
 
 
