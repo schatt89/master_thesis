@@ -16,12 +16,12 @@ Data: Glasgow dataset (129 non-missing actors)
 * Behavior: alcohol
 
 Model specifications:
-* The effects are taken from the SimulateNetworkaBehavior functions
+* The list of effects is taken from the SimulateNetworkaBehavior functions
 * Structural: transTrip, cycle3
 * Covars: egoX, altX, simX
 * Behavior: [avAlt, quad] for influence
 
-Both models converge.
+Both models (30 and 60 actors) converge.
 
 ## Simulation2.R
 
@@ -30,7 +30,7 @@ Data: Glasgow dataset (129 non-missing actors)
 * Bigger data: last 60 actors
 * 3 waves
 * Covar: gender
-* Behavior: alcohol, tobacco
+* Behavior: alcohol
 
 Model specifications:
 
@@ -39,6 +39,23 @@ Model specifications:
 * Behavior: [altX, egoX, egoXaltX] for selection, [quad, avAlt, avSim] for influence
 
 UPD: the model60 with tobacco doesn't converge
+
 Both models converge if tobacco removed.
 
+## Simulation3.R
+
+Data: Glasgow dataset (129 non-missing actors)
+* Smaller data: first 30 actors
+* Bigger data: last 60 actors
+* 3 waves
+* Covar: gender, tobacco[,1]
+* Behavior: alcohol
+
+Model specifications:
+
+* Structural: transTrip, cycle3
+* Covars: sameX (gender), simX (tobacco)
+* Behavior: [altX, egoX, egoXaltX] for selection, [quad, avAlt, avSim] for influence
+
+Both models converge.
 

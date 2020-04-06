@@ -6,7 +6,7 @@ Filename is complete_data_model_60.txt.
 
 This file contains primary output for SIENA project <<complete_data_model_60>>.
 
-Date and time: 06/04/2020 16:09:11 
+Date and time: 06/04/2020 16:26:12 
 
 RSiena version 1.2-23 (12 01 2020)
 
@@ -21,7 +21,7 @@ Data input.
 0 dependent bipartite variables,
 1 dependent discrete behavior variables,
 0 dependent continuous behavior variables,
-1 constant actor covariates,
+2 constant actor covariates,
 0 exogenous changing actor covariates,
 0 constant dyadic covariates,
 0 exogenous changing dyadic covariates,
@@ -113,18 +113,21 @@ drinkingbeh        2.554     2.796     3.268     2.872
 Reading constant actor covariates.
 ----------------------------------
 
-1 variable, named:
+2 variables, named:
 gender          
+smoke1          
 
-A total of 1 non-changing individual covariate.
+A total of 2 non-changing individual covariates.
 
 Number of missing cases:
 gender          0 	( 0.0 %)
+smoke1          0 	( 0.0 %)
 
 Information about covariates:
               minimum  maximum	  mean  centered 
 gender          0.0     1.0      0.450    Y 
-The mean value is subtracted from the centered covariate.
+smoke1          1.0     3.0      1.133    Y 
+The mean values are subtracted from the covariates.
 
 
 
@@ -136,6 +139,7 @@ For the similarity variable calculated from each actor covariate,
 the mean is subtracted.
 These means are:
 Similarity gender                   :       0.4966 
+Similarity smoke1                   :       0.8757 
 Similarity drinkingbeh              :       0.7411 
 
 
