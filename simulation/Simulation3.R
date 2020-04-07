@@ -195,13 +195,24 @@ qu.b <- ans30$theta[15]
 avalt.b <- ans30$theta[17]
 avsim.b <- ans30$theta[16]
 
-SN_30 <- SimulateNetworksBehavior(net.w1 = fr.30.1, covara = age.30,
-                                  covarb = toba.30[,1], b.w1 = alco.30[,1],
-                                  n, M, c,
-                                  rate, dens, rec, tt, c3,
-                                  Vasame, Vbsim, altX.b, egoX.b, egoXaltX.b,
-                                  rate.b, lin.b, qu.b, avalt.b, avsim.b)
+fr.30.2.sim = array(rep(0, n*n*100), c(n, n, 100))
+fr.30.3.sim = array(rep(0, n*n*100), c(n, n, 100))
 
+alco.30.sim = array(rep(0, n*2*100), c(n, 2, 100))
+
+for (i in 1:100) { 
+  SN <- SimulateNetworksBehavior(net.w1 = fr.30.1, covara = age.30,
+                                    covarb = toba.30[,1], b.w1 = alco.30[,1],
+                                    n, M, c,
+                                    rate, dens, rec, tt, c3,
+                                    Vasame, Vbsim, altX.b, egoX.b, egoXaltX.b,
+                                    rate.b, lin.b, qu.b, avalt.b, avsim.b)
+  
+  fr.30.2.sim[,,i] <- SN$networks[,,1]
+  fr.30.3.sim[,,i] <- SN$networks[,,2]
+  
+  alco.30.sim[,,i] <- SN$behaviors
+  }
 
 ################################################################################
 #######                                                                   ######
@@ -231,9 +242,22 @@ qu.b <- ans60$theta[15]
 avalt.b <- ans60$theta[17]
 avsim.b <- ans60$theta[16]
 
-SN_60 <- SimulateNetworksBehavior(net.w1 = fr.60.1, covara = age.60,
-                                  covarb = toba.60[,1], b.w1 = alco.60[,1],
-                                  n, M, c,
-                                  rate, dens, rec, tt, c3,
-                                  Vasame, Vbsim, altX.b, egoX.b, egoXaltX.b,
-                                  rate.b, lin.b, qu.b, avalt.b, avsim.b)
+
+fr.60.2.sim = array(rep(0, n*n*100), c(n, n, 100))
+fr.60.3.sim = array(rep(0, n*n*100), c(n, n, 100))
+
+alco.60.sim = array(rep(0, n*2*100), c(n, 2, 100))
+
+for (i in 1:100) {
+  SN <- SimulateNetworksBehavior(net.w1 = fr.60.1, covara = age.60,
+                                    covarb = toba.60[,1], b.w1 = alco.60[,1],
+                                    n, M, c,
+                                    rate, dens, rec, tt, c3,
+                                    Vasame, Vbsim, altX.b, egoX.b, egoXaltX.b,
+                                    rate.b, lin.b, qu.b, avalt.b, avsim.b)
+  fr.60.2.sim[,,i] <- SN$networks[,,1]
+  fr.60.3.sim[,,i] <- SN$networks[,,2]
+  
+  alco.60.sim[,,i] <- SN$behaviors
+  
+}
