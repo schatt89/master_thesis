@@ -32083,3 +32083,1019 @@ Estimated means and standard deviations, standard errors of the mean
 Standard errors of the mean are less than s.d./sqrt(n) 
 because of regression on scores (Dolby option). 
 Total computation time 0.25 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 07/04/2020 17:36:04
+New results follow.
+-----------------------------------
+
+RSiena version 1.2-23 (12 Jan 20)
+
+
+@1
+Simulations.
+============
+
+Random initialization of random number stream.
+Current random number seed is 831791.
+Effects object used: InitEff 
+Model Type:
+ 
+Behavioral Model Type:
+ 
+Estimation method: unconditional moment estimation.
+
+Time duration for simulations is 1.0.
+Derivatives are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Parameter values are 
+  1. rate:  basic rate parameter X                          2.5387
+  2. eval:  outdegree (density)                            -3.6474
+  3. eval:  reciprocity                                     2.5071
+  4. eval:  transitive triplets                             0.6667
+  5. eval:  3-cycles                                       -0.3494
+  6. eval:  same Va                                         1.0832
+  7. eval:  Vb similarity                                   0.2901
+  8. eval:  Z alter                                         0.1662
+  9. eval:  Z ego                                          -0.0777
+ 10. eval:  Z ego x Z alter                                 0.2152
+ 11. rate:  rate Z period 1                                 1.7673
+ 12. eval:  Z linear shape                                  0.3408
+ 13. eval:  Z quadratic shape                               0.0526
+ 14. eval:  Z average similarity                            4.3391
+ 15. eval:  Z average alter                                -0.4985
+
+
+Observed values of target statistics are
+  1. Amount of network change                                           136.0000
+  2. Number of ties                                                      83.0000
+  3. Number of reciprocated ties                                          6.0000
+  4. Number of transitive triplets                                       17.0000
+  5. 3-cycles                                                             6.0000
+  6. Same values on Va                                                   10.0000
+  7. Similarity on Vb                                                     3.2851
+  8. Sum indegrees x Z                                                   -6.6625
+  9. Sum outdegrees x Z                                                 -13.3000
+ 10. Sum Z ego x Z alter                                                 -2.4011
+ 11. Amount of behavioral change                                         33.0000
+ 12. Z centered sum                                                       0.9000
+ 13. Z sum of cent. squares                                              51.8671
+ 14. Z average similarity                                                -1.5147
+ 15. Z average alters                                                    11.7471
+
+ 15 parameters, 15 statistics
+
+Number of subphases is specified as 0.
+Therefore the estimation phase is skipped
+ and the program passes on immediately to phase 3
+ for checking the current parameter values and calculating standard errors.
+Estimation of derivatives by the LR method (type 1).
+
+
+
+
+@2
+Simulation Results.
+-------------------
+
+Regular end of simulation algorithm.
+Total of 20 iteration steps.
+
+
+@3
+Parameter values
+                
+Network Dynamics
+ 1. rate:  basic rate parameter X                                  2.5387  
+ 2. eval:  outdegree (density)                                    -3.6474  
+ 3. eval:  reciprocity                                             2.5071  
+ 4. eval:  transitive triplets                                     0.6667  
+ 5. eval:  3-cycles                                               -0.3494  
+ 6. eval:  same Va                                                 1.0832  
+ 7. eval:  Vb similarity                                           0.2901  
+ 8. eval:  Z alter                                                 0.1662  
+ 9. eval:  Z ego                                                  -0.0777  
+10. eval:  Z ego x Z alter                                         0.2152  
+Behavior Dynamics
+
+11. rate:  rate Z period 1                                         1.7673  
+12. eval:  Z linear shape                                          0.3408  
+13. eval:  Z quadratic shape                                       0.0526  
+14. eval:  Z average similarity                                    4.3391  
+15. eval:  Z average alter                                        -0.4985  
+
+
+@3
+Simulated statistics
+                    
+Estimated means and standard deviations, standard errors of the mean 
+  1. Amount of network change                                  42.430    5.818   0.8844
+  2. Number of ties                                            37.959    7.699   1.1338
+  3. Number of reciprocated ties                               20.816    5.921   0.9133
+  4. Number of transitive triplets                             25.961   16.819   2.2799
+  5. 3-cycles                                                   8.383    5.413   0.7047
+  6. Same values on Va                                          7.602    2.162   0.2816
+  7. Similarity on Vb                                           6.635    2.685   0.2980
+  8. Sum indegrees x Z                                        -10.839    5.607   0.7999
+  9. Sum outdegrees x Z                                       -13.832    5.437   1.0011
+ 10. Sum Z ego x Z alter                                       16.906    5.685   1.1205
+ 11. Amount of behavioral change                               15.939    2.800   0.5587
+ 12. Z centered sum                                             6.021    3.845   0.5884
+ 13. Z sum of cent. squares                                    29.491    8.091   0.9758
+ 14. Z average similarity                                       0.422    1.180   0.2356
+ 15. Z average alters                                           8.239    7.169   1.2981
+
+Standard errors of the mean are less than s.d./sqrt(n) 
+because of regression on scores (Dolby option). 
+Total computation time 0.29 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 07/04/2020 17:36:05
+New results follow.
+-----------------------------------
+
+RSiena version 1.2-23 (12 Jan 20)
+
+
+@1
+Simulations.
+============
+
+Random initialization of random number stream.
+Current random number seed is 990143.
+Effects object used: InitEff 
+Model Type:
+ 
+Behavioral Model Type:
+ 
+Estimation method: unconditional moment estimation.
+
+Time duration for simulations is 1.0.
+Derivatives are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Parameter values are 
+  1. rate:  basic rate parameter X                          2.5387
+  2. eval:  outdegree (density)                            -3.6474
+  3. eval:  reciprocity                                     2.5071
+  4. eval:  transitive triplets                             0.6667
+  5. eval:  3-cycles                                       -0.3494
+  6. eval:  same Va                                         1.0832
+  7. eval:  Vb similarity                                   0.2901
+  8. eval:  Z alter                                         0.1662
+  9. eval:  Z ego                                          -0.0777
+ 10. eval:  Z ego x Z alter                                 0.2152
+ 11. rate:  rate Z period 1                                 1.7673
+ 12. eval:  Z linear shape                                  0.3408
+ 13. eval:  Z quadratic shape                               0.0526
+ 14. eval:  Z average similarity                            4.3391
+ 15. eval:  Z average alter                                -0.4985
+
+
+Observed values of target statistics are
+  1. Amount of network change                                             1.0000
+  2. Number of ties                                                      59.0000
+  3. Number of reciprocated ties                                         34.0000
+  4. Number of transitive triplets                                       49.0000
+  5. 3-cycles                                                            14.0000
+  6. Same values on Va                                                    6.0000
+  7. Similarity on Vb                                                    10.8954
+  8. Sum indegrees x Z                                                   -4.7500
+  9. Sum outdegrees x Z                                                 -16.5000
+ 10. Sum Z ego x Z alter                                                 18.4375
+ 11. Amount of behavioral change                                          2.0000
+ 12. Z centered sum                                                       1.0000
+ 13. Z sum of cent. squares                                              24.0000
+ 14. Z average similarity                                                 2.5795
+ 15. Z average alters                                                     9.9615
+
+ 15 parameters, 15 statistics
+
+Number of subphases is specified as 0.
+Therefore the estimation phase is skipped
+ and the program passes on immediately to phase 3
+ for checking the current parameter values and calculating standard errors.
+Estimation of derivatives by the LR method (type 1).
+
+
+
+
+@2
+Simulation Results.
+-------------------
+
+Regular end of simulation algorithm.
+Total of 20 iteration steps.
+
+
+@3
+Parameter values
+                
+Network Dynamics
+ 1. rate:  basic rate parameter X                                  2.5387  
+ 2. eval:  outdegree (density)                                    -3.6474  
+ 3. eval:  reciprocity                                             2.5071  
+ 4. eval:  transitive triplets                                     0.6667  
+ 5. eval:  3-cycles                                               -0.3494  
+ 6. eval:  same Va                                                 1.0832  
+ 7. eval:  Vb similarity                                           0.2901  
+ 8. eval:  Z alter                                                 0.1662  
+ 9. eval:  Z ego                                                  -0.0777  
+10. eval:  Z ego x Z alter                                         0.2152  
+Behavior Dynamics
+
+11. rate:  rate Z period 1                                         1.7673  
+12. eval:  Z linear shape                                          0.3408  
+13. eval:  Z quadratic shape                                       0.0526  
+14. eval:  Z average similarity                                    4.3391  
+15. eval:  Z average alter                                        -0.4985  
+
+
+@3
+Simulated statistics
+                    
+Estimated means and standard deviations, standard errors of the mean 
+  1. Amount of network change                                  43.239    4.254   0.7122
+  2. Number of ties                                            35.452    6.755   0.9299
+  3. Number of reciprocated ties                               19.128    6.172   1.1033
+  4. Number of transitive triplets                             23.020   14.069   1.9036
+  5. 3-cycles                                                   6.955    4.734   0.5690
+  6. Same values on Va                                          8.004    2.130   0.3342
+  7. Similarity on Vb                                           6.018    2.136   0.3660
+  8. Sum indegrees x Z                                         -7.476    4.241   0.9195
+  9. Sum outdegrees x Z                                       -10.276    4.355   0.9249
+ 10. Sum Z ego x Z alter                                       13.032    6.052   1.3089
+ 11. Amount of behavioral change                               14.354    3.760   0.7692
+ 12. Z centered sum                                             5.713    4.161   0.5739
+ 13. Z sum of cent. squares                                    32.628    7.168   1.3084
+ 14. Z average similarity                                       0.708    0.948   0.2113
+ 15. Z average alters                                           8.063    5.650   1.2626
+
+Standard errors of the mean are less than s.d./sqrt(n) 
+because of regression on scores (Dolby option). 
+Total computation time 0.36 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 07/04/2020 17:40:24
+New results follow.
+-----------------------------------
+
+RSiena version 1.2-23 (12 Jan 20)
+
+
+@1
+Simulations.
+============
+
+Random initialization of random number stream.
+Current random number seed is 205969.
+Effects object used: InitEff 
+Model Type:
+ 
+Behavioral Model Type:
+ 
+Estimation method: unconditional moment estimation.
+
+Time duration for simulations is 1.0.
+Derivatives are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Parameter values are 
+  1. rate:  basic rate parameter X                          2.5387
+  2. eval:  outdegree (density)                            -3.6474
+  3. eval:  reciprocity                                     2.5071
+  4. eval:  transitive triplets                             0.6667
+  5. eval:  3-cycles                                       -0.3494
+  6. eval:  same Va                                         1.0832
+  7. eval:  Vb similarity                                   0.2901
+  8. eval:  Z alter                                         0.1662
+  9. eval:  Z ego                                          -0.0777
+ 10. eval:  Z ego x Z alter                                 0.2152
+ 11. rate:  rate Z period 1                                 1.7673
+ 12. eval:  Z linear shape                                  0.3408
+ 13. eval:  Z quadratic shape                               0.0526
+ 14. eval:  Z average similarity                            4.3391
+ 15. eval:  Z average alter                                -0.4985
+
+
+Observed values of target statistics are
+  1. Amount of network change                                           150.0000
+  2. Number of ties                                                      97.0000
+  3. Number of reciprocated ties                                         18.0000
+  4. Number of transitive triplets                                       24.0000
+  5. 3-cycles                                                            10.0000
+  6. Same values on Va                                                   10.0000
+  7. Similarity on Vb                                                     0.3874
+  8. Sum indegrees x Z                                                  -29.0667
+  9. Sum outdegrees x Z                                                 -44.0667
+ 10. Sum Z ego x Z alter                                                  5.5244
+ 11. Amount of behavioral change                                         42.0000
+ 12. Z centered sum                                                      13.0000
+ 13. Z sum of cent. squares                                              55.9333
+ 14. Z average similarity                                                -2.3856
+ 15. Z average alters                                                    -0.1711
+
+ 15 parameters, 15 statistics
+
+Number of subphases is specified as 0.
+Therefore the estimation phase is skipped
+ and the program passes on immediately to phase 3
+ for checking the current parameter values and calculating standard errors.
+Estimation of derivatives by the LR method (type 1).
+
+
+
+
+@2
+Simulation Results.
+-------------------
+
+Regular end of simulation algorithm.
+Total of 20 iteration steps.
+
+
+@3
+Parameter values
+                
+Network Dynamics
+ 1. rate:  basic rate parameter X                                  2.5387  
+ 2. eval:  outdegree (density)                                    -3.6474  
+ 3. eval:  reciprocity                                             2.5071  
+ 4. eval:  transitive triplets                                     0.6667  
+ 5. eval:  3-cycles                                               -0.3494  
+ 6. eval:  same Va                                                 1.0832  
+ 7. eval:  Vb similarity                                           0.2901  
+ 8. eval:  Z alter                                                 0.1662  
+ 9. eval:  Z ego                                                  -0.0777  
+10. eval:  Z ego x Z alter                                         0.2152  
+Behavior Dynamics
+
+11. rate:  rate Z period 1                                         1.7673  
+12. eval:  Z linear shape                                          0.3408  
+13. eval:  Z quadratic shape                                       0.0526  
+14. eval:  Z average similarity                                    4.3391  
+15. eval:  Z average alter                                        -0.4985  
+
+
+@3
+Simulated statistics
+                    
+Estimated means and standard deviations, standard errors of the mean 
+  1. Amount of network change                                  40.560    5.200   0.9508
+  2. Number of ties                                            35.590    5.748   0.8172
+  3. Number of reciprocated ties                               19.687    4.789   0.5735
+  4. Number of transitive triplets                             20.934    9.037   1.3833
+  5. 3-cycles                                                   6.193    2.963   0.4565
+  6. Same values on Va                                          6.803    2.248   0.2377
+  7. Similarity on Vb                                           6.801    1.763   0.3300
+  8. Sum indegrees x Z                                        -18.172    6.865   1.2131
+  9. Sum outdegrees x Z                                       -22.203    7.104   1.4914
+ 10. Sum Z ego x Z alter                                       29.928   10.065   1.7864
+ 11. Amount of behavioral change                               20.366    4.441   0.8572
+ 12. Z centered sum                                             0.036    4.340   0.6453
+ 13. Z sum of cent. squares                                    38.451    6.412   0.9573
+ 14. Z average similarity                                       2.643    1.233   0.1934
+ 15. Z average alters                                          12.920    6.709   1.1183
+
+Standard errors of the mean are less than s.d./sqrt(n) 
+because of regression on scores (Dolby option). 
+Total computation time 0.26 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 07/04/2020 17:40:24
+New results follow.
+-----------------------------------
+
+RSiena version 1.2-23 (12 Jan 20)
+
+
+@1
+Simulations.
+============
+
+Random initialization of random number stream.
+Current random number seed is 930058.
+Effects object used: InitEff 
+Model Type:
+ 
+Behavioral Model Type:
+ 
+Estimation method: unconditional moment estimation.
+
+Time duration for simulations is 1.0.
+Derivatives are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Parameter values are 
+  1. rate:  basic rate parameter X                          2.5387
+  2. eval:  outdegree (density)                            -3.6474
+  3. eval:  reciprocity                                     2.5071
+  4. eval:  transitive triplets                             0.6667
+  5. eval:  3-cycles                                       -0.3494
+  6. eval:  same Va                                         1.0832
+  7. eval:  Vb similarity                                   0.2901
+  8. eval:  Z alter                                         0.1662
+  9. eval:  Z ego                                          -0.0777
+ 10. eval:  Z ego x Z alter                                 0.2152
+ 11. rate:  rate Z period 1                                 1.7673
+ 12. eval:  Z linear shape                                  0.3408
+ 13. eval:  Z quadratic shape                               0.0526
+ 14. eval:  Z average similarity                            4.3391
+ 15. eval:  Z average alter                                -0.4985
+
+
+Observed values of target statistics are
+  1. Amount of network change                                             1.0000
+  2. Number of ties                                                      59.0000
+  3. Number of reciprocated ties                                         34.0000
+  4. Number of transitive triplets                                       49.0000
+  5. 3-cycles                                                            14.0000
+  6. Same values on Va                                                    6.0000
+  7. Similarity on Vb                                                    10.8954
+  8. Sum indegrees x Z                                                   -1.6000
+  9. Sum outdegrees x Z                                                 -11.6000
+ 10. Sum Z ego x Z alter                                                 32.8400
+ 11. Amount of behavioral change                                          2.0000
+ 12. Z centered sum                                                       1.0000
+ 13. Z sum of cent. squares                                              39.4000
+ 14. Z average similarity                                                 4.0843
+ 15. Z average alters                                                    22.4200
+
+ 15 parameters, 15 statistics
+
+Number of subphases is specified as 0.
+Therefore the estimation phase is skipped
+ and the program passes on immediately to phase 3
+ for checking the current parameter values and calculating standard errors.
+Estimation of derivatives by the LR method (type 1).
+
+
+
+
+@2
+Simulation Results.
+-------------------
+
+Regular end of simulation algorithm.
+Total of 20 iteration steps.
+
+
+@3
+Parameter values
+                
+Network Dynamics
+ 1. rate:  basic rate parameter X                                  2.5387  
+ 2. eval:  outdegree (density)                                    -3.6474  
+ 3. eval:  reciprocity                                             2.5071  
+ 4. eval:  transitive triplets                                     0.6667  
+ 5. eval:  3-cycles                                               -0.3494  
+ 6. eval:  same Va                                                 1.0832  
+ 7. eval:  Vb similarity                                           0.2901  
+ 8. eval:  Z alter                                                 0.1662  
+ 9. eval:  Z ego                                                  -0.0777  
+10. eval:  Z ego x Z alter                                         0.2152  
+Behavior Dynamics
+
+11. rate:  rate Z period 1                                         1.7673  
+12. eval:  Z linear shape                                          0.3408  
+13. eval:  Z quadratic shape                                       0.0526  
+14. eval:  Z average similarity                                    4.3391  
+15. eval:  Z average alter                                        -0.4985  
+
+
+@3
+Simulated statistics
+                    
+Estimated means and standard deviations, standard errors of the mean 
+  1. Amount of network change                                  42.979    4.673   0.9757
+  2. Number of ties                                            38.607    6.107   0.9159
+  3. Number of reciprocated ties                               21.564    5.433   1.1022
+  4. Number of transitive triplets                             23.269   15.604   2.0171
+  5. 3-cycles                                                   6.471    5.201   0.5587
+  6. Same values on Va                                          8.243    2.150   0.2485
+  7. Similarity on Vb                                           5.749    2.100   0.2868
+  8. Sum indegrees x Z                                         -0.678    6.352   0.9156
+  9. Sum outdegrees x Z                                        -3.545    7.294   1.5635
+ 10. Sum Z ego x Z alter                                       18.696    8.521   1.7082
+ 11. Amount of behavioral change                               19.656    4.298   0.9019
+ 12. Z centered sum                                             9.016    5.641   0.6359
+ 13. Z sum of cent. squares                                    41.401    7.960   1.0758
+ 14. Z average similarity                                       2.326    1.087   0.2131
+ 15. Z average alters                                          14.319    6.849   1.3711
+
+Standard errors of the mean are less than s.d./sqrt(n) 
+because of regression on scores (Dolby option). 
+Total computation time 0.42 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 07/04/2020 17:49:16
+New results follow.
+-----------------------------------
+
+RSiena version 1.2-23 (12 Jan 20)
+
+
+@1
+Simulations.
+============
+
+Random initialization of random number stream.
+Current random number seed is 575097.
+Effects object used: InitEff 
+Model Type:
+ 
+Behavioral Model Type:
+ 
+Estimation method: unconditional moment estimation.
+
+Time duration for simulations is 1.0.
+Derivatives are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Parameter values are 
+  1. rate:  basic rate parameter X                          2.5387
+  2. eval:  outdegree (density)                            -3.6474
+  3. eval:  reciprocity                                     2.5071
+  4. eval:  transitive triplets                             0.6667
+  5. eval:  3-cycles                                       -0.3494
+  6. eval:  same Va                                         1.0832
+  7. eval:  Vb similarity                                   0.2901
+  8. eval:  Z alter                                         0.1662
+  9. eval:  Z ego                                          -0.0777
+ 10. eval:  Z ego x Z alter                                 0.2152
+ 11. rate:  rate Z period 1                                 1.7673
+ 12. eval:  Z linear shape                                  0.3408
+ 13. eval:  Z quadratic shape                               0.0526
+ 14. eval:  Z average similarity                            4.3391
+ 15. eval:  Z average alter                                -0.4985
+
+
+Observed values of target statistics are
+  1. Amount of network change                                           145.0000
+  2. Number of ties                                                      94.0000
+  3. Number of reciprocated ties                                         12.0000
+  4. Number of transitive triplets                                       33.0000
+  5. 3-cycles                                                             6.0000
+  6. Same values on Va                                                    9.0000
+  7. Similarity on Vb                                                    -4.0989
+  8. Sum indegrees x Z                                                    3.6333
+  9. Sum outdegrees x Z                                                 -39.3667
+ 10. Sum Z ego x Z alter                                                -15.6706
+ 11. Amount of behavioral change                                         43.0000
+ 12. Z centered sum                                                       8.5000
+ 13. Z sum of cent. squares                                              62.4083
+ 14. Z average similarity                                                -4.9606
+ 15. Z average alters                                                    -5.1269
+
+ 15 parameters, 15 statistics
+
+Number of subphases is specified as 0.
+Therefore the estimation phase is skipped
+ and the program passes on immediately to phase 3
+ for checking the current parameter values and calculating standard errors.
+Estimation of derivatives by the LR method (type 1).
+
+
+
+
+@2
+Simulation Results.
+-------------------
+
+Regular end of simulation algorithm.
+Total of 20 iteration steps.
+
+
+@3
+Parameter values
+                
+Network Dynamics
+ 1. rate:  basic rate parameter X                                  2.5387  
+ 2. eval:  outdegree (density)                                    -3.6474  
+ 3. eval:  reciprocity                                             2.5071  
+ 4. eval:  transitive triplets                                     0.6667  
+ 5. eval:  3-cycles                                               -0.3494  
+ 6. eval:  same Va                                                 1.0832  
+ 7. eval:  Vb similarity                                           0.2901  
+ 8. eval:  Z alter                                                 0.1662  
+ 9. eval:  Z ego                                                  -0.0777  
+10. eval:  Z ego x Z alter                                         0.2152  
+Behavior Dynamics
+
+11. rate:  rate Z period 1                                         1.7673  
+12. eval:  Z linear shape                                          0.3408  
+13. eval:  Z quadratic shape                                       0.0526  
+14. eval:  Z average similarity                                    4.3391  
+15. eval:  Z average alter                                        -0.4985  
+
+
+@3
+Simulated statistics
+                    
+Estimated means and standard deviations, standard errors of the mean 
+  1. Amount of network change                                  42.985    5.572   1.1720
+  2. Number of ties                                            34.241    7.512   0.9190
+  3. Number of reciprocated ties                               17.841    6.084   1.0204
+  4. Number of transitive triplets                             22.269   12.588   1.1422
+  5. 3-cycles                                                   6.335    4.283   0.4407
+  6. Same values on Va                                          6.683    2.437   0.3548
+  7. Similarity on Vb                                           5.915    2.266   0.3933
+  8. Sum indegrees x Z                                        -10.927    6.645   1.0619
+  9. Sum outdegrees x Z                                       -13.206    6.113   1.1138
+ 10. Sum Z ego x Z alter                                       22.196    8.314   1.4884
+ 11. Amount of behavioral change                               21.597    3.440   0.7685
+ 12. Z centered sum                                             2.225    4.706   0.4692
+ 13. Z sum of cent. squares                                    39.276    8.828   1.1054
+ 14. Z average similarity                                       2.736    1.296   0.2070
+ 15. Z average alters                                          14.126    6.372   1.3013
+
+Standard errors of the mean are less than s.d./sqrt(n) 
+because of regression on scores (Dolby option). 
+Total computation time 0.24 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 07/04/2020 17:49:17
+New results follow.
+-----------------------------------
+
+RSiena version 1.2-23 (12 Jan 20)
+
+
+@1
+Simulations.
+============
+
+Random initialization of random number stream.
+Current random number seed is 252735.
+Effects object used: InitEff 
+Model Type:
+ 
+Behavioral Model Type:
+ 
+Estimation method: unconditional moment estimation.
+
+Time duration for simulations is 1.0.
+Derivatives are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Parameter values are 
+  1. rate:  basic rate parameter X                          2.5387
+  2. eval:  outdegree (density)                            -3.6474
+  3. eval:  reciprocity                                     2.5071
+  4. eval:  transitive triplets                             0.6667
+  5. eval:  3-cycles                                       -0.3494
+  6. eval:  same Va                                         1.0832
+  7. eval:  Vb similarity                                   0.2901
+  8. eval:  Z alter                                         0.1662
+  9. eval:  Z ego                                          -0.0777
+ 10. eval:  Z ego x Z alter                                 0.2152
+ 11. rate:  rate Z period 1                                 1.7673
+ 12. eval:  Z linear shape                                  0.3408
+ 13. eval:  Z quadratic shape                               0.0526
+ 14. eval:  Z average similarity                            4.3391
+ 15. eval:  Z average alter                                -0.4985
+
+
+Observed values of target statistics are
+  1. Amount of network change                                            38.0000
+  2. Number of ties                                                      59.0000
+  3. Number of reciprocated ties                                         34.0000
+  4. Number of transitive triplets                                       49.0000
+  5. 3-cycles                                                            14.0000
+  6. Same values on Va                                                    6.0000
+  7. Similarity on Vb                                                    10.8954
+  8. Sum indegrees x Z                                                  -15.4000
+  9. Sum outdegrees x Z                                                  -6.4000
+ 10. Sum Z ego x Z alter                                                 36.8400
+ 11. Amount of behavioral change                                         24.0000
+ 12. Z centered sum                                                      -5.0000
+ 13. Z sum of cent. squares                                              40.2000
+ 14. Z average similarity                                                 3.3251
+ 15. Z average alters                                                    19.5200
+
+ 15 parameters, 15 statistics
+
+Number of subphases is specified as 0.
+Therefore the estimation phase is skipped
+ and the program passes on immediately to phase 3
+ for checking the current parameter values and calculating standard errors.
+Estimation of derivatives by the LR method (type 1).
+
+
+
+
+@2
+Simulation Results.
+-------------------
+
+Regular end of simulation algorithm.
+Total of 20 iteration steps.
+
+
+@3
+Parameter values
+                
+Network Dynamics
+ 1. rate:  basic rate parameter X                                  2.5387  
+ 2. eval:  outdegree (density)                                    -3.6474  
+ 3. eval:  reciprocity                                             2.5071  
+ 4. eval:  transitive triplets                                     0.6667  
+ 5. eval:  3-cycles                                               -0.3494  
+ 6. eval:  same Va                                                 1.0832  
+ 7. eval:  Vb similarity                                           0.2901  
+ 8. eval:  Z alter                                                 0.1662  
+ 9. eval:  Z ego                                                  -0.0777  
+10. eval:  Z ego x Z alter                                         0.2152  
+Behavior Dynamics
+
+11. rate:  rate Z period 1                                         1.7673  
+12. eval:  Z linear shape                                          0.3408  
+13. eval:  Z quadratic shape                                       0.0526  
+14. eval:  Z average similarity                                    4.3391  
+15. eval:  Z average alter                                        -0.4985  
+
+
+@3
+Simulated statistics
+                    
+Estimated means and standard deviations, standard errors of the mean 
+  1. Amount of network change                                  34.428    4.707   0.9180
+  2. Number of ties                                            30.519    2.665   0.5005
+  3. Number of reciprocated ties                               16.196    4.396   0.6034
+  4. Number of transitive triplets                             14.401    7.021   1.0931
+  5. 3-cycles                                                   3.624    2.526   0.4105
+  6. Same values on Va                                          6.946    3.007   0.2200
+  7. Similarity on Vb                                           5.296    1.831   0.2990
+  8. Sum indegrees x Z                                         -6.213    7.363   1.4652
+  9. Sum outdegrees x Z                                        -9.773    6.641   1.2890
+ 10. Sum Z ego x Z alter                                       20.618    6.613   1.2955
+ 11. Amount of behavioral change                               20.174    3.968   0.8850
+ 12. Z centered sum                                            13.010    4.889   0.4761
+ 13. Z sum of cent. squares                                    47.723   12.309   1.1767
+ 14. Z average similarity                                       2.104    1.037   0.1967
+ 15. Z average alters                                           7.479    9.114   1.8526
+
+Standard errors of the mean are less than s.d./sqrt(n) 
+because of regression on scores (Dolby option). 
+Total computation time 0.67 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 07/04/2020 17:51:46
+New results follow.
+-----------------------------------
+
+RSiena version 1.2-23 (12 Jan 20)
+
+
+@1
+Simulations.
+============
+
+Random initialization of random number stream.
+Current random number seed is 751123.
+Effects object used: InitEff 
+Model Type:
+ 
+Behavioral Model Type:
+ 
+Estimation method: unconditional moment estimation.
+
+Time duration for simulations is 1.0.
+Derivatives are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Parameter values are 
+  1. rate:  basic rate parameter X                          4.2567
+  2. eval:  outdegree (density)                            -3.8868
+  3. eval:  reciprocity                                     2.8396
+  4. eval:  transitive triplets                             0.9816
+  5. eval:  3-cycles                                       -0.8878
+  6. eval:  same Va                                         1.2030
+  7. eval:  Vb similarity                                   0.6686
+  8. eval:  Z alter                                        -0.0033
+  9. eval:  Z ego                                           0.0739
+ 10. eval:  Z ego x Z alter                                 0.1722
+ 11. rate:  rate Z period 1                                 2.6092
+ 12. eval:  Z linear shape                                  1.1837
+ 13. eval:  Z quadratic shape                               0.1977
+ 14. eval:  Z average similarity                           14.9566
+ 15. eval:  Z average alter                                -0.8747
+
+
+Observed values of target statistics are
+  1. Amount of network change                                           281.0000
+  2. Number of ties                                                     179.0000
+  3. Number of reciprocated ties                                         10.0000
+  4. Number of transitive triplets                                       24.0000
+  5. 3-cycles                                                             6.0000
+  6. Same values on Va                                                   13.0000
+  7. Similarity on Vb                                                    -8.2514
+  8. Sum indegrees x Z                                                  -44.8083
+  9. Sum outdegrees x Z                                                  -9.8083
+ 10. Sum Z ego x Z alter                                                  0.1424
+ 11. Amount of behavioral change                                         89.0000
+ 12. Z centered sum                                                      14.5000
+ 13. Z sum of cent. squares                                             101.2375
+ 14. Z average similarity                                                -3.7740
+ 15. Z average alters                                                   -11.6119
+
+ 15 parameters, 15 statistics
+
+Number of subphases is specified as 0.
+Therefore the estimation phase is skipped
+ and the program passes on immediately to phase 3
+ for checking the current parameter values and calculating standard errors.
+Estimation of derivatives by the LR method (type 1).
+
+
+
+
+@2
+Simulation Results.
+-------------------
+
+Regular end of simulation algorithm.
+Total of 20 iteration steps.
+
+
+@3
+Parameter values
+                
+Network Dynamics
+ 1. rate:  basic rate parameter X                                  4.2567  
+ 2. eval:  outdegree (density)                                    -3.8868  
+ 3. eval:  reciprocity                                             2.8396  
+ 4. eval:  transitive triplets                                     0.9816  
+ 5. eval:  3-cycles                                               -0.8878  
+ 6. eval:  same Va                                                 1.2030  
+ 7. eval:  Vb similarity                                           0.6686  
+ 8. eval:  Z alter                                                -0.0033  
+ 9. eval:  Z ego                                                   0.0739  
+10. eval:  Z ego x Z alter                                         0.1722  
+Behavior Dynamics
+
+11. rate:  rate Z period 1                                         2.6092  
+12. eval:  Z linear shape                                          1.1837  
+13. eval:  Z quadratic shape                                       0.1977  
+14. eval:  Z average similarity                                   14.9566  
+15. eval:  Z average alter                                        -0.8747  
+
+
+@3
+Simulated statistics
+                    
+Estimated means and standard deviations, standard errors of the mean 
+  1. Amount of network change                                 111.888    6.096   1.3534
+  2. Number of ties                                            53.209    8.482   1.5289
+  3. Number of reciprocated ties                               23.649    4.830   0.8787
+  4. Number of transitive triplets                              8.392    5.799   1.0022
+  5. 3-cycles                                                   2.351    1.451   0.3002
+  6. Same values on Va                                         18.326    3.776   0.4729
+  7. Similarity on Vb                                           1.338    2.146   0.3655
+  8. Sum indegrees x Z                                         -5.940    7.194   1.5873
+  9. Sum outdegrees x Z                                        -7.841    6.128   0.9843
+ 10. Sum Z ego x Z alter                                       14.208    8.515   1.8084
+ 11. Amount of behavioral change                               59.791    6.914   1.5133
+ 12. Z centered sum                                            30.614    9.887   1.6085
+ 13. Z sum of cent. squares                                    89.161   15.580   3.2376
+ 14. Z average similarity                                       1.615    1.973   0.4374
+ 15. Z average alters                                          25.372   14.040   2.8951
+
+Standard errors of the mean are less than s.d./sqrt(n) 
+because of regression on scores (Dolby option). 
+Total computation time 0.31 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 07/04/2020 17:51:46
+New results follow.
+-----------------------------------
+
+RSiena version 1.2-23 (12 Jan 20)
+
+
+@1
+Simulations.
+============
+
+Random initialization of random number stream.
+Current random number seed is 661250.
+Effects object used: InitEff 
+Model Type:
+ 
+Behavioral Model Type:
+ 
+Estimation method: unconditional moment estimation.
+
+Time duration for simulations is 1.0.
+Derivatives are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Parameter values are 
+  1. rate:  basic rate parameter X                          4.2567
+  2. eval:  outdegree (density)                            -3.8868
+  3. eval:  reciprocity                                     2.8396
+  4. eval:  transitive triplets                             0.9816
+  5. eval:  3-cycles                                       -0.8878
+  6. eval:  same Va                                         1.2030
+  7. eval:  Vb similarity                                   0.6686
+  8. eval:  Z alter                                        -0.0033
+  9. eval:  Z ego                                           0.0739
+ 10. eval:  Z ego x Z alter                                 0.1722
+ 11. rate:  rate Z period 1                                 2.6092
+ 12. eval:  Z linear shape                                  1.1837
+ 13. eval:  Z quadratic shape                               0.1977
+ 14. eval:  Z average similarity                           14.9566
+ 15. eval:  Z average alter                                -0.8747
+
+
+Observed values of target statistics are
+  1. Amount of network change                                           116.0000
+  2. Number of ties                                                     114.0000
+  3. Number of reciprocated ties                                         62.0000
+  4. Number of transitive triplets                                       62.0000
+  5. 3-cycles                                                            13.0000
+  6. Same values on Va                                                   15.0000
+  7. Similarity on Vb                                                     0.1695
+  8. Sum indegrees x Z                                                   50.4000
+  9. Sum outdegrees x Z                                                  43.4000
+ 10. Sum Z ego x Z alter                                                 60.2400
+ 11. Amount of behavioral change                                         68.0000
+ 12. Z centered sum                                                     -27.0000
+ 13. Z sum of cent. squares                                              79.0000
+ 14. Z average similarity                                                 3.1823
+ 15. Z average alters                                                    28.8767
+
+ 15 parameters, 15 statistics
+
+Number of subphases is specified as 0.
+Therefore the estimation phase is skipped
+ and the program passes on immediately to phase 3
+ for checking the current parameter values and calculating standard errors.
+Estimation of derivatives by the LR method (type 1).
+
+
+
+
+@2
+Simulation Results.
+-------------------
+
+Regular end of simulation algorithm.
+Total of 20 iteration steps.
+
+
+@3
+Parameter values
+                
+Network Dynamics
+ 1. rate:  basic rate parameter X                                  4.2567  
+ 2. eval:  outdegree (density)                                    -3.8868  
+ 3. eval:  reciprocity                                             2.8396  
+ 4. eval:  transitive triplets                                     0.9816  
+ 5. eval:  3-cycles                                               -0.8878  
+ 6. eval:  same Va                                                 1.2030  
+ 7. eval:  Vb similarity                                           0.6686  
+ 8. eval:  Z alter                                                -0.0033  
+ 9. eval:  Z ego                                                   0.0739  
+10. eval:  Z ego x Z alter                                         0.1722  
+Behavior Dynamics
+
+11. rate:  rate Z period 1                                         2.6092  
+12. eval:  Z linear shape                                          1.1837  
+13. eval:  Z quadratic shape                                       0.1977  
+14. eval:  Z average similarity                                   14.9566  
+15. eval:  Z average alter                                        -0.8747  
+
+
+@3
+Simulated statistics
+                    
+Estimated means and standard deviations, standard errors of the mean 
+  1. Amount of network change                                  77.190    9.259   1.8186
+  2. Number of ties                                            51.155    9.186   1.7912
+  3. Number of reciprocated ties                               25.230    7.022   1.2993
+  4. Number of transitive triplets                             10.212   10.780   1.2474
+  5. 3-cycles                                                   3.022    3.620   0.5266
+  6. Same values on Va                                         25.901    6.578   0.7267
+  7. Similarity on Vb                                           0.625    1.328   0.2231
+  8. Sum indegrees x Z                                         39.398   11.240   1.5346
+  9. Sum outdegrees x Z                                        36.925    9.656   1.8030
+ 10. Sum Z ego x Z alter                                       53.772   15.201   3.1447
+ 11. Amount of behavioral change                               51.603    4.731   1.0229
+ 12. Z centered sum                                            60.560    7.930   1.5380
+ 13. Z sum of cent. squares                                   132.269   14.468   2.2327
+ 14. Z average similarity                                       4.832    1.647   0.3674
+ 15. Z average alters                                          47.827   10.748   2.3775
+
+Standard errors of the mean are less than s.d./sqrt(n) 
+because of regression on scores (Dolby option). 
+Total computation time 0.49 seconds.
