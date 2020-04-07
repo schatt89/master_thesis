@@ -1,6 +1,6 @@
 library(RSiena) # or RSienaTest
-source('./simulation/SimulateNetworksBehavior.R')
-source('./simulation/siena07ToConvergence.R')
+source("./simulation/SimulateNetworksBehavior.R")
+source("./simulation/siena07ToConvergence.R")
 
 ################################################################################
 #######                                                                   ######
@@ -8,9 +8,9 @@ source('./simulation/siena07ToConvergence.R')
 #######                                                                   ######
 ################################################################################
 
-load('./data/Glasgow_data/Glasgow-friendship.RData')
-load('./data/Glasgow_data/Glasgow-substances.RData')
-load('./data/Glasgow_data/Glasgow-demographic.RData')
+load("./data/Glasgow_data/Glasgow-friendship.RData")
+load("./data/Glasgow_data/Glasgow-substances.RData")
+load("./data/Glasgow_data/Glasgow-demographic.RData")
 
 friendship.1[friendship.1 == 2] <- 1
 friendship.2[friendship.2 == 2] <- 1
@@ -63,20 +63,20 @@ sex.F.60 <- sex.F[70:129]
 friendship <- sienaDependent(array(c(fr.30.1, fr.30.2, fr.30.3),
                                      dim = c(30, 30, 3)))
 
-drinkingbeh <- sienaDependent(alco.30, type = "behavior" )
+drinkingbeh <- sienaDependent(alco.30, type = "behavior")
 gender <- coCovar(sex.F.30)
 smoke1 <- coCovar(toba.30[, 1])
 
 myCoEvolutionData <- sienaDataCreate(friendship, gender, smoke1, drinkingbeh)
 myCoEvolutionEff <- getEffects(myCoEvolutionData)
 
-print01Report(myCoEvolutionData, modelname = 'complete_data_model_30')
+print01Report(myCoEvolutionData, modelname = "complete_data_model_30")
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff, transTrip, cycle3)
 
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
-                                    interaction1 = "smoke1" )
+                                    interaction1 = "smoke1")
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
                                    interaction1 = "gender")
 
@@ -86,12 +86,12 @@ myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
 # of drinking for friendship formation:
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff,
                                     name = "drinkingbeh", avAlt,
-                                    interaction1= "friendship")
+                                    interaction1 = "friendship")
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff,
                                     name = "drinkingbeh",
                                     quad, avAlt,
-                                    interaction1=c("","friendship"))
+                                    interaction1 = c("", "friendship"))
 
 # Check what effects you have decided to include:
 
@@ -101,7 +101,7 @@ myCoEvolutionEff
 # The defaults are adequate. You only have to specify the filename
 # that will receive the results in text format.
 
-myCoEvAlgorithm <- sienaAlgorithmCreate(projname="model_30", seed = 500)
+myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model_30", seed = 500)
 
 # Finally, estimate the model; the whole command is put in parentheses
 # to have the results printed directly to the screen.
@@ -118,20 +118,20 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname="model_30", seed = 500)
 friendship <- sienaDependent(array(c(fr.60.1, fr.60.2, fr.60.3),
                                    dim = c(60, 60, 3)))
 
-drinkingbeh <- sienaDependent(alco.60, type = "behavior" )
+drinkingbeh <- sienaDependent(alco.60, type = "behavior")
 smoke1 <- coCovar(toba.60[, 1])
 gender <- coCovar(sex.F.60)
 
 myCoEvolutionData <- sienaDataCreate(friendship, gender, smoke1, drinkingbeh)
 myCoEvolutionEff <- getEffects(myCoEvolutionData)
 
-print01Report(myCoEvolutionData, modelname = 'complete_data_model_60')
+print01Report(myCoEvolutionData, modelname = "complete_data_model_60")
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff, transTrip, cycle3)
 
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
-                                   interaction1 = "smoke1" )
+                                   interaction1 = "smoke1")
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
                                    interaction1 = "gender")
 
@@ -142,12 +142,12 @@ myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, simX,
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff,
                                    name = "drinkingbeh", avAlt,
-                                   interaction1="friendship")
+                                   interaction1 = "friendship")
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff,
                                    name = "drinkingbeh",
                                    quad, avAlt,
-                                   interaction1=c("","friendship"))
+                                   interaction1 = c("", "friendship"))
 
 # Check what effects you have decided to include:
 
@@ -158,7 +158,79 @@ myCoEvolutionEff
 # The defaults are adequate. You only have to specify the filename
 # that will receive the results in text format.
 
-myCoEvAlgorithm <- sienaAlgorithmCreate(projname="model_60", seed = 300)
+myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model_60", seed = 300)
 
 (ans60 <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
                  eff = myCoEvolutionEff, threshold = 0.20))
+
+################################################################################
+#######                                                                   ######
+#######             Smaller dataset simulation                            ######
+#######                                                                   ######
+################################################################################
+
+# Trial values:
+n <- 30
+M <- 3
+
+rate <- ans30$theta[1]
+dens <- ans30$theta[3] + 0.1
+rec <- ans30$theta[4]
+tt <- ans30$theta[5]
+c3 <- ans30$theta[6]
+
+Vaego <- ans30$theta[8]
+Vaalt <- ans30$theta[7]
+Vasim <- ans30$theta[9]
+
+Vbego <- ans30$theta[11]
+Vbalt <- ans30$theta[10]
+Vbsim <- ans30$theta[12]
+
+c <- 5
+rate.b <- ans30$theta[13]
+lin.b <- ans30$theta[15]
+qu.b <- ans30$theta[16]
+avalt.b <- ans30$theta[17]
+
+# Example call:
+SN_30 <- SimulateNetworksBehavior(n, M, c, rate, dens, rec,
+            tt, c3, Vaego, Vaalt, Vasim, Vbego, Vbalt, Vbsim, rate.b,
+            lin.b, qu.b, avalt.b)
+
+################################################################################
+#######                                                                   ######
+#######             Bigger dataset simulation                             ######
+#######                                                                   ######
+################################################################################
+
+# Trial values:
+n <- 60
+M <- 3
+
+rate <- ans60$theta[1]
+dens <- ans60$theta[3] - 0.5
+rec <- ans60$theta[4]
+tt <- ans60$theta[5]
+c3 <- ans60$theta[6]
+
+Vaego <- ans60$theta[8]
+Vaalt <- ans60$theta[7]
+Vasim <- ans60$theta[9]
+
+Vbego <- ans60$theta[11]
+Vbalt <- ans60$theta[10]
+Vbsim <- ans60$theta[12]
+
+c <- 5
+rate.b <- ans60$theta[13]
+lin.b <- ans60$theta[15]
+qu.b <- ans60$theta[16]
+avalt.b <- ans60$theta[17]
+
+# Example call:
+SN_60 <- SimulateNetworksBehavior(
+    n, M, c, rate, dens, rec,
+    tt, c3, Vaego, Vaalt, Vasim, Vbego, Vbalt, Vbsim, rate.b,
+    lin.b, qu.b, avalt.b
+)

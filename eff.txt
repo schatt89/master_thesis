@@ -1,0 +1,57 @@
+  effectName             include fix   test 
+1 basic rate parameter X TRUE    FALSE FALSE
+  initialValue parm
+1   52.70489   0   
+  effectName          include fix   test 
+1 outdegree (density) TRUE    FALSE FALSE
+  initialValue parm
+1   -4.38684   0   
+  effectName  include fix   test  initialValue parm
+1 reciprocity TRUE    FALSE FALSE    2.83961   0   
+  effectName          include fix   test 
+1 transitive triplets TRUE    FALSE FALSE
+  initialValue parm
+1     0.9816   0   
+  effectName include fix   test  initialValue parm
+1 3-cycles   TRUE    FALSE FALSE   -0.88784   0   
+  effectName include fix   test  initialValue parm
+1 same Va    TRUE    FALSE FALSE    1.20299   0   
+  effectName    include fix   test  initialValue parm
+1 Vb similarity TRUE    FALSE FALSE    0.66858   0   
+  effectName include fix   test  initialValue parm
+1 Z alter    TRUE    FALSE FALSE   -0.00334   0   
+  effectName include fix   test  initialValue parm
+1 Z ego      TRUE    FALSE FALSE    0.07395   0   
+  effectName      include fix   test  initialValue
+1 Z ego x Z alter TRUE    FALSE FALSE    0.17221  
+  parm
+1 0   
+  effectName      include fix   test  initialValue
+1 rate Z period 1 TRUE    FALSE FALSE   -0.76915  
+  parm
+1 0   
+  effectName     include fix   test  initialValue
+1 Z linear shape TRUE    FALSE FALSE    1.18368  
+  parm
+1 0   
+  effectName        include fix   test  initialValue
+1 Z quadratic shape TRUE    FALSE FALSE    0.19768  
+  parm
+1 0   
+  effectName      include fix   test  initialValue
+1 Z average alter TRUE    FALSE FALSE    -0.8747  
+  parm
+1 0   
+  effectName           include fix   test 
+1 Z average similarity TRUE    FALSE FALSE
+  initialValue parm
+1   14.95656   0   
+siena07 will create an output file Init.txt .
+  effectName             include fix   test 
+1 basic rate parameter X TRUE    FALSE FALSE
+  initialValue parm
+1    5.27049   0   
+  effectName      include fix   test  initialValue
+1 rate Z period 1 TRUE    FALSE FALSE   -0.07691  
+  parm
+1 0   
