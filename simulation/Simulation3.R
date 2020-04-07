@@ -1,5 +1,5 @@
 library(RSiena) # or RSienaTest
-source("./simulation/SimulateNetworksBehavior_v2.R")
+source("./simulation/SimulateNetworksBehavior_v3.R")
 source("./simulation/siena07ToConvergence.R")
 
 ################################################################################
@@ -177,7 +177,7 @@ n <- 30
 M <- 3
 c <- 5
 
-rate <- ans30$theta[1]
+rate <- ans30$theta[2]
 dens <- ans30$theta[3]
 rec <- ans30$theta[4]
 tt <- ans30$theta[5]
@@ -189,15 +189,18 @@ Vbsim <- ans30$theta[8]
 altX.b <- ans30$theta[9]
 egoX.b <- ans30$theta[10]
 egoXaltX.b <- ans30$theta[11]
-rate.b <- ans30$theta[12]
+rate.b <- ans30$theta[13]
 lin.b <- ans30$theta[14]
 qu.b <- ans30$theta[15]
 avalt.b <- ans30$theta[17]
 avsim.b <- ans30$theta[16]
 
-SN_30 <- SimulateNetworksBehavior(n, M, c, rate, dens, rec, tt, c3,
-                                     Vasame, Vbsim, altX.b, egoX.b, egoXaltX.b,
-                                     rate.b, lin.b, qu.b, avalt.b, avsim.b)
+SN_30 <- SimulateNetworksBehavior(net.w1 = fr.30.1, covara = age.30,
+                                  covarb = toba.30[,1], b.w1 = alco.30[,1],
+                                  n, M, c,
+                                  rate, dens, rec, tt, c3,
+                                  Vasame, Vbsim, altX.b, egoX.b, egoXaltX.b,
+                                  rate.b, lin.b, qu.b, avalt.b, avsim.b)
 
 
 ################################################################################
@@ -210,8 +213,8 @@ n <- 60
 M <- 3
 c <- 5
 
-rate <- ans60$theta[1]
-dens <- ans60$theta[3] - 0.5
+rate <- ans60$theta[2]
+dens <- ans60$theta[3]
 rec <- ans60$theta[4]
 tt <- ans60$theta[5]
 c3 <- ans60$theta[6]
@@ -222,13 +225,15 @@ Vbsim <- ans60$theta[8]
 altX.b <- ans60$theta[9]
 egoX.b <- ans60$theta[10]
 egoXaltX.b <- ans60$theta[11]
-rate.b <- ans60$theta[12] - 1.5
+rate.b <- ans60$theta[13]
 lin.b <- ans60$theta[14]
 qu.b <- ans60$theta[15]
 avalt.b <- ans60$theta[17]
 avsim.b <- ans60$theta[16]
 
-closeAllConnections()
-SN_60 <- SimulateNetworksBehavior(n, M, c, rate, dens, rec, tt, c3,
+SN_60 <- SimulateNetworksBehavior(net.w1 = fr.60.1, covara = age.60,
+                                  covarb = toba.60[,1], b.w1 = alco.60[,1],
+                                  n, M, c,
+                                  rate, dens, rec, tt, c3,
                                   Vasame, Vbsim, altX.b, egoX.b, egoXaltX.b,
                                   rate.b, lin.b, qu.b, avalt.b, avsim.b)
