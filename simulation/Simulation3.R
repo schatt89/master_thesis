@@ -255,9 +255,95 @@ for (i in 1:100) {
                                     rate, dens, rec, tt, c3,
                                     Vasame, Vbsim, altX.b, egoX.b, egoXaltX.b,
                                     rate.b, lin.b, qu.b, avalt.b, avsim.b)
+  
   fr.60.2.sim[,,i] <- SN$networks[,,1]
   fr.60.3.sim[,,i] <- SN$networks[,,2]
   
   alco.60.sim[,,i] <- SN$behaviors
   
+}
+
+
+################################################################################
+########                                                               #########
+########           Missing data generation - smaller network           #########
+########                                                               #########
+################################################################################
+
+################## Missings depend on the network ##############################
+
+### 10% missing data ####
+
+fr.30.1.mis.10 <- fr.30.1
+fr.30.1.mis.10[rowSums(fr.30.1) < 1,] <- NA # 3 removed
+
+alco.30.1.mis.10 <- alco.30[,1]
+alco.30.1.mis.10[rowSums(fr.30.1) < 1] <- NA
+
+fr.30.2.sim.mis.10 <- fr.30.2.sim
+fr.30.3.sim.mis.10 <- fr.30.3.sim
+alco.30.sim.mis.10 <- alco.30.sim
+
+for (i in 1:100) {
+  to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 1), 3, replace=F)
+  to_remove.3 <- sample(which(rowSums(fr.30.3.sim[,,i]) < 1), 3, replace=F)
+  for (j in 1:3) {
+    fr.30.2.sim.mis.10[,,i][to_remove.2[j],] <- NA
+    alco.30.sim.mis.10[,1,i][to_remove.2[j]] <- NA
+    
+    fr.30.3.sim.mis.10[,,i][to_remove.3[j],] <- NA
+    alco.30.sim.mis.10[,2,i][to_remove.3[j]] <- NA
+  }
+}
+
+### 20% missing data ####
+
+to_remove.1 <- sample(which(rowSums(fr.30.1) < 2), 6, replace=F)
+
+fr.30.1.mis.20 <- fr.30.1
+fr.30.1.mis.20[to_remove.1,] <- NA # 6 removed
+
+alco.30.1.mis.20 <- alco.30[,1]
+alco.30.1.mis.20[to_remove.1] <- NA
+
+fr.30.2.sim.mis.20 <- fr.30.2.sim
+fr.30.3.sim.mis.20 <- fr.30.3.sim
+alco.30.sim.mis.20 <- alco.30.sim
+
+for (i in 1:100) {
+  to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 2), 6, replace=F)
+  to_remove.3 <- sample(which(rowSums(fr.30.3.sim[,,i]) < 2), 6, replace=F)
+  for (j in 1:6) {
+    fr.30.2.sim.mis.20[,,i][to_remove.2[j],] <- NA
+    alco.30.sim.mis.20[,1,i][to_remove.2[j]] <- NA
+    
+    fr.30.3.sim.mis.20[,,i][to_remove.3[j],] <- NA
+    alco.30.sim.mis.20[,2,i][to_remove.3[j]] <- NA
+  }
+}
+
+### 30% missing data ####
+
+to_remove.1 <- sample(which(rowSums(fr.30.1) < 2), 9, replace=F)
+
+fr.30.1.mis.30 <- fr.30.1
+fr.30.1.mis.30[to_remove.1,] <- NA # 9 removed
+
+alco.30.1.mis.30 <- alco.30[,1]
+alco.30.1.mis.30[to_remove.1] <- NA
+
+fr.30.2.sim.mis.30 <- fr.30.2.sim
+fr.30.3.sim.mis.30 <- fr.30.3.sim
+alco.30.sim.mis.30 <- alco.30.sim
+
+for (i in 1:100) {
+  to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 2), 9, replace=F)
+  to_remove.3 <- sample(which(rowSums(fr.30.3.sim[,,i]) < 2), 9, replace=F)
+  for (j in 1:9) {
+    fr.30.2.sim.mis.30[,,i][to_remove.2[j],] <- NA
+    alco.30.sim.mis.30[,1,i][to_remove.2[j]] <- NA
+    
+    fr.30.3.sim.mis.30[,,i][to_remove.3[j],] <- NA
+    alco.30.sim.mis.30[,2,i][to_remove.3[j]] <- NA
+  }
 }
