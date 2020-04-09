@@ -72,19 +72,20 @@ for (i in 1:2) {
                                         miceImpAlco30.10.n[,d,i]), 
                                   type = "behavior", allowOnly = FALSE)
     
-    stationaryDataList[[d]] <- sienaDataCreate(friendship,drinkingbeh, 
-                                               w2,a2)
+    stationaryDataList[[d]] <- sienaDataCreate(friendship, drinkingbeh, 
+                                               w2, a2)
   }
   
   Data.stationary <- sienaGroupCreate(stationaryDataList)
   
   effects.stationary <- getEffects(Data.stationary)
-  effects.stationary <- includeEffects(effects.stationary, outActSqrt, inPopSqrt,
+  effects.stationary <- includeEffects(effects.stationary,
                                        gwespFF, gwespBB)
   
   # 2nd wave as covariate
-  effects.stationary <- includeEffects(effects.stationary, X, name ="friendship",
-                                       interaction1 = "w2")
+  effects.stationary <- includeEffects(effects.stationary, X,
+                                       name ="friendship",interaction1 = "w2")
+  
   effects.stationary <- includeEffects(effects.stationary, effFrom, 
                                        name = "drinkingbeh", interaction1 ="a2")
   
@@ -93,7 +94,7 @@ for (i in 1:2) {
                                        avAlt, interaction1 = "friendship")
   
   #selection
-  effects.stationary <- includeEffects(effects.stationary,egoX,altX,
+  effects.stationary <- includeEffects(effects.stationary, egoX, altX, egoXaltX, 
                                        name = "friendship",
                                        interaction1 = "drinkingbeh")
   
@@ -116,8 +117,9 @@ for (i in 1:2) {
                                                 lessMem = TRUE)
   
   period0saom <- siena07ToConvergence(alg = estimation.options.st,
-                                      dat = Data.stationary,nodes = 7,
+                                      dat = Data.stationary,nodes = 4,
                                       eff = effects.stationary, threshold=0.25)
+  
   
   imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
                                              seed = 214,
@@ -146,12 +148,12 @@ for (i in 1:2) {
     n1[changedTie] <- 0
     n2[changedTie] <- 1
     
-    friendship <- sienaDependent(array(c(n1,n2), dim = c(N,N, 2)),
+    friendship <- sienaDependent(array(c(n1,n2), dim = c(30,30, 2)),
                                  allowOnly = FALSE )
     
     
     a1 <- alco.30.1.mis.10.n
-    a1.3s <- c(1:N)[a1 == 3 & !is.na(a1)]
+    a1.3s <- c(1:30)[a1 == 3 & !is.na(a1)]
     a1c <- sample(a1.3s,1)
     a1change <- miceImpAlco30.10.n[,d,i]
     a1change[a1c] <- sample(c(2,4),1)
@@ -184,4 +186,20 @@ for (i in 1:2) {
   impNets.1.30.10.n[[i]] = net1imp
   impAlco.1.30.10.n[[i]] = alc1imp
   
-  }
+  ########################### later waves imputation ###########################
+  
+  alc2imp <- matrix(NA,30,50)
+  alc3imp <- matrix(NA,30,50)
+  net2imp <- list()
+  net3imp <- list()
+  
+  set.seed(1402)
+  
+  estimation.options <- sienaAlgorithmCreate(useStdInits = FALSE, seed = 214,
+                                             n3 = 3000, maxlike = FALSE,
+                                             cond = FALSE, diagonalize = 0.3,
+                                             firstg = 0.02, lessMem = TRUE,
+                                             behModelType = c(drinkingbeh = 2))
+  
+
+}
