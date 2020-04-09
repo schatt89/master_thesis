@@ -334,3 +334,171 @@ covariance/correlation matrix of X can be found using
 summary(ans) within R, or by using the 'verbose' option in Siena07.
  
 Total computation time 11.36 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 09/04/2020 12:55:42
+New results follow.
+-----------------------------------
+
+RSiena version 1.2-23 (12 Jan 20)
+
+
+@1
+Estimation by stochastic approximation algorithm.
+=================================================
+
+Current random number seed is 500.
+Effects object used: eff 
+Model Type:
+ 
+Behavioral Model Type:
+ 
+Estimation method: unconditional moment estimation.
+
+Time duration for simulations in each period is 1.0.
+Standard errors are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Initial value of gain parameter is  0.3464102.
+Reduction factor for gain parameter is  0.5000000.
+Number of subphases in Phase 2 is 4.
+
+Initial parameter values are 
+  1. rate:  constant friendship rate (period 1)             3.2445
+  2. rate:  constant friendship rate (period 2)             2.4868
+  3. eval:  outdegree (density)                            -1.4681
+  4. eval:  reciprocity                                     0.0000
+  5. eval:  transitive triplets                             0.0000
+  6. eval:  3-cycles                                        0.0000
+  7. eval:  same gender                                     0.0000
+  8. eval:  smoke1 similarity                               0.0000
+  9. eval:  drinkingbeh alter                               0.0000
+ 10. eval:  drinkingbeh ego                                 0.0000
+ 11. eval:  drinkingbeh ego x drinkingbeh alter             0.0000
+ 12. rate:  rate drinkingbeh (period 1)                     0.6082
+ 13. rate:  rate drinkingbeh (period 2)                     0.9733
+ 14. eval:  drinkingbeh linear shape                        0.3046
+ 15. eval:  drinkingbeh quadratic shape                     0.0000
+ 16. eval:  drinkingbeh average similarity                  0.0000
+ 17. eval:  drinkingbeh average alter                       0.0000
+
+
+Observed values of target statistics are
+  1. Amount of network change in period 1                                47.0000
+  2. Amount of network change in period 2                                36.0000
+  3. Number of ties                                                     100.0000
+  4. Number of reciprocated ties                                         66.0000
+  5. Number of transitive triplets                                       80.0000
+  6. 3-cycles                                                            24.0000
+  7. Same values on gender                                               77.0000
+  8. Similarity on smoke1                                                15.3736
+  9. Sum indegrees x drinkingbeh                                        -12.5614
+ 10. Sum outdegrees x drinkingbeh                                       -15.5614
+ 11. Sum drinkingbeh ego x drinkingbeh alter                             38.0959
+ 12. Amount of behavioral change in period 1 on drinkingbeh              13.0000
+ 13. Amount of behavioral change in period 2 on drinkingbeh              16.0000
+ 14. drinkingbeh centered sum                                             9.6896
+ 15. drinkingbeh sum of cent. squares                                    55.8700
+ 16. drinkingbeh average similarity                                       1.8759
+ 17. drinkingbeh average alters                                          11.7179
+
+ 17 parameters, 17 statistics
+
+Estimation of derivatives by the LR method (type 1).
+
+
+@2
+End of stochastic approximation algorithm, phase 3.
+---------------------------------------------------
+
+Total of 2197 iterations.
+Parameter estimates based on 1195 iterations,
+convergence diagnostics, covariance and derivative matrices based on 1002 iterations.
+
+Information for convergence diagnosis.
+Averages, standard deviations, and t-ratios for deviations from targets:
+  1.   0.1936   5.5026   0.0352 
+  2.  -0.0080   5.2158  -0.0015 
+  3.  -0.1377  11.4138  -0.0121 
+  4.  -0.3014  11.0464  -0.0273 
+  5.  -0.1537  38.0934  -0.0040 
+  6.   0.0858  12.5138   0.0069 
+  7.  -0.1816   8.7467  -0.0208 
+  8.  -0.1620   4.0021  -0.0405 
+  9.   0.5479  10.0915   0.0543 
+ 10.   0.5987   9.7010   0.0617 
+ 11.   0.3022  11.6143   0.0260 
+ 12.   0.1068   3.2142   0.0332 
+ 13.   0.1796   3.6137   0.0497 
+ 14.   0.4820   6.0060   0.0803 
+ 15.   0.1004   9.4998   0.0106 
+ 16.  -0.0082   1.3864  -0.0059 
+ 17.   0.4557   7.0070   0.0650 
+
+Good convergence is indicated by the t-ratios being close to zero.
+
+Overall maximum convergence ratio =  0.1811 .
+
+
+
+@2
+Estimation Results.
+-------------------
+
+Regular end of estimation algorithm.
+Total of 2197 iteration steps.
+
+
+@3
+Estimates and standard errors
+                             
+Network Dynamics
+ 1. rate:  constant friendship rate (period 1)                     3.3836  (   0.7993)
+ 2. rate:  constant friendship rate (period 2)                     2.5387  (   0.7132)
+ 3. eval:  outdegree (density)                                    -3.6474  (   0.4136)
+ 4. eval:  reciprocity                                             2.5071  (   0.4143)
+ 5. eval:  transitive triplets                                     0.6667  (   0.1911)
+ 6. eval:  3-cycles                                               -0.3494  (   0.3832)
+ 7. eval:  same gender                                             1.0832  (   0.3523)
+ 8. eval:  smoke1 similarity                                       0.2901  (   0.4402)
+ 9. eval:  drinkingbeh alter                                       0.1662  (   0.2193)
+10. eval:  drinkingbeh ego                                        -0.0777  (   0.2599)
+11. eval:  drinkingbeh ego x drinkingbeh alter                     0.2152  (   0.1892)
+Behavior Dynamics
+
+12. rate:  rate drinkingbeh (period 1)                             1.5567  (   0.8754)
+13. rate:  rate drinkingbeh (period 2)                             1.7673  (   0.6844)
+14. eval:  drinkingbeh linear shape                                0.3408  (   0.2131)
+15. eval:  drinkingbeh quadratic shape                             0.0526  (   0.2900)
+16. eval:  drinkingbeh average similarity                          4.3391  (   5.2604)
+17. eval:  drinkingbeh average alter                              -0.4985  (   0.9309)
+
+
+@3
+Covariance matrices
+                   
+Covariance matrix of estimates (correlations below diagonal):
+     0.639     -0.024      0.031      0.011      0.010     -0.052     -0.015      0.002     -0.014      0.006     -0.008     -0.104     -0.051      0.010     -0.028     -0.538      0.065
+    -0.041      0.509      0.006      0.038      0.002     -0.017     -0.008     -0.002     -0.004     -0.003     -0.009      0.046     -0.005     -0.014     -0.005     -0.197      0.017
+     0.093      0.021      0.171     -0.077     -0.030      0.017     -0.109     -0.002     -0.012      0.022     -0.019      0.023      0.022      0.007      0.024      0.495     -0.073
+     0.034      0.130     -0.451      0.172      0.041     -0.094     -0.002     -0.001      0.017     -0.010      0.001     -0.011     -0.063     -0.003     -0.019     -0.415      0.058
+     0.067      0.013     -0.374      0.515      0.037     -0.061      0.004     -0.002      0.003      0.002     -0.002     -0.009     -0.023      0.001     -0.005     -0.098      0.009
+    -0.170     -0.063      0.108     -0.595     -0.840      0.147      0.020     -0.005     -0.003     -0.003      0.005      0.026      0.051     -0.001      0.012      0.243     -0.023
+    -0.054     -0.031     -0.751     -0.011      0.062      0.148      0.124     -0.011     -0.001     -0.015      0.005     -0.034      0.001     -0.004     -0.015     -0.309      0.043
+     0.004     -0.007     -0.012     -0.008     -0.019     -0.030     -0.071      0.194      0.024      0.039     -0.014      0.010      0.012      0.000      0.007      0.091     -0.015
+    -0.082     -0.028     -0.132      0.189      0.071     -0.034     -0.018      0.245      0.048     -0.026     -0.006     -0.043     -0.012     -0.003     -0.006     -0.192      0.026
+     0.030     -0.015      0.208     -0.093      0.032     -0.029     -0.161      0.345     -0.458      0.068     -0.013      0.058      0.014      0.005      0.011      0.325     -0.036
+    -0.052     -0.065     -0.247      0.014     -0.053      0.068      0.079     -0.171     -0.153     -0.266      0.036      0.001      0.014     -0.002     -0.001     -0.037     -0.001
+    -0.149      0.074      0.062     -0.032     -0.054      0.077     -0.111      0.025     -0.223      0.255      0.007      0.766      0.137     -0.052      0.071      1.577     -0.136
+    -0.093     -0.009      0.076     -0.223     -0.173      0.196      0.002      0.039     -0.082      0.078      0.105      0.228      0.468     -0.020      0.058      1.314     -0.153
+     0.057     -0.092      0.084     -0.029      0.016     -0.010     -0.052     -0.004     -0.063      0.083     -0.060     -0.281     -0.135      0.045      0.011      0.227     -0.053
+    -0.119     -0.026      0.200     -0.160     -0.094      0.109     -0.144      0.056     -0.099      0.142     -0.011      0.280      0.291      0.176      0.084      1.343     -0.239
+    -0.128     -0.053      0.227     -0.190     -0.097      0.121     -0.167      0.039     -0.167      0.238     -0.038      0.342      0.365      0.202      0.880     27.672     -4.349
+     0.088      0.026     -0.190      0.150      0.053     -0.064      0.130     -0.036      0.129     -0.148     -0.005     -0.167     -0.241     -0.268     -0.885     -0.888      0.867
+
+Derivative matrix of expected statistics X by parameters and
+covariance/correlation matrix of X can be found using
+summary(ans) within R, or by using the 'verbose' option in Siena07.
+ 
+Total computation time 11.33 seconds.

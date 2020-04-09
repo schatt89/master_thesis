@@ -470,7 +470,7 @@ to_remove.1 <- sample(intersect(which(alco.30[,1] > 1),
                       6, replace = F)
 
 fr.30.1.mis.20.nb <- fr.30.1
-fr.30.1.mis.20.nb[to_remove.1,] <- NA # 3 removed
+fr.30.1.mis.20.nb[to_remove.1,] <- NA # 6 removed
 
 alco.30.1.mis.20.nb <- alco.30[,1]
 alco.30.1.mis.20.nb[to_remove.1] <- NA
@@ -503,7 +503,7 @@ to_remove.1 <- sample(intersect(which(alco.30[,1] > 1),
                       9, replace = F)
 
 fr.30.1.mis.30.nb <- fr.30.1
-fr.30.1.mis.30.nb[to_remove.1,] <- NA # 3 removed
+fr.30.1.mis.30.nb[to_remove.1,] <- NA # 9 removed
 
 alco.30.1.mis.30.nb <- alco.30[,1]
 alco.30.1.mis.30.nb[to_remove.1] <- NA
@@ -528,3 +528,29 @@ for (i in 1:100) {
     alco.30.sim.mis.30.nb[,2,i][to_remove.3[j]] <- NA
   }
 }
+
+######## SAVING SMALLER DATASET ################################################
+
+save(age.30, alco.30, 
+     alco.30.1.mis.10.b, alco.30.1.mis.10.n, alco.30.1.mis.10.nb, 
+     alco.30.1.mis.20.b, alco.30.1.mis.20.n, alco.30.1.mis.20.nb, 
+     alco.30.1.mis.30.b, alco.30.1.mis.30.n, alco.30.1.mis.30.nb, 
+     alco.30.sim.mis.10.b, alco.30.sim.mis.10.n, alco.30.sim.mis.10.nb, 
+     alco.30.sim.mis.20.b, alco.30.sim.mis.20.n, alco.30.sim.mis.20.nb, 
+     alco.30.sim.mis.30.b, alco.30.sim.mis.30.n, alco.30.sim.mis.30.nb, 
+     ans30, 
+     fr.30.1, 
+     fr.30.1.mis.10.b, fr.30.1.mis.10.n, fr.30.1.mis.10.nb, 
+     fr.30.1.mis.20.b, fr.30.1.mis.20.n, fr.30.1.mis.20.nb, 
+     fr.30.1.mis.30.b, fr.30.1.mis.30.n, fr.30.1.mis.30.nb, 
+     fr.30.2, 
+     fr.30.2.sim.mis.10.b, fr.30.2.sim.mis.10.n, fr.30.2.sim.mis.10.nb, 
+     fr.30.2.sim.mis.20.b, fr.30.2.sim.mis.20.n, fr.30.2.sim.mis.20.nb, 
+     fr.30.2.sim.mis.30.b, fr.30.2.sim.mis.30.n, fr.30.2.sim.mis.30.nb, 
+     fr.30.3, 
+     fr.30.3.sim.mis.10.b, fr.30.3.sim.mis.10.n, fr.30.3.sim.mis.10.nb, 
+     fr.30.3.sim.mis.20.b, fr.30.3.sim.mis.20.n, fr.30.3.sim.mis.20.nb, 
+     fr.30.3.sim.mis.30.b, fr.30.3.sim.mis.30.n, fr.30.3.sim.mis.30.nb, 
+     sex.F.30, toba.30,
+     file = "./data/simulated/Data30.RData")
+
