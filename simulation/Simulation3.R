@@ -554,3 +554,297 @@ save(age.30, alco.30,
      sex.F.30, toba.30,
      file = "./data/simulated/Data30.RData")
 
+
+################################################################################
+########                                                               #########
+########           Missing data generation - bigger network            #########
+########                                                               #########
+################################################################################
+
+################## Missings depend on the network ##############################
+
+### 10% missing data ####
+
+to_remove.1 <- sample(which(rowSums(fr.60.1) < 1), 6, replace = F)
+
+fr.60.1.mis.10.n <- fr.60.1
+fr.60.1.mis.10.n[to_remove.1,] <- NA # 6 removed
+
+alco.60.1.mis.10.n <- alco.60[,1]
+alco.60.1.mis.10.n[to_remove.1] <- NA
+
+fr.60.2.sim.mis.10.n <- fr.60.2.sim
+fr.60.3.sim.mis.10.n <- fr.60.3.sim
+alco.60.sim.mis.10.n <- alco.60.sim
+
+for (i in 1:100) {
+  to_remove.2 <- sample(which(rowSums(fr.60.2.sim[,,i]) < 1), 6, replace=F)
+  to_remove.3 <- sample(which(rowSums(fr.60.3.sim[,,i]) < 1), 6, replace=F)
+  for (j in 1:6) {
+    fr.60.2.sim.mis.10.n[,,i][to_remove.2[j],] <- NA
+    alco.60.sim.mis.10.n[,1,i][to_remove.2[j]] <- NA
+    
+    fr.60.3.sim.mis.10.n[,,i][to_remove.3[j],] <- NA
+    alco.60.sim.mis.10.n[,2,i][to_remove.3[j]] <- NA
+  }
+}
+
+### 20% missing data ####
+
+to_remove.1 <- sample(which(rowSums(fr.60.1) < 2), 12, replace=F)
+
+fr.60.1.mis.20.n <- fr.60.1
+fr.60.1.mis.20.n[to_remove.1,] <- NA # 12 removed
+
+alco.60.1.mis.20.n <- alco.60[,1]
+alco.60.1.mis.20.n[to_remove.1] <- NA
+
+fr.60.2.sim.mis.20.n <- fr.60.2.sim
+fr.60.3.sim.mis.20.n <- fr.60.3.sim
+alco.60.sim.mis.20.n <- alco.60.sim
+
+for (i in 1:100) {
+  to_remove.2 <- sample(which(rowSums(fr.60.2.sim[,,i]) < 2), 12, replace=F)
+  to_remove.3 <- sample(which(rowSums(fr.60.3.sim[,,i]) < 2), 12, replace=F)
+  for (j in 1:12) {
+    fr.60.2.sim.mis.20.n[,,i][to_remove.2[j],] <- NA
+    alco.60.sim.mis.20.n[,1,i][to_remove.2[j]] <- NA
+    
+    fr.60.3.sim.mis.20.n[,,i][to_remove.3[j],] <- NA
+    alco.60.sim.mis.20.n[,2,i][to_remove.3[j]] <- NA
+  }
+}
+
+### 30% missing data ####
+
+to_remove.1 <- sample(which(rowSums(fr.60.1) < 2), 18, replace=F)
+
+fr.60.1.mis.60.n <- fr.60.1
+fr.60.1.mis.60.n[to_remove.1,] <- NA # 18 removed
+
+alco.60.1.mis.60.n <- alco.60[,1]
+alco.60.1.mis.60.n[to_remove.1] <- NA
+
+fr.60.2.sim.mis.60.n <- fr.60.2.sim
+fr.60.3.sim.mis.60.n <- fr.60.3.sim
+alco.60.sim.mis.60.n <- alco.60.sim
+
+for (i in 1:100) {
+  to_remove.2 <- sample(which(rowSums(fr.60.2.sim[,,i]) < 2), 18, replace=F)
+  to_remove.3 <- sample(which(rowSums(fr.60.3.sim[,,i]) < 2), 18, replace=F)
+  for (j in 1:18) {
+    fr.60.2.sim.mis.60.n[,,i][to_remove.2[j],] <- NA
+    alco.60.sim.mis.60.n[,1,i][to_remove.2[j]] <- NA
+    
+    fr.60.3.sim.mis.60.n[,,i][to_remove.3[j],] <- NA
+    alco.60.sim.mis.60.n[,2,i][to_remove.3[j]] <- NA
+  }
+}
+
+################## Missings depend on the behavior #############################
+
+### 10% missing data ####
+
+to_remove.1 <- sample(which(alco.60[,1] > 3), 6, replace = F)
+
+fr.60.1.mis.10.b <- fr.60.1
+fr.60.1.mis.10.b[to_remove.1,] <- NA # 6 removed
+
+alco.60.1.mis.10.b <- alco.60[,1]
+alco.60.1.mis.10.b[to_remove.1] <- NA
+
+fr.60.2.sim.mis.10.b <- fr.60.2.sim
+fr.60.3.sim.mis.10.b <- fr.60.3.sim
+alco.60.sim.mis.10.b <- alco.60.sim
+
+for (i in 1:100) {
+  to_remove.2 <- sample(which(alco.60.sim[,1,i] > 3), 6, replace=F)
+  to_remove.3 <- sample(which(alco.60.sim[,2,i] > 3), 6, replace=F)
+  for (j in 1:6) {
+    fr.60.2.sim.mis.10.b[,,i][to_remove.2[j],] <- NA
+    alco.60.sim.mis.10.b[,1,i][to_remove.2[j]] <- NA
+    
+    fr.60.3.sim.mis.10.b[,,i][to_remove.3[j],] <- NA
+    alco.60.sim.mis.10.b[,2,i][to_remove.3[j]] <- NA
+  }
+}
+
+### 20% missing data ####
+
+to_remove.1 <- sample(which(alco.60[,1] > 2), 12, replace = F)
+
+fr.60.1.mis.20.b <- fr.60.1
+fr.60.1.mis.20.b[to_remove.1,] <- NA # 12 removed
+
+alco.60.1.mis.20.b <- alco.60[,1]
+alco.60.1.mis.20.b[to_remove.1] <- NA
+
+fr.60.2.sim.mis.20.b <- fr.60.2.sim
+fr.60.3.sim.mis.20.b <- fr.60.3.sim
+alco.60.sim.mis.20.b <- alco.60.sim
+
+for (i in 1:100) {
+  to_remove.2 <- sample(which(alco.60.sim[,1,i] > 3), 12, replace=F)
+  to_remove.3 <- sample(which(alco.60.sim[,2,i] > 3), 12, replace=F)
+  for (j in 1:12) {
+    fr.60.2.sim.mis.20.b[,,i][to_remove.2[j],] <- NA
+    alco.60.sim.mis.20.b[,1,i][to_remove.2[j]] <- NA
+    
+    fr.60.3.sim.mis.20.b[,,i][to_remove.3[j],] <- NA
+    alco.60.sim.mis.20.b[,2,i][to_remove.3[j]] <- NA
+  }
+}
+
+### 30% missing data ####
+
+to_remove.1 <- sample(which(alco.60[,1] > 2), 18, replace = F)
+
+fr.60.1.mis.60.b <- fr.60.1
+fr.60.1.mis.60.b[to_remove.1,] <- NA # 18 removed
+
+alco.60.1.mis.60.b <- alco.60[,1]
+alco.60.1.mis.60.b[to_remove.1] <- NA
+
+fr.60.2.sim.mis.60.b <- fr.60.2.sim
+fr.60.3.sim.mis.60.b <- fr.60.3.sim
+alco.60.sim.mis.60.b <- alco.60.sim
+
+for (i in 1:100) {
+  to_remove.2 <- sample(which(alco.60.sim[,1,i] > 2), 18, replace=F)
+  to_remove.3 <- sample(which(alco.60.sim[,2,i] > 2), 18, replace=F)
+  for (j in 1:18) {
+    fr.60.2.sim.mis.60.b[,,i][to_remove.2[j],] <- NA
+    alco.60.sim.mis.60.b[,1,i][to_remove.2[j]] <- NA
+    
+    fr.60.3.sim.mis.60.b[,,i][to_remove.3[j],] <- NA
+    alco.60.sim.mis.60.b[,2,i][to_remove.3[j]] <- NA
+  }
+}
+
+################## Missings depend on both net and beh #########################
+
+### 10% data ####
+
+to_remove.1 <- sample(intersect(which(alco.60[,1] > 2),
+                                which(rowSums(fr.60.1) < 2)),
+                      6, replace = F)
+
+fr.60.1.mis.10.nb <- fr.60.1
+fr.60.1.mis.10.nb[to_remove.1,] <- NA # 6 removed
+
+alco.60.1.mis.10.nb <- alco.60[,1]
+alco.60.1.mis.10.nb[to_remove.1] <- NA
+
+fr.60.2.sim.mis.10.nb <- fr.60.2.sim
+fr.60.3.sim.mis.10.nb <- fr.60.3.sim
+alco.60.sim.mis.10.nb <- alco.60.sim
+
+for (i in 1:100) {
+  
+  to_remove.2 <- sample(intersect(which(alco.60.sim[,1,i] > 2),
+                                  which(rowSums(fr.60.2.sim[,,i]) < 2)),
+                        6, replace = F)
+  to_remove.3 <- sample(intersect(which(alco.60.sim[,2,i] > 2),
+                                  which(rowSums(fr.60.3.sim[,,i]) < 2)),
+                        6, replace = F)
+  for (j in 1:6) {
+    fr.60.2.sim.mis.10.nb[,,i][to_remove.2[j],] <- NA
+    alco.60.sim.mis.10.nb[,1,i][to_remove.2[j]] <- NA
+    
+    fr.60.3.sim.mis.10.nb[,,i][to_remove.3[j],] <- NA
+    alco.60.sim.mis.10.nb[,2,i][to_remove.3[j]] <- NA
+  }
+}
+
+### 20% data ####
+
+to_remove.1 <- sample(intersect(which(alco.60[,1] > 1),
+                                which(rowSums(fr.60.1) < 2)),
+                      12, replace = F)
+
+fr.60.1.mis.20.nb <- fr.60.1
+fr.60.1.mis.20.nb[to_remove.1,] <- NA # 12 removed
+
+alco.60.1.mis.20.nb <- alco.60[,1]
+alco.60.1.mis.20.nb[to_remove.1] <- NA
+
+fr.60.2.sim.mis.20.nb <- fr.60.2.sim
+fr.60.3.sim.mis.20.nb <- fr.60.3.sim
+alco.60.sim.mis.20.nb <- alco.60.sim
+
+for (i in 1:100) {
+  
+  to_remove.2 <- sample(intersect(which(alco.60.sim[,1,i] > 2),
+                                  which(rowSums(fr.60.2.sim[,,i]) < 2)),
+                        12, replace = F)
+  to_remove.3 <- sample(intersect(which(alco.60.sim[,2,i] > 2),
+                                  which(rowSums(fr.60.3.sim[,,i]) < 2)),
+                        12, replace = F)
+  for (j in 1:12) {
+    fr.60.2.sim.mis.20.nb[,,i][to_remove.2[j],] <- NA
+    alco.60.sim.mis.20.nb[,1,i][to_remove.2[j]] <- NA
+    
+    fr.60.3.sim.mis.20.nb[,,i][to_remove.3[j],] <- NA
+    alco.60.sim.mis.20.nb[,2,i][to_remove.3[j]] <- NA
+  }
+}
+
+### 30% data ####
+
+to_remove.1 <- sample(intersect(which(alco.60[,1] > 1),
+                                which(rowSums(fr.60.1) < 2)),
+                      17, replace = F)
+to_remove.1 <- union(to_remove.1, 3)
+
+fr.60.1.mis.60.nb <- fr.60.1
+fr.60.1.mis.60.nb[to_remove.1,] <- NA # 18 removed
+
+alco.60.1.mis.60.nb <- alco.60[,1]
+alco.60.1.mis.60.nb[to_remove.1] <- NA
+
+fr.60.2.sim.mis.60.nb <- fr.60.2.sim
+fr.60.3.sim.mis.60.nb <- fr.60.3.sim
+alco.60.sim.mis.60.nb <- alco.60.sim
+
+for (i in 1:100) {
+  
+  to_remove.2 <- sample(intersect(which(alco.60.sim[,1,i] > 1),
+                                  which(rowSums(fr.60.2.sim[,,i]) < 2)),
+                        18, replace = F)
+  to_remove.3 <- sample(intersect(which(alco.60.sim[,2,i] > 1),
+                                  which(rowSums(fr.60.3.sim[,,i]) < 2)),
+                        18, replace = F)
+  for (j in 1:18) {
+    fr.60.2.sim.mis.60.nb[,,i][to_remove.2[j],] <- NA
+    alco.60.sim.mis.60.nb[,1,i][to_remove.2[j]] <- NA
+    
+    fr.60.3.sim.mis.60.nb[,,i][to_remove.3[j],] <- NA
+    alco.60.sim.mis.60.nb[,2,i][to_remove.3[j]] <- NA
+  }
+}
+
+
+######## SAVING BIGGER DATASET #################################################
+
+save(age.60, alco.60, 
+     alco.60.1.mis.10.b, alco.60.1.mis.10.n, alco.60.1.mis.10.nb, 
+     alco.60.1.mis.20.b, alco.60.1.mis.20.n, alco.60.1.mis.20.nb, 
+     alco.60.1.mis.60.b, alco.60.1.mis.60.n, alco.60.1.mis.60.nb, 
+     alco.60.sim.mis.10.b, alco.60.sim.mis.10.n, alco.60.sim.mis.10.nb, 
+     alco.60.sim.mis.20.b, alco.60.sim.mis.20.n, alco.60.sim.mis.20.nb, 
+     alco.60.sim.mis.60.b, alco.60.sim.mis.60.n, alco.60.sim.mis.60.nb, 
+     ans30, 
+     fr.60.1, 
+     fr.60.1.mis.10.b, fr.60.1.mis.10.n, fr.60.1.mis.10.nb, 
+     fr.60.1.mis.20.b, fr.60.1.mis.20.n, fr.60.1.mis.20.nb, 
+     fr.60.1.mis.60.b, fr.60.1.mis.60.n, fr.60.1.mis.60.nb, 
+     fr.60.2, 
+     fr.60.2.sim.mis.10.b, fr.60.2.sim.mis.10.n, fr.60.2.sim.mis.10.nb, 
+     fr.60.2.sim.mis.20.b, fr.60.2.sim.mis.20.n, fr.60.2.sim.mis.20.nb, 
+     fr.60.2.sim.mis.60.b, fr.60.2.sim.mis.60.n, fr.60.2.sim.mis.60.nb, 
+     fr.60.3, 
+     fr.60.3.sim.mis.10.b, fr.60.3.sim.mis.10.n, fr.60.3.sim.mis.10.nb, 
+     fr.60.3.sim.mis.20.b, fr.60.3.sim.mis.20.n, fr.60.3.sim.mis.20.nb, 
+     fr.60.3.sim.mis.60.b, fr.60.3.sim.mis.60.n, fr.60.3.sim.mis.60.nb, 
+     sex.F.60, toba.60,
+     file = "./data/simulated/Data60.RData")
