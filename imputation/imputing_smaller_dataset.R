@@ -22,8 +22,13 @@ load("./data/simulated/Data30.RData")
 ################################################################################
 
 miceImpAlco30.10.n <- array(rep(NA, 30*50*100), c(30, 50, 100))
+miceImpToba30 <- array(rep(NA, 30*50), c(30, 50))
 impNets.1.30.10.n <- list()
 impAlco.1.30.10.n <- list()
+impNets.2.30.10.n <- list()
+impAlco.2.30.10.n <- list()
+impNets.3.30.10.n <- list()
+impAlco.3.30.10.n <- list()
 
 for (i in 1:2) {
   indegree1 <- colSums(fr.30.1.mis.10.n, na.rm = TRUE)
@@ -46,13 +51,15 @@ for (i in 1:2) {
   avgAltA2[is.nan(avgAltA2)] <- NA
   avgAltA3[is.nan(avgAltA3)] <- NA
   
-  miceData <- cbind(alco.30.1.mis.10.n, alco.30.sim.mis.10.n[,,i], indegree1,
-                    indegree2, indegree3, avgAltA1, avgAltA2, avgAltA3)
+  miceData <- cbind(alco.30.1.mis.10.n, alco.30.sim.mis.10.n[,,i], sex.F.30,
+                    toba.30[,1], indegree1, indegree2, indegree3, avgAltA1,
+                    avgAltA2, avgAltA3)
   
   set.seed(11019)
   miceImp <- mice(miceData, m = 50, defaultMethod = "pmm", maxit = 20)
   for (d in 1:50) {
     miceImpAlco30.10.n[,d,i] <- complete(miceImp, d)$alco.30.1.mis.10.n
+    miceImpToba30[,i] <- complete(miceImp, d)$V5
   }
   
   friendship <- sienaDependent(array(c(fr.30.1.mis.10.n, fr.30.1.mis.10.n),
@@ -63,7 +70,9 @@ for (i in 1:2) {
   # network as covariate
   a2 <- coCovar(alco.30.sim.mis.10.n[,1,i]) # the 2nd wave incomplete
   # behavior as covariate
+  smoke1 <- coCovar(toba.30[,1])
   
+  gender <- coCovar(sex.F.30)
   
   stationaryDataList <- list()
   
@@ -73,7 +82,7 @@ for (i in 1:2) {
                                   type = "behavior", allowOnly = FALSE)
     
     stationaryDataList[[d]] <- sienaDataCreate(friendship, drinkingbeh, 
-                                               w2, a2)
+                                               w2, a2, smoke1 , gender)
   }
   
   Data.stationary <- sienaGroupCreate(stationaryDataList)
@@ -89,9 +98,15 @@ for (i in 1:2) {
   effects.stationary <- includeEffects(effects.stationary, effFrom, 
                                        name = "drinkingbeh", interaction1 ="a2")
   
+  effects.stationary <- includeEffects(effects.stationary, simX, 
+                                       interaction1 ="smoke1")  
+  
+  effects.stationary <- includeEffects(effects.stationary, sameX, 
+                                       interaction1 ="gender") 
   # influence
   effects.stationary <- includeEffects(effects.stationary, name = "drinkingbeh",
-                                       avAlt, interaction1 = "friendship")
+                                       avAlt, avSim,
+                                       interaction1 = "friendship")
   
   #selection
   effects.stationary <- includeEffects(effects.stationary, egoX, altX, egoXaltX, 
@@ -163,8 +178,12 @@ for (i in 1:2) {
     drinkingbeh <- sienaDependent(cbind(a1change,a1), type = "behavior",
                                   allowOnly = FALSE)
     
+    smoke1 <- coCovar(toba.30[,1])
+    
+    gender <- coCovar(sex.F.30)
+    
     stationaryImpDataList[[d]] <- sienaDataCreate(friendship, drinkingbeh, 
-                                                  w2,a2)
+                                                  w2,a2, smoke1, gender)
   }
   
   Data.stationary.imp <- sienaGroupCreate(stationaryImpDataList)
@@ -201,5 +220,96 @@ for (i in 1:2) {
                                              firstg = 0.02, lessMem = TRUE,
                                              behModelType = c(drinkingbeh = 2))
   
+  for (d in 1:50) {
+    
+    cat('imputation',d,'\n')
+    
+    # now impute wave2
+    
+    friendship <- sienaDependent(array(c(impNets.1.30.10.n[[i]][[d]],
+                                         fr.30.2.sim.mis.10.n[,,d]),
+                                       dim = c(30,30,2)))
+    
+    drinkingbeh <- sienaDependent(cbind(impAlco.1.30.10.n[[i]][,d],
+                                        alco.30.sim.mis.10.n[,1,i]),
+                                  type = "behavior")
+    smoke1 <- coCovar(toba.30[,1])
+    gender <- coCovar(age.30)
+    
+    Data.w2  <- sienaDataCreate(friendship, drinkingbeh, smoke1, gender)
+    
+    effects.twoWaves <- getEffects(Data.w2)
+    effects.twoWaves <- includeEffects(effects.twoWaves, density, recip,
+                                       outActSqrt, inPopSqrt, gwespFF, gwespBB)
+    
+    effects.twoWaves <- includeEffects(effects.twoWaves, simX,
+                                       interaction1 = "smoke1")
+    effects.twoWaves <- includeEffects(effects.twoWaves, sameX,
+                                       interaction1 = "gender")  
+    
+    effects.twoWaves <- includeEffects(effects.twoWaves, egoX,  altX, egoXaltX,
+                                       interaction1 =  "drinkingbeh")
+    effects.twoWaves <- includeEffects(effects.twoWaves, avAlt, avSim,
+                                       name = 'drinkingbeh',
+                                       interaction1 =  "friendship")
+    
+    if (d == 1) {
+      period1saom <- siena07ToConvergence(alg = estimation.options,
+                                          dat = Data.w2,nodes = 7,
+                                          eff = effects.twoWaves,
+                                          threshold = 0.25)
+    } else {
+      period1saom <- siena07ToConvergence(alg = estimation.options,
+                                          dat = Data.w2,
+                                          eff = effects.twoWaves,
+                                          threshold = 0.25,nodes = 7,
+                                          ans0 = period1saom)
+    }
+    
+    sims <- siena07(imputation.options, data = Data.w2,
+                    effects = effects.twoWaves, prevAns = period1saom,
+                    returnDeps = TRUE)$sims[[10]]
+    
+    net2imp[[d]] <- getNet(impNets.1.30.10.n[[i]][[d]], sims[[1]])
+    #a1changelc2imp[,d] <- sims[[2]]
+    alc2imp[,d] <- sims[[2]]
+    # impute wave 3
+    
+    friendship <- sienaDependent(array( c(net2imp[[d]],
+                                          fr.30.3.sim.mis.10.n[,,d]),
+                                        dim = c(30,30, 2)))
+    drinkingbeh <- sienaDependent(cbind(alc2imp[,d],
+                                        alco.30.sim.mis.10.n[,2,i]),
+                                  type = "behavior")
+    
+    Data.w3  <- sienaDataCreate(friendship, drinkingbeh, smoke1, gender)
+    
+    if (d == 1) {
+      period2saom <- siena07ToConvergence(alg = estimation.options,
+                                          dat = Data.w3,nodes = 7,
+                                          eff = effects.twoWaves,
+                                          threshold = 0.25)
+    } else {
+      period2saom <- siena07ToConvergence(alg = estimation.options,
+                                          dat = Data.w3,
+                                          eff = effects.twoWaves,
+                                          threshold = 0.25,nodes = 7,
+                                          ans0 = period2saom)
+    }
+    
+    
+    sims <- siena07(imputation.options, data = Data.w3,
+                    effects = effects.twoWaves,
+                    prevAns = period2saom, returnDeps = TRUE)$sims[[10]]
+    
+    net3imp[[d]] <- getNet(fr.30.3.sim.mis.10.n[,,d], sims[[1]])
+    alc3imp[,d] <- sims[[2]]
+    
+  }
+  save.image('mi.RData')
+  impNets.2.30.10.n[[i]] = list(net2imp)
+  impAlco.2.30.10.n[[i]] = list(alc2imp)
+  impNets.3.30.10.n[[i]] = list(net3imp)
+  impAlco.3.30.10.n[[i]] = list(alc3imp)
 
 }
