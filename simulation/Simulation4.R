@@ -1,5 +1,5 @@
 library(RSiena) # or RSienaTest
-source("./simulation/SimulateNetworksBehavior_v3.R")
+source("./simulation/SimulateNetworksBehavior_v4.R")
 source("./simulation/siena07ToConvergence.R")
 
 ################################################################################
@@ -210,45 +210,69 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model_60", seed = 300)
 #######                                                                   ######
 ################################################################################
 
-n <- 30
 M <- 3
-c <- 5
 
-rate <- ans30$theta[2]
-dens <- ans30$theta[3]
-rec <- ans30$theta[4]
-tt <- ans30$theta[5]
-c3 <- ans30$theta[6]
+net.w1 = fr.30.1
+covar = sex.F.30
+b1.w1 = toba.30[,1]
+b2.w1 = alco.30[,1]
+n = 30
+c1 = 5
+c2 = 5
 
-Vasame  <- ans30$theta[7]
-Vbsim <- ans30$theta[8]
+rate = ans30$theta[1]
+dens = ans30$theta[2]
+rec = ans30$theta[3]
+tt = ans30$theta[4]
+tRt = ans30$theta[5]
+c3 = ans30$theta[6]
+inPopSq = ans30$theta[7]
+outActSq = ans30$theta[8]
 
-altX.b <- ans30$theta[9]
-egoX.b <- ans30$theta[10]
-egoXaltX.b <- ans30$theta[11]
-rate.b <- ans30$theta[13]
-lin.b <- ans30$theta[14]
-qu.b <- ans30$theta[15]
-avalt.b <- ans30$theta[17]
-avsim.b <- ans30$theta[16]
+Vsame = ans30$theta[9]
+
+altX.b1 = ans30$theta[10]
+egoX.b1 = ans30$theta[11]
+egoXaltX.b1 = ans30$theta[12]
+
+rate.b1 = ans30$theta[16]
+lin.b1 = ans30$theta[17]
+qu.b1 = ans30$theta[18]
+avalt.b1 = ans30$theta[19]
+effF.b1.V = ans30$theta[20]
+effF.b1.b2 = ans30$theta[21]
+
+altX.b2 = ans30$theta[13]
+egoX.b2 = ans30$theta[14]
+egoXaltX.b2 = ans30$theta[15]
+
+rate.b2 = ans30$theta[22]
+lin.b2 = ans30$theta[23]
+qu.b2 = ans30$theta[24]
+avalt.b2 = ans30$theta[25]
+effF.b2.V = ans30$theta[26]
+effF.b2.b1 = ans30$theta[27]
 
 fr.30.2.sim <- array(rep(0, n*n*100), c(n, n, 100))
 fr.30.3.sim <- array(rep(0, n*n*100), c(n, n, 100))
 
 alco.30.sim <- array(rep(0, n*2*100), c(n, 2, 100))
+toba.30.sim <- array(rep(0, n*2*100), c(n, 2, 100))
 
 for (i in 1:100) { 
-  SN <- SimulateNetworksBehavior(net.w1 = fr.30.1, covara = age.30,
-                                 covarb = toba.30[,1], b.w1 = alco.30[,1],
-                                 n, M, c,
-                                 rate, dens, rec, tt, c3,
-                                 Vasame, Vbsim, altX.b, egoX.b, egoXaltX.b,
-                                 rate.b, lin.b, qu.b, avalt.b, avsim.b)
-  
+  SN <- SimulateNetworksBehavior(net.w1, covar, b1.w1, b2.w1, n, c1, c2,
+                       rate, dens, rec, tt, tRt, c3, inPopSq, outActSq,
+                       Vsame,
+                       altX.b1, egoX.b1, egoXaltX.b1,
+                       rate.b1, lin.b1, qu.b1, avalt.b1, effF.b1.V, effF.b1.b2,
+                       altX.b2, egoX.b2, egoXaltX.b2,
+                       rate.b2, lin.b2, qu.b2, avalt.b2, effF.b2.V, effF.b2.b1)
+
   fr.30.2.sim[,,i] <- SN$networks[,,1]
   fr.30.3.sim[,,i] <- SN$networks[,,2]
   
-  alco.30.sim[,,i] <- SN$behaviors
+  toba.30.sim[,,i] <- SN$behavior1
+  alco.30.sim[,,i] <- SN$behavior2
 }
 
 ################################################################################
