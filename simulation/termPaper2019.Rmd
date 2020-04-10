@@ -1,0 +1,953 @@
+---
+author: "Anna Iashina"
+title: "Behavior and network imputation"
+output: html_document
+---
+
+```{r}
+siena07ToConvergence <- function(alg, dat, eff, ans0=NULL, threshold, ...){
+  numr <- 0
+  ans <- siena07(alg, data = dat, effects = eff, prevAns = ans0, nbrNodes = 4, returnDeps = TRUE, useCluster = TRUE, ...) # the first run
+  repeat {
+    save(ans, file = paste("ans",numr,".RData",sep = "")) # to be safe
+    numr <- numr + 1           # count number of repeated runs
+    tm <- ans$tconv.max      # convergence indicator
+    cat(numr, tm,"\n")       # report how far we are
+    if (tm < threshold) {break}   # success
+    if (tm > 10) {stop()}     # divergence without much hope
+    # of returning to good parameter values
+    if (numr > 100) {stop()}  # now it has lasted too long
+    alg$nsub <- 1
+    alg$n2start <- 5000 + numr * 1000
+    ans <- siena07(alg, data = dat, effects = eff, prevAns = ans,nbrNodes = 4, returnDeps = TRUE, useCluster = TRUE, ...)
+  }
+  if (tm > threshold)
+  {
+    stop("Warning: convergence inadequate.\n")
+  }
+  ans
+}
+
+library(RSienaTest)
+library(mice)
+
+```
+
+
+### Data preprocessing
+
+Glasgow data contains natural missing data. For the research purposes we need a complete dataset so we leave only those observations which doesn't contain any missings.
+
+```{r}
+
+# Read data sets:
+load("~/Desktop/siena_project/data/Glasgow-demographic.RData")# for gender
+load("~/Desktop/siena_project/data/Glasgow-friendship.RData") # for networks
+load("~/Desktop/siena_project/data/Glasgow-substances.RData") # for alcochol and tobacco
+load("~/Desktop/siena_project/data/Glasgow-selections.RData") # for 129 selection
+selection129 = selection129
+
+# firstly we leave only 129 students who don't have missings in tobacco variable
+alcohol <- alcohol[selection129,]
+tobacco <- tobacco[selection129,]
+
+sex.F <- sex.F[selection129]
+
+friendship.1 <- friendship.1[selection129, selection129]
+friendship.2 <- friendship.2[selection129, selection129]
+
+# change coding
+friendship.1[friendship.1 == 2] <- 1
+friendship.2[friendship.2 == 2] <- 1
+
+# 129 selection has missings in alcochol variable. Let's find those who also has no missings in alcochol variable
+present <- !is.na(rowSums(alcohol))
+
+alcohol <- alcohol[present,]
+tobacco <- tobacco[present,]
+
+sex.F <- sex.F[present]
+
+friendship.1 <- friendship.1[present, present]
+friendship.2 <- friendship.2[present, present]
+
+N <- nrow(friendship.1) # number of observations
+
+```
+
+
+### SIENA model with full data
+
+Before we proceed to the imputation models. we need to make sure the model we are going to estimate is correct. We'll estimate the model with behavioral effects with the full data we have. Then we'll take a look on goodness of fit.
+
+
+```{r}
+
+friendship <- sienaDependent(array(c(friendship.1, friendship.2),
+                                     dim = c( N, N, 2)))# create dependent variable
+
+# for behavior effects 
+drinkingbeh <- sienaDependent(alcohol[,1:2], type = "behavior" ) # complete data
+smokingbeh <- sienaDependent(tobacco[,1:2], type = "behavior" )
+
+# adding gender covariate
+sex <- coCovar(sex.F)
+
+# create siena data
+myCoEvolutionData <- sienaDataCreate(friendship, drinkingbeh,
+                                     smokingbeh,
+                                     sex)
+
+myCoEvolutionEff <- getEffects(myCoEvolutionData) # get initial effects
+
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, density, recip,  inPopSqrt, cycle3, transTrip, transRecTrip, inActSqrt) #structural effects
+
+#myCoEvolutionEff <- setEffect(myCoEvolutionEff, outTrunc, parameter = 7, test = FALSE, fix = TRUE,              initialValue = -10) # we cannot use MaxDegree when running MoM estimation, so we use outTrunc instead
+
+# gender homophily
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, sameX, interaction1 = "sex" )
+
+# selection effects
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, egoXaltX, interaction1 = "drinkingbeh" )
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, egoXaltX, interaction1 = "smokingbeh" )
+
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, name = "drinkingbeh", avAlt, interaction1 = "friendship")
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, name = "smokingbeh", avAlt, interaction1 = "friendship")
+
+# gender influence on smoking and drinking (not for the first wave)
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, effFrom,
+                                         name = "smokingbeh", interaction1 = "sex")
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, effFrom,
+                                       name = "drinkingbeh", interaction1 = "sex")
+
+# smoking and drinking influencing each other (not for the first wave)
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, effFrom,
+                                   name = "smokingbeh", interaction1 = "drinkingbeh")
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, effFrom,
+                                   name = "drinkingbeh", interaction1 = "smokingbeh")
+
+# check the list of effects
+myCoEvolutionEff
+
+
+# Estimate the siena model
+estimation.options <- sienaAlgorithmCreate(seed = 846, n3 = 3000) # seed must be specified
+
+# estimate the model until it converges
+model.1 <- siena07ToConvergence2(alg = estimation.options,
+                                dat = myCoEvolutionData,
+                                eff = myCoEvolutionEff,
+                                threshold = .25, nodes = 2)
+
+
+# make a tex table
+siena.table(model.1, type = "tex", sig = TRUE)
+
+model.1
+```
+
+Now, when we obtained the full model, we ought to test the goodness of fit.
+
+### Goodness of fit
+
+Note: *networks* and *sna* packages must be installed
+
+We'll check the goodness of indegree and outdegree distribution and the number of different triads. The violin plots let us compare empirical distribution (red line) with simulated distributions of those parameters and triads (violins). 
+
+```{r}
+# Indegree
+gof1.id <- sienaGOF(model.1, verbose = TRUE,
+                    varName = "friendship", IndegreeDistribution, cumulative = FALSE)
+plot(gof1.id)
+
+
+# Outdegree
+gof1.od <- sienaGOF(model.1, verbose = TRUE, varName = "friendship",
+                    OutdegreeDistribution, cumulative = FALSE)
+plot(gof1.od)
+
+
+# Triad census
+
+TriadCensus <- function(i, data, sims, wave, groupName, varName, levls=1:16){
+  unloadNamespace("igraph") # to avoid package clashes
+  require(sna)
+  require(network)
+  x <- networkExtraction(i, data, sims, wave, groupName, varName)
+  if (network.edgecount(x) <= 0) {x <- symmetrize(x)}
+  # because else triad.census(x) will lead to an error
+  tc <- sna::triad.census(x)[1,levls]
+  # triad names are transferred automatically
+  tc
+}
+
+
+gof1.tc <- sienaGOF(model.1, verbose = TRUE,
+                    varName = "friendship", TriadCensus)
+# This is more time-consuming...
+
+plot(gof1.tc, scale = TRUE, center = TRUE)
+
+```
+
+
+
+#######################################################
+# Multiple imputation for behavioral and network data #
+#######################################################
+
+
+### Generating missing data
+
+We will generate 20% of missings (MCAR) for the behavioral data (alcochol and tobacco consumption) and for the networks. The missing cases are persistent by waves. 
+
+```{r}
+
+set.seed(2509609) # for consistency
+
+# generate the random samples for each wave
+missW1 <- sample(1:N,21)
+missW2 <- sample(1:N,21)
+
+# make copies of the original data
+f1miss <- friendship.1
+f2miss <- friendship.2
+
+alcMiss <- alcohol
+tobMiss <- tobacco
+
+# create missings
+f1miss[missW1,] <- NA # networks
+f2miss[missW2,] <- NA
+
+alcMiss[missW1, 1] <- NA # alcochol
+alcMiss[missW2, 2] <- NA
+
+tobMiss[missW1, 1] <- NA # tobacco
+tobMiss[missW2, 2] <- NA
+
+```
+
+### MICE imputation for the behavior variables
+
+For the alcochol and tobacco imputation in the 1st wave we use indegree in the 1st and 2nd waves, average alter efect on alcochol and tobacco. Alcochol and tobacco variable are also used to help impute each other.
+
+```{r}
+indegree1 <- colSums(f1miss, na.rm = TRUE) # count indegree 1st wave
+indegree2 <- colSums(f2miss, na.rm = TRUE) # count indegree 2nd wave
+
+# split the behavior variables by waves
+a1 = alcMiss[,1]
+t1 = tobMiss[,1]
+a2 = alcMiss[,2]
+t2 = tobMiss[,2]
+
+# calculate the avgAlt effect where applicable (add a formula here)
+
+avgAltA1 <- rowSums(sweep(t(friendship.1), MARGIN = 2, a1,'*'),na.rm = TRUE) / rowSums(t(friendship.1), na.rm = TRUE)
+avgAltT1 <- rowSums(sweep(t(friendship.1), MARGIN = 2, t1,'*'),na.rm = TRUE) / rowSums(t(friendship.1), na.rm = TRUE)
+
+avgAltA1[is.nan(avgAltA1)] <- NA
+avgAltT1[is.nan(avgAltT1)] <- NA
+
+avgAltA2 <- rowSums(sweep(t(friendship.2), MARGIN = 2, a2,'*'),na.rm = TRUE) / rowSums(t(friendship.2), na.rm = TRUE)
+avgAltT2 <- rowSums(sweep(t(friendship.2), MARGIN = 2, t2,'*'),na.rm = TRUE) / rowSums(t(friendship.2), na.rm = TRUE)
+
+avgAltA2[is.nan(avgAltA2)] <- NA
+avgAltT2[is.nan(avgAltT2)] <- NA
+
+# create the final dataframe for mice imputation
+df <- cbind(a1, t1, sex.F,a2, t2, indegree1, indegree2, avgAltA1, avgAltT1, avgAltA2, avgAltT2)
+
+```
+
+With mice imputation all the variables that contain missings will be imputed but we are only interested in the first wave alcochol and tobacco imputation. The imputation for the behavioral variables in the second wave will be done with SAOMs later. 
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+D <- 50 # MUST BE SET TO A HIGHER VALUE
+# impute behavior wave 1
+m = mice(df, m = D ,defaultMethod = "pmm", maxit = 100)
+
+```
+
+### First imputation with stationary SAOM
+
+
+Now, when we have the imputed data for the behavioral variables in the 1st wave, we can start imputing the network. The first run of imputation for the 1st wave network is done with stationary SAOM. We take one of the behavioral datasets completed with mice and use it to model the first wave sructure.
+
+Since version 1.2-12, Maximum Likelihood (ML) estimation by $\textsf{Rsiena}$ with ```returnDeps = TRUE``` returns an edgelist of the final network at the end of the phase 3 simulation. The following function, ``` getNet() ```, uses this edgelist to impute the data.
+
+```{r}
+
+getNet <- function(observedNet,edgeList) { # get imputed network from SIENA model
+  # observedNet = observed network as adjacency with missing data
+  # edgeList = edgelist that is returned by siena07(...)$sims
+  observedNet[is.na(observedNet)] <- 0
+  for (i in 1:nrow(edgeList)) {
+    observedNet[edgeList[i,1],edgeList[i,2]] <- 1
+  }
+  return(observedNet)
+}
+
+
+```
+
+
+
+```{r}
+
+# the model
+
+friendship <- sienaDependent(array(c(f1miss, f1miss), dim = c( N, N, 2)), # make a dependent variable
+                            allowOnly = FALSE )
+  
+completedData <- complete(m, sample(1:D, 1)) # a random behavior dataset imputed with MICE
+
+drinking <- coCovar(completedData$a1) # imputed alco w1
+smoking <- coCovar(completedData$t1) # imputed tobacco w1
+sex <- coCovar(sex.F)
+  
+w2 <- coDyadCovar(f2miss) # the 2nd wave incomplete network as covariate 
+  
+Data.stationary  <- sienaDataCreate(friendship, drinking, smoking, sex, w2)
+  
+effects.stationary <- getEffects(Data.stationary)
+
+effects.stationary <- includeEffects(effects.stationary, density, recip, inPopSqrt,
+                                     cycle3, transTrip, transRecTrip, inActSqrt)
+                                
+# gender homophily
+effects.stationary <- includeEffects(effects.stationary, sameX, interaction1 = "sex" )
+
+
+effects.stationary <- includeEffects(effects.stationary, egoX, altX, egoXaltX,
+                                     interaction1 = "drinking")
+effects.stationary <- includeEffects(effects.stationary, egoX, altX, egoXaltX,
+                                     interaction1 = "smoking")
+
+# 2nd wave as coDyad covariate    
+effects.stationary <- includeEffects(effects.stationary, X, name = "friendship",
+                                     interaction1 = "w2")
+
+# fix the rate
+effects.stationary <- setEffect(effects.stationary, Rate, initialValue = 20,
+                                name = "friendship", fix = TRUE, type = "rate") 
+
+estimation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
+                                           seed = 214,
+                                           n3 = 1000, maxlike = FALSE,
+                                           cond = FALSE#, MaxDegree = c(friendship = 6)
+                                           )
+
+# First estimate the stationary SAOM by MoM.
+# ~ 60 mins
+period0saom <- siena07ToConvergence(alg = estimation.options,
+                                    dat = Data.stationary,
+                                    eff = effects.stationary, threshold = 0.25, nodes = 2)
+
+```
+
+
+### Multiple SAOM imputation starting from the first estimate by MoM with the stationary SAOM
+
+```{r message=FALSE, warning=FALSE}
+
+set.seed(142)
+
+D <- D # the same number as for the mice imputation
+wave1imp <- list()
+
+
+for (j in 1:D) {
+  cat('imputation', j,'\n')
+  # We have to change one tie in the starting network from 1 to 0 to allow ML
+  # simulation. For every imputation we want to change a different tie.
+  # Further, we will fix all observed ties and non-ties, which means we convert
+  # them to structural zeros (10) and structural ones (11). This increases speed
+  # and reduces randomness in our imputation. However, this is only done in the
+  # imputation of the first wave. We do not want observed ties to change during
+  # the stationary SAOM simulation. In contrast, in later waves observed ties
+  # are likely to change and this change needs to be preserved.
+  
+  n1 <- f1miss
+  n1 <- n1 + 10
+  diag(n1) <- 0
+  n2 <- n1
+  tieList <- c(1:(nrow(n1)**2))[c(n1 == 11)]
+  tieList <- tieList[!is.na(tieList)]
+  
+  changedTie <- sample(tieList,1)
+  
+  n1[changedTie] <- 0
+  n2[changedTie] <- 1
+  
+  friendship <- sienaDependent(array(c(n1,n2), dim = c( N, N, 2)),
+                            allowOnly = FALSE )
+  
+  
+  completedData <- complete(m, j) # j-completed dataset from MICE
+  
+  drinking <- coCovar(completedData$a1) # alco w1
+  smoking <- coCovar(completedData$t1) # tobacco w1
+  sex <- coCovar(sex.F)
+  
+  w2 <- coDyadCovar(f2miss) # 2nd wave as coDyad covariate
+  
+  Data.stationary  <- sienaDataCreate(friendship, drinking, smoking, sex, w2)
+  
+  effects.stationary <- getEffects(Data.stationary)
+  effects.stationary <- includeEffects(effects.stationary, density, recip,
+                                         #outTrunc,
+                                         inPopSqrt, cycle3, transTrip, transRecTrip, inActSqrt)
+  
+  #effects.stationary <- setEffect(effects.stationary, outTrunc, parameter = 7, test = FALSE, fix = TRUE, initialValue = -10) # we        cannot use MaxDegree when running MoM estimation, so we use outTrunc instead
+  
+  # gender homophily
+  effects.stationary <- includeEffects(effects.stationary, sameX, interaction1 = "sex" )
+  
+
+  effects.stationary <- includeEffects(effects.stationary, egoX, altX, egoXaltX,
+                                     interaction1 = "drinking")
+  effects.stationary <- includeEffects(effects.stationary, egoX, altX, egoXaltX,
+                                     interaction1 = "smoking")
+    
+  effects.stationary <- includeEffects(effects.stationary, X, name = "friendship",
+                                     interaction1 = "w2")
+
+  # set fixed rate
+  effects.stationary <- setEffect(effects.stationary, Rate, initialValue = 20, 
+                                name = "friendship", fix = TRUE, type = "rate")
+  
+  imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE, seed = 13848, # always specify seed
+                                           n3 = 10, maxlike = TRUE,
+                                           cond = FALSE, nsub = 0,
+                                           simOnly = TRUE) # no MaxDegree here because we use outTrunc instead
+  
+  # run the estimation
+  sims <- siena07(imputation.options, data = Data.stationary,
+                  effects = effects.stationary,
+                  prevAns = period0saom,
+                  returnDeps = TRUE)$sims[[10]]
+
+  
+  wave1imp[[j]] = getNet(f1miss, sims[[1]]) # save every imputed network
+  
+}
+
+
+```
+
+
+
+### 2nd wave imputation
+
+Imputation of missings in wave 2 by SAOM MoM simulations
+
+After obtaining D imputations of wave 1 we proceed by imputing wave 2 in a stepwise procedure.
+
+
+```{r W2 imputation, message=FALSE, include=FALSE}
+wave2imp <- list()
+alcImpW2 <- matrix(NA,nrow(friendship.1),D)
+tobImpW2 <- matrix(NA,nrow(friendship.1),D)
+
+for (j in 1:D) {
+  
+  cat('imputation',j,'\n')
+
+  # now impute wave2
+  friendship <- sienaDependent(array(c(wave1imp[[j]], f2miss),
+                                  dim = c(N,N,2)))
+  
+  completedData <- complete(m, j)
+  
+  alc <- cbind(completedData$a1, completedData$a2) # what if we try a2 with missings here
+  tob <- cbind(completedData$t1, completedData$t2) # what if we try t2 with missings here
+  
+  drinkingbeh <- sienaDependent(alc, type = "behavior") 
+  smokingbeh <- sienaDependent(tob, type = "behavior")
+  
+  sex = coCovar(sex.F)
+  
+  Data.w2  <- sienaDataCreate(friendship, drinkingbeh, smokingbeh, sex)
+  
+  effects.twoWaves <- getEffects(Data.w2)
+  
+  effects.twoWaves <- includeEffects(effects.twoWaves, density, recip, inPopSqrt,
+                                     cycle3, transTrip, transRecTrip, inActSqrt)
+  
+  # gender homophily
+  effects.twoWaves <- includeEffects(effects.twoWaves, sameX, interaction1 = "sex" )
+  
+  effects.twoWaves <- includeEffects(effects.twoWaves, egoX, altX, egoXaltX,  
+                                     interaction1 =  "drinkingbeh")
+  effects.twoWaves <- includeEffects(effects.twoWaves, egoX, altX, egoXaltX,
+                                     interaction1 =  "smokingbeh")
+  
+  effects.twoWaves <- includeEffects(effects.twoWaves, name = "drinkingbeh", avAlt, interaction1 = "friendship")
+  effects.twoWaves <- includeEffects(effects.twoWaves, name = "smokingbeh", avAlt, interaction1 = "friendship")
+
+  # gender influence on smoking and drinking 
+  effects.twoWaves <- includeEffects(effects.twoWaves, effFrom,
+                                         name = "smokingbeh", interaction1 = "sex")
+  effects.twoWaves <- includeEffects(effects.twoWaves, effFrom,
+                                       name = "drinkingbeh", interaction1 = "sex")
+
+  # smoking and drinking influencing each other 
+  effects.twoWaves <- includeEffects(effects.twoWaves, effFrom,
+                                   name = "smokingbeh", interaction1 = "drinkingbeh")
+  effects.twoWaves <- includeEffects(effects.twoWaves, effFrom,
+                                   name = "drinkingbeh", interaction1 = "smokingbeh")
+  
+  
+  estimation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
+                                           seed = 2214,
+                                           n3 = 1000, maxlike = FALSE,
+                                           cond = FALSE#, MaxDegree = c(friendship = 6)
+                                           )
+  
+
+  if (j == 1) {
+    period1saom <- siena07ToConvergence2(alg = estimation.options,
+                                        dat = Data.w2,
+                                        eff = effects.twoWaves,
+                                        threshold = 0.25, nodes = 2)
+  } else {
+    period1saom <- siena07ToConvergence2(alg = estimation.options,
+                                        dat = Data.w2,
+                                        eff = effects.twoWaves,
+                                        threshold = 0.25,
+                                        ans0 = period1saom, nodes = 2)
+  }
+  
+  # we want to impute the 2nd wave variables with SAOMs
+  alc <- cbind(completedData$a1, a2)
+  tob <- cbind(completedData$t1, t2)
+  
+  drinkingbeh <- sienaDependent(alc, type = "behavior")
+  smokingbeh <- sienaDependent(tob, type = "behavior")
+  
+  Data.w2  <- sienaDataCreate(friendship, drinkingbeh, smokingbeh, sex)
+  
+  sims <- siena07(imputation.options, data = Data.w2,
+                  effects = effects.twoWaves,
+                  prevAns = period1saom,
+                  returnDeps = TRUE)$sims[[10]]
+  
+  wave2imp[[j]] <- getNet(f2miss, sims[[1]]) # save imputed 2nd wave networks
+
+  alcImpW2[,j] = sims[[2]] # save imputed alco
+  tobImpW2[,j] = sims[[3]] # save imputed tobacco
+  
+}
+
+
+save.image('mi.RData') 
+# Now that we have obtained our imputed data sets we need to run our model
+# on the D complete data sets.
+
+```
+
+############################
+# Imputed model estimation #
+############################
+
+
+```{r imputed model estimation, message=FALSE, include=FALSE}
+saomResults <- list()
+
+for (j in D:1) {
+  cat('Imputation',j,'\n')
+  
+  friendship <- sienaDependent(array(c(wave1imp[[j]], wave2imp[[j]]), dim = c( N, N, 2)))
+  
+  #if (j == 1) {
+   # completedData <- complete(m, j)
+   # alc = cbind(completedData$a1, completedData$a2)
+  #  tob = cbind(completedData$t1, completedData$t2)
+ # } else {
+    completedData <- complete(m, j)
+    alc = cbind(completedData$a1, alcImpW2[,j])
+    tob = cbind(completedData$t1, tobImpW2[,j])
+ # }
+  
+  
+  drinkingbeh <- sienaDependent(alc, type = "behavior")
+  smokingbeh <- sienaDependent(tob, type = "behavior")
+  
+  sex <- coCovar(sex.F)
+  
+  Data  <- sienaDataCreate(friendship, drinkingbeh, smokingbeh, sex)
+  
+  effectsData <- getEffects(Data)
+  effectsData <- includeEffects(effectsData, density, recip, inPopSqrt, cycle3,
+                                transTrip, transRecTrip, inActSqrt)
+  
+  # gender homophily
+  effectsData <- includeEffects(effectsData, sameX, interaction1 = "sex" )
+  
+  effectsData <- includeEffects(effectsData, egoX, altX, egoXaltX,  
+                                     interaction1 =  "drinkingbeh")
+  effectsData <- includeEffects(effectsData, egoX, altX, egoXaltX,
+                                     interaction1 =  "smokingbeh")
+  
+  effectsData <- includeEffects(effectsData, name = "drinkingbeh", avAlt, interaction1 = "friendship")
+  effectsData <- includeEffects(effectsData, name = "smokingbeh", avAlt, interaction1 = "friendship")
+
+  # gender influence on smoking and drinking 
+  effectsData <- includeEffects(effectsData, effFrom,
+                                         name = "smokingbeh", interaction1 = "sex")
+  effectsData <- includeEffects(effectsData, effFrom,
+                                       name = "drinkingbeh", interaction1 = "sex")
+
+  # smoking and drinking influencing each other 
+  effectsData <- includeEffects(effectsData, effFrom,
+                                   name = "smokingbeh", interaction1 = "drinkingbeh")
+  effectsData <- includeEffects(effectsData, effFrom,
+                                   name = "drinkingbeh", interaction1 = "smokingbeh")
+  
+  estimation.options <- sienaAlgorithmCreate(useStdInits = FALSE, seed = 38712,
+                                             n3 = 5000, maxlike = FALSE,
+                                             lessMem = TRUE#, MaxDegree = c(friendship=max(rowSums(wave1imp[[j]])))
+                                             )
+  if (j == 50) {
+    saomResults[[j]] <- siena07ToConvergence(alg = estimation.options,
+                                             dat = Data, eff = effectsData,
+                                             threshold = 0.25, nodes = 4)
+  } else {
+    saomResults[[j]] <- siena07ToConvergence(alg = estimation.options,
+                                             dat = Data, eff = effectsData,
+                                             threshold = 0.25,
+                                             ans0 = saomResults[[j + 1]], nodes = 4)
+  }
+}
+
+
+```
+
+
+###### Default SIENA imputation model (not working now)
+
+```{r}
+friendship <- sienaDependent(array(c(f1miss, f2miss),
+                                     dim = c( N, N, 2)))# create dependent variable
+
+# for behavior effects 
+drinkingbeh <- sienaDependent(alcMiss[,1:2], type = "behavior" ) # complete data
+smokingbeh <- sienaDependent(tobMiss[,1:2], type = "behavior" )
+
+# adding gender covariate
+sex <- coCovar(sex.F)
+
+# create siena data
+myCoEvolutionData <- sienaDataCreate(friendship, drinkingbeh,
+                                     smokingbeh,
+                                     sex)
+
+myCoEvolutionEff <- getEffects(myCoEvolutionData) # get initial effects
+
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, density, recip,  inPopSqrt, cycle3, transTrip, transRecTrip, inActSqrt) #structural effects
+
+# gender homophily
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, sameX, interaction1 = "sex" )
+
+# selection effects
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, egoXaltX, interaction1 = "drinkingbeh" )
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, egoX, altX, egoXaltX, interaction1 = "smokingbeh" )
+
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, name = "drinkingbeh", avAlt, interaction1 = "friendship")
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, name = "smokingbeh", avAlt, interaction1 = "friendship")
+
+# gender influence on smoking and drinking (not for the first wave)
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, effFrom,
+                                         name = "smokingbeh", interaction1 = "sex")
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, effFrom,
+                                       name = "drinkingbeh", interaction1 = "sex")
+
+# smoking and drinking influencing each other (not for the first wave)
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, effFrom,
+                                   name = "smokingbeh", interaction1 = "drinkingbeh")
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, effFrom,
+                                   name = "drinkingbeh", interaction1 = "smokingbeh")
+
+# check the list of effects
+myCoEvolutionEff
+
+
+# Estimate the siena model
+estimation.options <- sienaAlgorithmCreate(seed = 8146, n3 = 3000) # seed must be specified
+
+# estimate the model until it converges
+model.2 <- siena07ToConvergence(alg = estimation.options,
+                                dat = myCoEvolutionData,
+                                eff = myCoEvolutionEff,
+                                threshold = .25)
+
+
+# make a tex table
+siena.table(model.2, type = "tex", sig = TRUE)
+
+model.2
+```
+
+
+
+
+```{r}
+# Now we have D RSiena results and all that is left is to combine them
+
+# We need to extract all parameter and standard error estimates from the models
+# and combine them using Rubin's Rules.
+
+npar <- sum(effectsData$include)
+
+rowVar <- function(x) {
+  rowSums((x - rowMeans(x))^2)/(dim(x)[2] - 1)
+}
+
+MIResults <- as.data.frame(matrix(NA,npar,(2 * D)))
+
+for (i in 1:D) {
+  names(MIResults)[i * 2 - 1] <- paste("imp" , "mean", sep = as.character(i))
+  names(MIResults)[i * 2] <- paste("imp" , "se", sep = as.character(i))
+  MIResults[,i * 2 - 1] <- saomResults[[i]]$theta  # estimates
+  MIResults[,i * 2] <-  sqrt(diag(saomResults[[i]]$covtheta))  # standard errors
+}
+
+# Now we get the average covariance structure between the parameters
+WDMIs <- matrix(0,npar,npar)
+
+for (i in 1:D) {
+  WDMIs <- WDMIs + saomResults[[i]]$covtheta
+}
+
+WDMIs <- (1/D) * WDMIs
+
+# Using Rubin's Rules we combine the parameters and standard errors and
+# complete the procedure
+finalResults <- as.data.frame(matrix(NA,npar,2))
+names(finalResults) <- c("combinedEstimate", "combinedSE")
+rownames(finalResults) <- effectsData$effectName[effectsData$include]
+
+finalResults$combinedEstimate <- rowMeans(MIResults[,seq(1,2*D,2)])
+finalResults$combinedSE <- sqrt(diag(WDMIs) + ((D + 1)/D) *
+                                  rowVar(MIResults[,seq(1,2*D,2)]))
+
+finalResults$completeTheta <- model.1$theta
+finalResults$completeSE <- sqrt(diag(model.1$covtheta))
+
+finalResults$defaultTheta <- model.2$theta
+finalResults$defaultSE <- sqrt(diag(model.2$covtheta))
+
+
+round(finalResults, 4)
+# the names of user specified interactions have to be set manually
+
+print(xtable(round(finalResults, 4), type = "latex"), file = "BdTdRound.tex")
+
+save.image('mi.RData') # 100 MB
+```
+
+
+
+```{r}
+###############################################################################
+# proportion of variance due to imputation
+BdTd <- as.data.frame(matrix(,npar,1))
+
+names(BdTd) <- c("parameter")
+
+BdTd$parameter <- finalResults$parameter
+
+BdTd$MIsaom <- round(((51/50) * rowVar(MIResults[,seq(1,100,2)])) / (finalResults$combinedSE ** 2),2)
+
+View(BdTd)
+
+print(xtable(BdTd, type = "latex"), file = "BdTdRound.tex")
+
+```
+
+
+```{r}
+################################################################################
+#
+# Plots
+#
+finalResults$parameter <- c("Friend rate 1",
+                          "Density",
+                          "Reciprocity",
+                          "transTrip",
+                          "transRecTrip",
+                          "3-cycles",
+                          "Indeg. Pop. sqrt.",
+                          "Indeg. Act. sqrt.",
+                          "Same sex",
+                          "Alter drinking",
+                          "Ego drinking",
+                          "Ego x alt drinking",
+                          "Alter smokimg",
+                          "Ego smoking",
+                          "Ego x alt smoking",
+                          "Drinking rate 1",
+                          "Drink. linear",
+                          "Drink. quadratic",
+                          "Avg. Alter Drink.",
+                          "Drink: eff. from sex",
+                          "Drink: eff. from smoke.",
+                          "Smoking rate 1",
+                          "Smoke. linear",
+                          "Smoke. quadratic",
+                          "Avg. Alter Smoke.",
+                          "Smoke: eff. from sex",
+                          "Smoke: eff. from drink.")
+
+
+
+# lognformat - dirty
+
+ld <- as.data.frame(matrix(NA,81,3))
+
+ld[,1] <- rep(finalResults$parameter,3)
+ld[1:27,c(2,3)] <- finalResults[,c(1,2)]
+ld[28:54,c(2,3)] <- finalResults[,c(3,4)]
+ld[55:81,c(2,3)] <- finalResults[,c(5,6)]
+
+
+ld[,4] <- c(rep("MI-SAOM",27),
+            rep("Complete Data",27),
+            rep("Default SIENA",27)
+            )
+
+names(ld) <- c("parameter","Theta","SE","model")
+
+ld$model = factor(ld$model, levels = c("MI-SAOM", "Default SIENA", "Complete Data" )[3:1]) # ,"Default SIENA"
+
+ld$parameter = factor(ld$parameter,
+                          levels = c("Friend rate 1",
+                          "Density",
+                          "Reciprocity",
+                          "transTrip",
+                          "transRecTrip",
+                          "3-cycles",
+                          "Indeg. Pop. sqrt.",
+                          "Indeg. Act. sqrt.",
+                          "Same sex",
+                          "Alter drinking",
+                          "Ego drinking",
+                          "Ego x alt drinking",
+                          "Alter smokimg",
+                          "Ego smoking",
+                          "Ego x alt smoking",
+                          "Drinking rate 1",
+                          "Drink. linear",
+                          "Drink. quadratic",
+                          "Avg. Alter Drink.",
+                          "Drink: eff. from sex",
+                          "Drink: eff. from smoke.",
+                          "Smoking rate 1",
+                          "Smoke. linear",
+                          "Smoke. quadratic",
+                          "Avg. Alter Smoke.",
+                          "Smoke: eff. from sex",
+                          "Smoke: eff. from drink.")[27:1])
+
+
+
+g1 <- c("Friend rate 1",
+                          "Density",
+                          "Reciprocity",
+                          "transTrip",
+                          "transRecTrip",
+                          "3-cycles",
+                          "Indeg. Pop. sqrt.",
+                          "Indeg. Act. sqrt.",
+                          "Same sex")
+
+
+g2 <- c("Alter drinking",
+                          "Ego drinking",
+                          "Ego x alt drinking",
+                          "Alter smokimg",
+                          "Ego smoking",
+                          "Ego x alt smoking")
+g3 <- c("Drinking rate 1",
+                          "Drink. linear",
+                          "Drink. quadratic",
+                          "Avg. Alter Drink.",
+                          "Drink: eff. from sex",
+                          "Drink: eff. from smoke.",
+                          "Smoking rate 1",
+                          "Smoke. linear",
+                          "Smoke. quadratic",
+                          "Avg. Alter Smoke.",
+                          "Smoke: eff. from sex",
+                          "Smoke: eff. from drink.")
+
+ld$g[ld$parameter %in% g1] <- "Structure"
+ld$g[ld$parameter %in% g2] <- "Selection"
+ld$g[ld$parameter %in% g3] <- "Behavior"
+
+ld$g <- factor(ld$g, levels = c("Structure","Selection","Behavior"))
+
+library(ggplot2)
+p5 <- ggplot(ld, aes(x = parameter, y = Theta, group = model, colour = model,
+                     shape = model)) +
+         geom_point( size = 2.2 , position = position_dodge(width = .75)) +
+         geom_hline(yintercept = 0, size = 1, color = "black") +
+         geom_errorbar(size = .7, aes(ymin = Theta - SE, ymax = Theta + SE),
+                        position = position_dodge(width = .75)) +
+         theme_classic() +
+         theme(axis.text.x = element_text(angle = 0, hjust = 1),
+                axis.text.y = element_text(angle = 0, hjust = 1),
+                legend.title = element_blank(),
+                legend.position = "bottom",
+                legend.direction = "vertical",
+                legend.key.height = unit(1,"line"),
+                legend.key.width = unit(1,"line"),
+                text = element_text(size = 20),
+                axis.title.x = element_blank()) +
+         ylab("") + xlab("") + coord_flip()
+p5
+
+
+p6 <- ggplot(ld, aes(x = parameter, y = Theta, group = model, colour = model,
+                     shape = model)) + scale_color_manual(values = c(
+                    "grey75","grey60","grey45","grey30","grey15","grey0" )) +
+  facet_wrap(facets = ~g, scales = "free", nrow = 3) +
+  geom_point( size = 2.2 , position = position_dodge(width = .75)) +
+  geom_hline(yintercept = 0, size = .25, color = "black") +
+  geom_errorbar(size = .7, aes(ymin = Theta - SE, ymax = Theta + SE),
+                position = position_dodge(width = .75)) +
+  theme_classic() + theme(
+    axis.text.x = element_text(angle = 0, hjust = 1),
+    axis.text.y = element_text(angle = 0, hjust = 1),
+    legend.title = element_blank(),
+    legend.position = "bottom",
+    legend.direction = "horizontal",
+    legend.key.height = unit(3,"line"), legend.key.width = unit(3,"line"),
+    text = element_text(size = 20),
+    axis.title.x = element_blank()) + ylab("") + xlab("") + coord_flip()
+p6
+
+
+## 2 standard errors
+p6 <- ggplot(ld, aes(x = parameter, y = Theta, group = model, colour = model,
+                     shape = model)) +
+  facet_wrap(facets = ~g, scales = "free", nrow = 1) +
+  geom_point( size = 2.2 , position = position_dodge(width = .75)) +
+  geom_hline(yintercept = 0, size = .25, color = "black") +
+  geom_errorbar(size = .7, aes(ymin = Theta - SE*2, ymax = Theta + SE*2),
+                position = position_dodge(width = .75)) +
+  theme_classic() + theme(
+    axis.text.x = element_text(angle = 0, hjust = 1),
+    axis.text.y = element_text(angle = 0, hjust = 1),
+    legend.title = element_blank(),
+    legend.position = "bottom",
+    legend.direction = "horizontal",
+    legend.key.height = unit(3,"line"), legend.key.width = unit(3,"line"),
+    text = element_text(size = 20),
+    axis.title.x = element_blank()) + ylab("") + xlab("") + coord_flip()
+p6
+
+```
