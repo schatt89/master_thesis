@@ -209,5 +209,5 @@ SimulateNetworksBehavior <- function(net.w1, covar, b1.w1, b2.w1, n, c1, c2,
   # Result: simulated data set; covara and covarb are vectors of length n;
   # networks is an array of dimension nxnxM;
   # behaviors is a matrix of dimension nxM
-  list(networks = Xs[,,2:M], behavior1 = Z1s[,2:M], behavior2 = Z2s[,2:M])
+  list(networks = Xs[,,2:M], behavior1 = Z1s[,2], behavior2 = Z2s[,2])
 }

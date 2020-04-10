@@ -6,7 +6,7 @@ Filename is complete_data_model_30.txt.
 
 This file contains primary output for SIENA project <<complete_data_model_30>>.
 
-Date and time: 10/04/2020 16:45:41 
+Date and time: 10/04/2020 18:06:30 
 
 RSiena version 1.2-23 (12 01 2020)
 

@@ -1,55 +1,55 @@
   effectName             include fix   test  initialValue parm
-1 basic rate parameter X TRUE    FALSE FALSE   33.56134   0   
+1 basic rate parameter X TRUE    FALSE FALSE   37.83547   0   
   effectName          include fix   test  initialValue parm
-1 outdegree (density) TRUE    FALSE FALSE   -1.66864   0   
+1 outdegree (density) TRUE    FALSE FALSE   -2.26948   0   
   effectName  include fix   test  initialValue parm
-1 reciprocity TRUE    FALSE FALSE    4.24285   0   
+1 reciprocity TRUE    FALSE FALSE    3.13218   0   
   effectName          include fix   test  initialValue parm
-1 transitive triplets TRUE    FALSE FALSE    1.75914   0   
+1 transitive triplets TRUE    FALSE FALSE     1.6471   0   
   effectName include fix   test  initialValue parm
-1 3-cycles   TRUE    FALSE FALSE    0.68773   0   
+1 3-cycles   TRUE    FALSE FALSE    0.52576   0   
   effectName include fix   test  initialValue parm
-1 same V     TRUE    FALSE FALSE     0.4129   0   
+1 same V     TRUE    FALSE FALSE    1.85737   0   
   effectName include fix   test  initialValue parm
-1 Z1 alter   TRUE    FALSE FALSE   -0.90425   0   
+1 Z1 alter   TRUE    FALSE FALSE   -1.02211   0   
   effectName include fix   test  initialValue parm
-1 Z1 ego     TRUE    FALSE FALSE   -1.19351   0   
+1 Z1 ego     TRUE    FALSE FALSE   -0.29801   0   
   effectName        include fix   test  initialValue parm
-1 Z1 ego x Z1 alter TRUE    FALSE FALSE   -0.21365   0   
+1 Z1 ego x Z1 alter TRUE    FALSE FALSE    0.51155   0   
   effectName       include fix   test  initialValue parm
-1 rate Z1 period 1 TRUE    FALSE FALSE    6.16381   0   
+1 rate Z1 period 1 TRUE    FALSE FALSE   25.17353   0   
   effectName      include fix   test  initialValue parm
-1 Z1 linear shape TRUE    FALSE FALSE   -1.24269   0   
+1 Z1 linear shape TRUE    FALSE FALSE   -4.29354   0   
   effectName         include fix   test  initialValue parm
-1 Z1 quadratic shape TRUE    FALSE FALSE   -1.71824   0   
+1 Z1 quadratic shape TRUE    FALSE FALSE    3.42484   0   
   effectName       include fix   test  initialValue parm
-1 Z1 average alter TRUE    FALSE FALSE   -0.95992   0   
+1 Z1 average alter TRUE    FALSE FALSE     1.6015   0   
   effectName        include fix   test  initialValue parm
-1 Z1: effect from V TRUE    FALSE FALSE     4.9739   0   
+1 Z1: effect from V TRUE    FALSE FALSE    0.58499   0   
   effectName         include fix   test  initialValue parm
-1 Z1: effect from Z2 TRUE    FALSE FALSE   -1.51779   0   
+1 Z1: effect from Z2 TRUE    FALSE FALSE   -0.78539   0   
   effectName include fix   test  initialValue parm
-1 Z2 alter   TRUE    FALSE FALSE     0.3965   0   
+1 Z2 alter   TRUE    FALSE FALSE    0.52225   0   
   effectName include fix   test  initialValue parm
-1 Z2 ego     TRUE    FALSE FALSE    0.20095   0   
+1 Z2 ego     TRUE    FALSE FALSE   -0.30761   0   
   effectName        include fix   test  initialValue parm
-1 Z2 ego x Z2 alter TRUE    FALSE FALSE    0.55969   0   
+1 Z2 ego x Z2 alter TRUE    FALSE FALSE    0.39357   0   
   effectName       include fix   test  initialValue parm
-1 rate Z2 period 1 TRUE    FALSE FALSE    10.8475   0   
+1 rate Z2 period 1 TRUE    FALSE FALSE    14.4825   0   
   effectName      include fix   test  initialValue parm
-1 Z2 linear shape TRUE    FALSE FALSE    0.69311   0   
+1 Z2 linear shape TRUE    FALSE FALSE    0.31199   0   
   effectName         include fix   test  initialValue parm
-1 Z2 quadratic shape TRUE    FALSE FALSE   -0.06906   0   
+1 Z2 quadratic shape TRUE    FALSE FALSE   -0.40394   0   
   effectName       include fix   test  initialValue parm
-1 Z2 average alter TRUE    FALSE FALSE   -0.39547   0   
+1 Z2 average alter TRUE    FALSE FALSE    1.33314   0   
   effectName        include fix   test  initialValue parm
-1 Z2: effect from V TRUE    FALSE FALSE    1.06844   0   
+1 Z2: effect from V TRUE    FALSE FALSE    0.20227   0   
   effectName         include fix   test  initialValue parm
-1 Z2: effect from Z1 TRUE    FALSE FALSE   -0.66759   0   
+1 Z2: effect from Z1 TRUE    FALSE FALSE   -0.01778   0   
 siena07 will create an output file Init.txt .
   effectName             include fix   test  initialValue parm
-1 basic rate parameter X TRUE    FALSE FALSE    3.35613   0   
+1 basic rate parameter X TRUE    FALSE FALSE    3.78355   0   
   effectName       include fix   test  initialValue parm
-1 rate Z1 period 1 TRUE    FALSE FALSE    0.61638   0   
+1 rate Z1 period 1 TRUE    FALSE FALSE    2.51735   0   
   effectName       include fix   test  initialValue parm
-1 rate Z2 period 1 TRUE    FALSE FALSE    1.08475   0   
+1 rate Z2 period 1 TRUE    FALSE FALSE    1.44825   0   

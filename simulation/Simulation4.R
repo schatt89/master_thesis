@@ -210,7 +210,7 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model_60", seed = 300)
 #######                                                                   ######
 ################################################################################
 
-M <- 3
+M <- 2
 
 net.w1 = fr.30.1
 covar = sex.F.30
@@ -256,8 +256,8 @@ effF.b2.b1 = ans30$theta[27]
 fr.30.2.sim <- array(rep(0, n*n*100), c(n, n, 100))
 fr.30.3.sim <- array(rep(0, n*n*100), c(n, n, 100))
 
-alco.30.sim <- array(rep(0, n*2*100), c(n, 2, 100))
-toba.30.sim <- array(rep(0, n*2*100), c(n, 2, 100))
+alco.30.sim <- array(rep(0, n*100), c(n, 100))
+toba.30.sim <- array(rep(0, n*100), c(n, 100))
 
 for (i in 1:100) { 
   SN <- SimulateNetworksBehavior(net.w1, covar, b1.w1, b2.w1, n, c1, c2,
@@ -268,11 +268,10 @@ for (i in 1:100) {
                        altX.b2, egoX.b2, egoXaltX.b2,
                        rate.b2, lin.b2, qu.b2, avalt.b2, effF.b2.V, effF.b2.b1)
 
-  fr.30.2.sim[,,i] <- SN$networks[,,1]
-  fr.30.3.sim[,,i] <- SN$networks[,,2]
-  
-  toba.30.sim[,,i] <- SN$behavior1
-  alco.30.sim[,,i] <- SN$behavior2
+  fr.30.2.sim[,,i] <- SN$networks
+
+  toba.30.sim[,i] <- SN$behavior1
+  alco.30.sim[,i] <- SN$behavior2
 }
 
 ################################################################################
@@ -281,46 +280,69 @@ for (i in 1:100) {
 #######                                                                   ######
 ################################################################################
 
-n <- 60
-M <- 3
-c <- 5
+M <- 2
 
-rate <- ans60$theta[2]
-dens <- ans60$theta[3]
-rec <- ans60$theta[4]
-tt <- ans60$theta[5]
-c3 <- ans60$theta[6]
+net.w1 = fr.60.1
+covar = sex.F.60
+b1.w1 = toba.60[,1]
+b2.w1 = alco.60[,1]
+n = 60
+c1 = 5
+c2 = 5
 
-Vasame  <- ans60$theta[7]
-Vbsim <- ans60$theta[8]
+rate = ans60$theta[1]
+dens = ans60$theta[2]
+rec = ans60$theta[3]
+tt = ans60$theta[4]
+tRt = ans60$theta[5]
+c3 = ans60$theta[6]
+inPopSq = ans60$theta[7]
+outActSq = ans60$theta[8]
 
-altX.b <- ans60$theta[9]
-egoX.b <- ans60$theta[10]
-egoXaltX.b <- ans60$theta[11]
-rate.b <- ans60$theta[13]
-lin.b <- ans60$theta[14]
-qu.b <- ans60$theta[15]
-avalt.b <- ans60$theta[17]
-avsim.b <- ans60$theta[16]
+Vsame = ans60$theta[9]
+
+altX.b1 = ans60$theta[10]
+egoX.b1 = ans60$theta[11]
+egoXaltX.b1 = ans60$theta[12]
+
+rate.b1 = ans60$theta[16]
+lin.b1 = ans60$theta[17]
+qu.b1 = ans60$theta[18]
+avalt.b1 = ans60$theta[19]
+effF.b1.V = ans60$theta[20]
+effF.b1.b2 = ans60$theta[21]
+
+altX.b2 = ans60$theta[13]
+egoX.b2 = ans60$theta[14]
+egoXaltX.b2 = ans60$theta[15]
+
+rate.b2 = ans60$theta[22]
+lin.b2 = ans60$theta[23]
+qu.b2 = ans60$theta[24]
+avalt.b2 = ans60$theta[25]
+effF.b2.V = ans60$theta[26]
+effF.b2.b1 = ans60$theta[27]
 
 
 fr.60.2.sim = array(rep(0, n*n*100), c(n, n, 100))
 fr.60.3.sim = array(rep(0, n*n*100), c(n, n, 100))
 
-alco.60.sim = array(rep(0, n*2*100), c(n, 2, 100))
+alco.60.sim = array(rep(0, n*100), c(n, 100))
+toba.60.sim = array(rep(0, n*100), c(n, 100))
 
 for (i in 1:100) {
-  SN <- SimulateNetworksBehavior(net.w1 = fr.60.1, covara = age.60,
-                                 covarb = toba.60[,1], b.w1 = alco.60[,1],
-                                 n, M, c,
-                                 rate, dens, rec, tt, c3,
-                                 Vasame, Vbsim, altX.b, egoX.b, egoXaltX.b,
-                                 rate.b, lin.b, qu.b, avalt.b, avsim.b)
+  SN <- SimulateNetworksBehavior(net.w1, covar, b1.w1, b2.w1, n, c1, c2,
+                       rate, dens, rec, tt, tRt, c3, inPopSq, outActSq,
+                       Vsame,
+                       altX.b1, egoX.b1, egoXaltX.b1,
+                       rate.b1, lin.b1, qu.b1, avalt.b1, effF.b1.V, effF.b1.b2,
+                       altX.b2, egoX.b2, egoXaltX.b2,
+                       rate.b2, lin.b2, qu.b2, avalt.b2, effF.b2.V, effF.b2.b1)
   
-  fr.60.2.sim[,,i] <- SN$networks[,,1]
-  fr.60.3.sim[,,i] <- SN$networks[,,2]
-  
-  alco.60.sim[,,i] <- SN$behaviors
+  fr.60.2.sim[,,i] <- SN$networks
+
+  toba.60.sim[,i] <- SN$behavior1
+  alco.60.sim[,i] <- SN$behavior2
   
 }
 
@@ -341,19 +363,20 @@ fr.30.1.mis.10.n[rowSums(fr.30.1) < 1,] <- NA # 3 removed
 alco.30.1.mis.10.n <- alco.30[,1]
 alco.30.1.mis.10.n[rowSums(fr.30.1) < 1] <- NA
 
+toba.30.1.mis.10.n <- toba.30[,1]
+toba.30.1.mis.10.n[rowSums(fr.30.1) < 1] <- NA
+
 fr.30.2.sim.mis.10.n <- fr.30.2.sim
-fr.30.3.sim.mis.10.n <- fr.30.3.sim
-alco.30.sim.mis.10.n <- alco.30.sim
+
+alco.30.2.sim.mis.10.n <- alco.30.sim
+toba.30.2.sim.mis.10.n <- toba.30.sim
 
 for (i in 1:100) {
-  to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 1), 3, replace=F)
-  to_remove.3 <- sample(which(rowSums(fr.30.3.sim[,,i]) < 1), 3, replace=F)
+  to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 4), 3, replace=F)
   for (j in 1:3) {
     fr.30.2.sim.mis.10.n[,,i][to_remove.2[j],] <- NA
-    alco.30.sim.mis.10.n[,1,i][to_remove.2[j]] <- NA
-    
-    fr.30.3.sim.mis.10.n[,,i][to_remove.3[j],] <- NA
-    alco.30.sim.mis.10.n[,2,i][to_remove.3[j]] <- NA
+    alco.30.2.sim.mis.10.n[,i][to_remove.2[j]] <- NA
+    toba.30.2.sim.mis.10.n[,i][to_remove.2[j]] <- NA
   }
 }
 
@@ -362,24 +385,25 @@ for (i in 1:100) {
 to_remove.1 <- sample(which(rowSums(fr.30.1) < 2), 6, replace=F)
 
 fr.30.1.mis.20.n <- fr.30.1
-fr.30.1.mis.20.n[to_remove.1,] <- NA # 6 removed
+fr.30.1.mis.20.n[rowSums(fr.30.1) < 1,] <- NA # 6 removed
 
 alco.30.1.mis.20.n <- alco.30[,1]
-alco.30.1.mis.20.n[to_remove.1] <- NA
+alco.30.1.mis.20.n[rowSums(fr.30.1) < 1] <- NA
+
+toba.30.1.mis.20.n <- toba.30[,1]
+toba.30.1.mis.20.n[rowSums(fr.30.1) < 1] <- NA
 
 fr.30.2.sim.mis.20.n <- fr.30.2.sim
-fr.30.3.sim.mis.20.n <- fr.30.3.sim
-alco.30.sim.mis.20.n <- alco.30.sim
+
+alco.30.2.sim.mis.20.n <- alco.30.sim
+toba.30.2.sim.mis.20.n <- toba.30.sim
 
 for (i in 1:100) {
-  to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 2), 6, replace=F)
-  to_remove.3 <- sample(which(rowSums(fr.30.3.sim[,,i]) < 2), 6, replace=F)
+  to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 5), 6, replace=F)
   for (j in 1:6) {
     fr.30.2.sim.mis.20.n[,,i][to_remove.2[j],] <- NA
-    alco.30.sim.mis.20.n[,1,i][to_remove.2[j]] <- NA
-    
-    fr.30.3.sim.mis.20.n[,,i][to_remove.3[j],] <- NA
-    alco.30.sim.mis.20.n[,2,i][to_remove.3[j]] <- NA
+    alco.30.2.sim.mis.20.n[,i][to_remove.2[j]] <- NA
+    toba.30.2.sim.mis.20.n[,i][to_remove.2[j]] <- NA
   }
 }
 
@@ -388,24 +412,25 @@ for (i in 1:100) {
 to_remove.1 <- sample(which(rowSums(fr.30.1) < 2), 9, replace=F)
 
 fr.30.1.mis.30.n <- fr.30.1
-fr.30.1.mis.30.n[to_remove.1,] <- NA # 9 removed
+fr.30.1.mis.30.n[rowSums(fr.30.1) < 1,] <- NA # 9 removed
 
 alco.30.1.mis.30.n <- alco.30[,1]
-alco.30.1.mis.30.n[to_remove.1] <- NA
+alco.30.1.mis.30.n[rowSums(fr.30.1) < 1] <- NA
+
+toba.30.1.mis.30.n <- toba.30[,1]
+toba.30.1.mis.30.n[rowSums(fr.30.1) < 1] <- NA
 
 fr.30.2.sim.mis.30.n <- fr.30.2.sim
-fr.30.3.sim.mis.30.n <- fr.30.3.sim
-alco.30.sim.mis.30.n <- alco.30.sim
+
+alco.30.2.sim.mis.30.n <- alco.30.sim
+toba.30.2.sim.mis.30.n <- toba.30.sim
 
 for (i in 1:100) {
-  to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 2), 9, replace=F)
-  to_remove.3 <- sample(which(rowSums(fr.30.3.sim[,,i]) < 2), 9, replace=F)
+  to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 6), 9, replace=F)
   for (j in 1:9) {
     fr.30.2.sim.mis.30.n[,,i][to_remove.2[j],] <- NA
-    alco.30.sim.mis.30.n[,1,i][to_remove.2[j]] <- NA
-    
-    fr.30.3.sim.mis.30.n[,,i][to_remove.3[j],] <- NA
-    alco.30.sim.mis.30.n[,2,i][to_remove.3[j]] <- NA
+    alco.30.2.sim.mis.30.n[,i][to_remove.2[j]] <- NA
+    toba.30.2.sim.mis.30.n[,i][to_remove.2[j]] <- NA
   }
 }
 
@@ -421,19 +446,20 @@ fr.30.1.mis.10.b[to_remove.1,] <- NA # 3 removed
 alco.30.1.mis.10.b <- alco.30[,1]
 alco.30.1.mis.10.b[to_remove.1] <- NA
 
+toba.30.1.mis.10.b <- toba.30[,1]
+toba.30.1.mis.10.b[to_remove.1] <- NA
+
 fr.30.2.sim.mis.10.b <- fr.30.2.sim
-fr.30.3.sim.mis.10.b <- fr.30.3.sim
-alco.30.sim.mis.10.b <- alco.30.sim
+
+alco.30.2.sim.mis.10.b <- alco.30.sim
+toba.30.2.sim.mis.10.b <- toba.30.sim
 
 for (i in 1:100) {
-  to_remove.2 <- sample(which(alco.30.sim[,1,i] > 3), 3, replace=F)
-  to_remove.3 <- sample(which(alco.30.sim[,2,i] > 3), 3, replace=F)
+  to_remove.2 <- sample(which(alco.30.sim[,i] > 3), 3, replace=F)
   for (j in 1:3) {
     fr.30.2.sim.mis.10.b[,,i][to_remove.2[j],] <- NA
-    alco.30.sim.mis.10.b[,1,i][to_remove.2[j]] <- NA
-    
-    fr.30.3.sim.mis.10.b[,,i][to_remove.3[j],] <- NA
-    alco.30.sim.mis.10.b[,2,i][to_remove.3[j]] <- NA
+    alco.30.2.sim.mis.10.b[,i][to_remove.2[j]] <- NA
+    toba.30.2.sim.mis.10.b[,i][to_remove.2[j]] <- NA
   }
 }
 
@@ -447,19 +473,20 @@ fr.30.1.mis.20.b[to_remove.1,] <- NA # 6 removed
 alco.30.1.mis.20.b <- alco.30[,1]
 alco.30.1.mis.20.b[to_remove.1] <- NA
 
+toba.30.1.mis.20.b <- toba.30[,1]
+toba.30.1.mis.20.b[to_remove.1] <- NA
+
 fr.30.2.sim.mis.20.b <- fr.30.2.sim
-fr.30.3.sim.mis.20.b <- fr.30.3.sim
-alco.30.sim.mis.20.b <- alco.30.sim
+
+alco.30.2.sim.mis.20.b <- alco.30.sim
+toba.30.2.sim.mis.20.b <- toba.30.sim
 
 for (i in 1:100) {
-  to_remove.2 <- sample(which(alco.30.sim[,1,i] > 2), 6, replace=F)
-  to_remove.3 <- sample(which(alco.30.sim[,2,i] > 2), 6, replace=F)
+  to_remove.2 <- sample(which(alco.30.sim[,i] > 2), 6, replace=F)
   for (j in 1:6) {
     fr.30.2.sim.mis.20.b[,,i][to_remove.2[j],] <- NA
-    alco.30.sim.mis.20.b[,1,i][to_remove.2[j]] <- NA
-    
-    fr.30.3.sim.mis.20.b[,,i][to_remove.3[j],] <- NA
-    alco.30.sim.mis.20.b[,2,i][to_remove.3[j]] <- NA
+    alco.30.2.sim.mis.20.b[,i][to_remove.2[j]] <- NA
+    toba.30.2.sim.mis.20.b[,i][to_remove.2[j]] <- NA
   }
 }
 
@@ -473,19 +500,20 @@ fr.30.1.mis.30.b[to_remove.1,] <- NA # 9 removed
 alco.30.1.mis.30.b <- alco.30[,1]
 alco.30.1.mis.30.b[to_remove.1] <- NA
 
+toba.30.1.mis.30.b <- toba.30[,1]
+toba.30.1.mis.30.b[to_remove.1] <- NA
+
 fr.30.2.sim.mis.30.b <- fr.30.2.sim
-fr.30.3.sim.mis.30.b <- fr.30.3.sim
-alco.30.sim.mis.30.b <- alco.30.sim
+
+alco.30.2.sim.mis.30.b <- alco.30.sim
+toba.30.2.sim.mis.30.b <- toba.30.sim
 
 for (i in 1:100) {
-  to_remove.2 <- sample(which(alco.30.sim[,1,i] > 2), 9, replace=F)
-  to_remove.3 <- sample(which(alco.30.sim[,2,i] > 2), 9, replace=F)
+  to_remove.2 <- sample(which(alco.30.sim[,i] > 2), 9, replace=F)
   for (j in 1:9) {
     fr.30.2.sim.mis.30.b[,,i][to_remove.2[j],] <- NA
-    alco.30.sim.mis.30.b[,1,i][to_remove.2[j]] <- NA
-    
-    fr.30.3.sim.mis.30.b[,,i][to_remove.3[j],] <- NA
-    alco.30.sim.mis.30.b[,2,i][to_remove.3[j]] <- NA
+    alco.30.2.sim.mis.30.b[,i][to_remove.2[j]] <- NA
+    toba.30.2.sim.mis.30.b[,i][to_remove.2[j]] <- NA
   }
 }
 
@@ -503,24 +531,23 @@ fr.30.1.mis.10.nb[to_remove.1,] <- NA # 3 removed
 alco.30.1.mis.10.nb <- alco.30[,1]
 alco.30.1.mis.10.nb[to_remove.1] <- NA
 
+toba.30.1.mis.10.nb <- toba.30[,1]
+toba.30.1.mis.10.nb[to_remove.1] <- NA
+
 fr.30.2.sim.mis.10.nb <- fr.30.2.sim
-fr.30.3.sim.mis.10.nb <- fr.30.3.sim
-alco.30.sim.mis.10.nb <- alco.30.sim
+
+alco.30.2.sim.mis.10.nb <- alco.30.sim
+toba.30.2.sim.mis.10.nb <- toba.30.sim
+
 
 for (i in 1:100) {
-  
-  to_remove.2 <- sample(intersect(which(alco.30.sim[,1,i] > 2),
-                                  which(rowSums(fr.30.2.sim[,,i]) < 2)),
-                        3, replace = F)
-  to_remove.3 <- sample(intersect(which(alco.30.sim[,2,i] > 2),
-                                  which(rowSums(fr.30.3.sim[,,i]) < 2)),
+  to_remove.2 <- sample(intersect(which(alco.30.sim[,i] > 1),
+                                  which(rowSums(fr.30.2.sim[,,i]) < 4)),
                         3, replace = F)
   for (j in 1:3) {
     fr.30.2.sim.mis.10.nb[,,i][to_remove.2[j],] <- NA
-    alco.30.sim.mis.10.nb[,1,i][to_remove.2[j]] <- NA
-    
-    fr.30.3.sim.mis.10.nb[,,i][to_remove.3[j],] <- NA
-    alco.30.sim.mis.10.nb[,2,i][to_remove.3[j]] <- NA
+    alco.30.2.sim.mis.10.nb[,i][to_remove.2[j]] <- NA
+    toba.30.2.sim.mis.10.nb[,i][to_remove.2[j]] <- NA
   }
 }
 
@@ -536,24 +563,22 @@ fr.30.1.mis.20.nb[to_remove.1,] <- NA # 6 removed
 alco.30.1.mis.20.nb <- alco.30[,1]
 alco.30.1.mis.20.nb[to_remove.1] <- NA
 
+toba.30.1.mis.20.nb <- toba.30[,1]
+toba.30.1.mis.20.nb[to_remove.1] <- NA
+
 fr.30.2.sim.mis.20.nb <- fr.30.2.sim
-fr.30.3.sim.mis.20.nb <- fr.30.3.sim
-alco.30.sim.mis.20.nb <- alco.30.sim
+
+alco.30.2.sim.mis.20.nb <- alco.30.sim
+toba.30.2.sim.mis.20.nb <- toba.30.sim
 
 for (i in 1:100) {
-  
-  to_remove.2 <- sample(intersect(which(alco.30.sim[,1,i] > 2),
-                                  which(rowSums(fr.30.2.sim[,,i]) < 2)),
-                        6, replace = F)
-  to_remove.3 <- sample(intersect(which(alco.30.sim[,2,i] > 2),
-                                  which(rowSums(fr.30.3.sim[,,i]) < 2)),
+  to_remove.2 <- sample(intersect(which(alco.30.sim[,i] > 1),
+                                  which(rowSums(fr.30.2.sim[,,i]) < 6)),
                         6, replace = F)
   for (j in 1:6) {
     fr.30.2.sim.mis.20.nb[,,i][to_remove.2[j],] <- NA
-    alco.30.sim.mis.20.nb[,1,i][to_remove.2[j]] <- NA
-    
-    fr.30.3.sim.mis.20.nb[,,i][to_remove.3[j],] <- NA
-    alco.30.sim.mis.20.nb[,2,i][to_remove.3[j]] <- NA
+    alco.30.2.sim.mis.20.nb[,i][to_remove.2[j]] <- NA
+    toba.30.2.sim.mis.20.nb[,i][to_remove.2[j]] <- NA
   }
 }
 
@@ -569,24 +594,22 @@ fr.30.1.mis.30.nb[to_remove.1,] <- NA # 9 removed
 alco.30.1.mis.30.nb <- alco.30[,1]
 alco.30.1.mis.30.nb[to_remove.1] <- NA
 
+toba.30.1.mis.30.nb <- toba.30[,1]
+toba.30.1.mis.30.nb[to_remove.1] <- NA
+
 fr.30.2.sim.mis.30.nb <- fr.30.2.sim
-fr.30.3.sim.mis.30.nb <- fr.30.3.sim
-alco.30.sim.mis.30.nb <- alco.30.sim
+
+alco.30.2.sim.mis.30.nb <- alco.30.sim
+toba.30.2.sim.mis.30.nb <- toba.30.sim
 
 for (i in 1:100) {
-  
-  to_remove.2 <- sample(intersect(which(alco.30.sim[,1,i] > 1),
-                                  which(rowSums(fr.30.2.sim[,,i]) < 2)),
-                        9, replace = F)
-  to_remove.3 <- sample(intersect(which(alco.30.sim[,2,i] > 1),
-                                  which(rowSums(fr.30.3.sim[,,i]) < 2)),
+  to_remove.2 <- sample(intersect(which(alco.30.sim[,i] > 1),
+                                  which(rowSums(fr.30.2.sim[,,i]) < 7)),
                         9, replace = F)
   for (j in 1:9) {
-    fr.30.2.sim.mis.30.nb[,,i][to_remove.2[j],] <- NA
-    alco.30.sim.mis.30.nb[,1,i][to_remove.2[j]] <- NA
-    
-    fr.30.3.sim.mis.30.nb[,,i][to_remove.3[j],] <- NA
-    alco.30.sim.mis.30.nb[,2,i][to_remove.3[j]] <- NA
+    fr.30.2.sim.mis.20.nb[,,i][to_remove.2[j],] <- NA
+    alco.30.2.sim.mis.20.nb[,i][to_remove.2[j]] <- NA
+    toba.30.2.sim.mis.20.nb[,i][to_remove.2[j]] <- NA
   }
 }
 

@@ -59,3 +59,25 @@ Model specifications:
 
 Both models converge.
 
+## Simulation4.R
+
+Data: Glasgow dataset (129 non-missing actors)
+* Smaller data: first 30 actors
+* Bigger data: last 60 actors
+* 2 waves
+* Covar: gender
+* Behavior: alcohol, tobacco
+
+Model specifications:
+
+* Structural: rec,tt,tRt,c3,inPopSq,outActSq
+* Covars: sameX (gender)
+* Behavior: [altX, egoX, egoXaltX] for selection, [quad, avAlt, effFromGender, effFromAnotherBeh] for influence
+
+Both models converge.
+
+This model will be used for the paper.
+
+To do:
+- [ ] Edit object names in `save()` function for both datasets
+- [ ] Edit missing simulation part for bigger dataset in Simulation4.R

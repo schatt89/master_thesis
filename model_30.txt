@@ -7781,3 +7781,441 @@ covariance/correlation matrix of X can be found using
 summary(ans) within R, or by using the 'verbose' option in Siena07.
  
 Total computation time 16.68 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 10/04/2020 17:14:23
+New results follow.
+-----------------------------------
+
+RSiena version 1.2-23 (12 Jan 20)
+
+
+@1
+Estimation by stochastic approximation algorithm.
+=================================================
+
+Current random number seed is 500.
+Effects object used: eff 
+Model Type:
+ 
+Behavioral Model Type:
+Behavior 1 smokingbeh : 
+Behavior 2 drinkingbeh : 
+Estimation method: unconditional moment estimation.
+
+Time duration for simulations is 1.0.
+Standard errors are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Initial value of gain parameter is  0.5291503.
+Reduction factor for gain parameter is  0.5000000.
+Number of subphases in Phase 2 is 4.
+
+Initial parameter values are 
+  1. rate:  basic rate parameter friendship                 3.2445
+  2. eval:  outdegree (density)                            -1.4604
+  3. eval:  reciprocity                                     0.0000
+  4. eval:  transitive triplets                             0.0000
+  5. eval:  transitive recipr. triplets                     0.0000
+  6. eval:  3-cycles                                        0.0000
+  7. eval:  indegree - popularity (sqrt)                    0.0000
+  8. eval:  outdegree - activity (sqrt)                     0.0000
+  9. eval:  same gender                                     0.0000
+ 10. eval:  smokingbeh alter                                0.0000
+ 11. eval:  smokingbeh ego                                  0.0000
+ 12. eval:  smokingbeh ego x smokingbeh alter               0.0000
+ 13. eval:  drinkingbeh alter                               0.0000
+ 14. eval:  drinkingbeh ego                                 0.0000
+ 15. eval:  drinkingbeh ego x drinkingbeh alter             0.0000
+ 16. rate:  rate smokingbeh period 1                        0.8881
+ 17. eval:  smokingbeh linear shape                        -0.9853
+ 18. eval:  smokingbeh quadratic shape                      0.0000
+ 19. eval:  smokingbeh average alter                        0.0000
+ 20. eval:  smokingbeh: effect from gender                  0.0000
+ 21. eval:  smokingbeh: effect from drinkingbeh             0.0000
+ 22. rate:  rate drinkingbeh period 1                       0.6082
+ 23. eval:  drinkingbeh linear shape                        0.5806
+ 24. eval:  drinkingbeh quadratic shape                     0.0000
+ 25. eval:  drinkingbeh average alter                       0.0000
+ 26. eval:  drinkingbeh: effect from gender                 0.0000
+ 27. eval:  drinkingbeh: effect from smokingbeh             0.0000
+
+
+Observed values of target statistics are
+  1. Amount of network change                                            47.0000
+  2. Number of ties                                                      52.0000
+  3. Number of reciprocated ties                                         36.0000
+  4. Number of transitive triplets                                       43.0000
+  5. Number of transitive recipr. triplets                               25.0000
+  6. 3-cycles                                                            13.0000
+  7. Sum of indegrees x sqrt(indegree)                                   86.6710
+  8. Sum of outdegrees^(1.5)                                             84.4310
+  9. Same values on gender                                               38.0000
+ 10. Sum indegrees x smokingbeh                                         -10.8000
+ 11. Sum outdegrees x smokingbeh                                        -10.8000
+ 12. Sum smokingbeh ego x smokingbeh alter                                4.3200
+ 13. Sum indegrees x drinkingbeh                                        -13.2408
+ 14. Sum outdegrees x drinkingbeh                                       -14.1767
+ 15. Sum drinkingbeh ego x drinkingbeh alter                             26.4964
+ 16. Amount of behavioral change                                          6.0000
+ 17. smokingbeh centered sum                                              0.0000
+ 18. smokingbeh sum of cent. squares                                     13.2000
+ 19. smokingbeh average alters                                            2.7600
+ 20. smokingbeh x gender                                                  4.4000
+ 21. smokingbeh x drinkingbeh                                             6.4053
+ 22. Amount of behavioral change                                         13.0000
+ 23. drinkingbeh centered sum                                             5.4117
+ 24. drinkingbeh sum of cent. squares                                    28.6039
+ 25. drinkingbeh average alters                                           6.0437
+ 26. drinkingbeh x gender                                                 6.3087
+ 27. drinkingbeh x smokingbeh                                             5.6053
+
+ 27 parameters, 27 statistics
+
+Estimation of derivatives by the LR method (type 1).
+
+
+@2
+End of stochastic approximation algorithm, phase 3.
+---------------------------------------------------
+
+Total of 2298 iterations.
+Parameter estimates based on 1297 iterations,
+convergence diagnostics, covariance and derivative matrices based on 1001 iterations.
+
+Information for convergence diagnosis.
+Averages, standard deviations, and t-ratios for deviations from targets:
+  1.  -0.2328   5.7242  -0.0407 
+  2.  -0.1888   7.4789  -0.0252 
+  3.  -0.1938   6.1304  -0.0316 
+  4.  -0.9121  23.5948  -0.0387 
+  5.  -0.6683  15.1284  -0.0442 
+  6.  -0.3127   7.4406  -0.0420 
+  7.  -0.5466  17.9098  -0.0305 
+  8.  -0.5838  17.4261  -0.0335 
+  9.  -0.0460   6.0712  -0.0076 
+ 10.   0.1814   4.1823   0.0434 
+ 11.   0.0446   3.7745   0.0118 
+ 12.   0.0147   2.7187   0.0054 
+ 13.   0.0845   7.0161   0.0120 
+ 14.  -0.0701   6.4547  -0.0109 
+ 15.   0.1945   6.9514   0.0280 
+ 16.   0.0040   2.1666   0.0018 
+ 17.  -0.0519   2.0850  -0.0249 
+ 18.  -0.0424   2.6406  -0.0160 
+ 19.   0.0555   2.1607   0.0257 
+ 20.   0.0252   1.1074   0.0228 
+ 21.   0.0078   2.4286   0.0032 
+ 22.  -0.0619   3.1180  -0.0199 
+ 23.   0.0759   3.4889   0.0218 
+ 24.  -0.0362   5.6308  -0.0064 
+ 25.   0.4637   4.7309   0.0980 
+ 26.   0.0735   1.7932   0.0410 
+ 27.   0.1365   2.7879   0.0489 
+
+Good convergence is indicated by the t-ratios being close to zero.
+
+Overall maximum convergence ratio =  0.1728 .
+
+
+
+@2
+Estimation Results.
+-------------------
+
+Regular end of estimation algorithm.
+Total of 2298 iteration steps.
+
+
+@3
+Estimates and standard errors
+                             
+Network Dynamics
+ 1. rate:  basic rate parameter friendship                         3.3561  (   0.9011)
+ 2. eval:  outdegree (density)                                    -1.6686  (   2.1728)
+ 3. eval:  reciprocity                                             4.2429  (   1.3351)
+ 4. eval:  transitive triplets                                     1.7591  (   0.7572)
+ 5. eval:  transitive recipr. triplets                            -2.1810  (   1.0271)
+ 6. eval:  3-cycles                                                0.6877  (   0.5808)
+ 7. eval:  indegree - popularity (sqrt)                           -0.5369  (   1.0321)
+ 8. eval:  outdegree - activity (sqrt)                            -1.1041  (   1.3192)
+ 9. eval:  same gender                                             0.4129  (   0.6441)
+10. eval:  smokingbeh alter                                       -0.9043  (   1.0660)
+11. eval:  smokingbeh ego                                         -1.1935  (   1.1094)
+12. eval:  smokingbeh ego x smokingbeh alter                      -0.2136  (   1.8971)
+13. eval:  drinkingbeh alter                                       0.3965  (   0.6749)
+14. eval:  drinkingbeh ego                                         0.2010  (   1.0011)
+15. eval:  drinkingbeh ego x drinkingbeh alter                     0.5597  (   0.7806)
+Behavior Dynamics
+
+16. rate:  <1> rate smokingbeh period 1                            0.6164  (   0.3396)
+17. eval:  <1> smokingbeh linear shape                            -1.2427  (   1.9453)
+18. eval:  <1> smokingbeh quadratic shape                         -1.7182  (   6.8171)
+19. eval:  <1> smokingbeh average alter                           -0.9599  (   8.8024)
+20. eval:  <1> smokingbeh: effect from gender                      4.9739  (  12.3045)
+21. eval:  <1> smokingbeh: effect from drinkingbeh                -1.5178  (   8.7289)
+22. rate:  <2> rate drinkingbeh period 1                           1.0847  (   0.5002)
+23. eval:  <2> drinkingbeh linear shape                            0.6931  (   0.7285)
+24. eval:  <2> drinkingbeh quadratic shape                        -0.0691  (   0.3029)
+25. eval:  <2> drinkingbeh average alter                          -0.3955  (   1.2518)
+26. eval:  <2> drinkingbeh: effect from gender                     1.0684  (   1.7101)
+27. eval:  <2> drinkingbeh: effect from smokingbeh                -0.6676  (   0.7845)
+
+
+@3
+Covariance matrices
+                   
+Covariance matrix of estimates (correlations below diagonal):
+     0.812      0.185     -0.043     -0.062      0.061     -0.090      0.088      0.043      0.055      0.477      0.180      0.278     -0.197      0.145     -0.279     -0.066     -0.143     -2.127     -0.276      4.380     -2.838     -0.045      0.121     -0.037     -0.214      0.280      0.058
+     0.095      4.721     -0.554      0.656      0.139     -0.252     -0.923     -1.706     -0.313      0.110     -0.741      0.712     -0.350      0.604     -0.070      0.046     -0.601     -0.094     -5.164      0.893      1.253      0.194     -0.351     -0.008      0.552     -0.180      0.000
+    -0.036     -0.191      1.782      0.601     -1.080      0.196      0.082     -0.329     -0.162     -0.167     -0.268      0.115      0.339     -0.204      0.131     -0.073      0.320     -1.245     -0.122      2.476     -1.625      0.055     -0.104     -0.002      0.136     -0.134     -0.049
+    -0.091      0.399      0.594      0.573     -0.561     -0.035     -0.048     -0.644     -0.110     -0.141     -0.374      0.269      0.013      0.170      0.070      0.004     -0.047      0.523     -1.872     -0.664      1.105      0.082     -0.167     -0.002      0.248     -0.050     -0.095
+     0.066      0.062     -0.788     -0.721      1.055     -0.182      0.075      0.179      0.219      0.099      0.222     -0.151     -0.186      0.069     -0.086      0.030     -0.409      0.679     -0.484     -1.132      0.889     -0.039      0.086      0.011     -0.128      0.104      0.037
+    -0.172     -0.200      0.253     -0.079     -0.304      0.337     -0.031      0.050     -0.006     -0.077     -0.032      0.056      0.121     -0.144      0.107      0.001     -0.017      0.232     -0.173     -0.521      0.137     -0.014     -0.008      0.021      0.021     -0.099     -0.007
+     0.095     -0.412      0.060     -0.062      0.071     -0.051      1.065     -0.421      0.143      0.177      0.025      0.308     -0.196      0.342     -0.186      0.042     -0.414      2.590     -2.357     -4.206      3.461     -0.053      0.067     -0.014     -0.166      0.410     -0.153
+     0.036     -0.595     -0.187     -0.645      0.132      0.066     -0.309      1.740     -0.002      0.171      0.802     -0.670      0.224     -0.576     -0.073     -0.072      0.758     -3.187      6.400      4.815     -5.178     -0.146      0.330     -0.022     -0.474     -0.018      0.209
+     0.096     -0.224     -0.189     -0.226      0.331     -0.016      0.215     -0.002      0.415      0.048      0.026     -0.148     -0.050      0.116     -0.179      0.008     -0.235     -0.228     -0.374      0.583     -0.469     -0.035      0.105      0.012     -0.159      0.167     -0.051
+     0.497      0.048     -0.118     -0.175      0.090     -0.124      0.161      0.121      0.070      1.136      0.368      0.702     -0.274      0.045     -0.376     -0.053     -0.097     -1.690      0.311      3.343     -2.396     -0.057      0.204     -0.056     -0.401      0.412      0.059
+     0.180     -0.307     -0.181     -0.446      0.195     -0.049      0.022      0.548      0.036      0.311      1.231      0.213     -0.041     -0.247     -0.240     -0.072      0.006     -0.867      1.442      1.576     -1.713     -0.188      0.371     -0.018     -0.498      0.287     -0.054
+     0.163      0.173      0.046      0.187     -0.078      0.051      0.157     -0.268     -0.121      0.347      0.101      3.599     -0.305      0.530     -0.131      0.045     -0.816      4.228     -4.288     -6.323      5.135      0.179     -0.208     -0.040      0.219     -0.094     -0.131
+    -0.323     -0.239      0.377      0.026     -0.268      0.308     -0.282      0.252     -0.114     -0.382     -0.055     -0.238      0.455     -0.411      0.110     -0.020      0.396     -0.434      1.927      0.273     -0.799     -0.031      0.024      0.015      0.012     -0.285      0.040
+     0.161      0.278     -0.152      0.224      0.067     -0.248      0.331     -0.436      0.180      0.042     -0.223      0.279     -0.609      1.002     -0.386      0.098     -0.635      1.796     -2.355     -2.347      2.511      0.080     -0.039     -0.054     -0.009      0.476     -0.106
+    -0.397     -0.041      0.126      0.118     -0.107      0.236     -0.231     -0.071     -0.355     -0.452     -0.277     -0.089      0.210     -0.494      0.609     -0.016      0.240      0.737     -0.276     -1.720      1.141      0.073     -0.229      0.056      0.400     -0.469      0.034
+    -0.214      0.062     -0.160      0.016      0.086      0.004      0.120     -0.161      0.035     -0.146     -0.191      0.069     -0.087      0.287     -0.060      0.115     -0.107      1.068      0.292     -1.898      1.305      0.012     -0.026      0.008      0.035     -0.009     -0.019
+    -0.082     -0.142      0.123     -0.032     -0.205     -0.015     -0.206      0.295     -0.188     -0.047      0.003     -0.221      0.302     -0.326      0.158     -0.162      3.784     -3.255     10.055      1.858     -3.332      0.055      0.061     -0.018      0.144     -0.684      0.333
+    -0.346     -0.006     -0.137      0.101      0.097      0.059      0.368     -0.354     -0.052     -0.233     -0.115      0.327     -0.094      0.263      0.139      0.461     -0.245     46.473    -12.431    -80.112     56.059      0.205     -1.092      0.143      1.529     -0.560     -1.005
+    -0.035     -0.270     -0.010     -0.281     -0.054     -0.034     -0.259      0.551     -0.066      0.033      0.148     -0.257      0.324     -0.267     -0.040      0.098      0.587     -0.207     77.482      9.941    -26.098     -0.090      1.173     -0.080     -1.660     -1.230      1.725
+     0.395      0.033      0.151     -0.071     -0.090     -0.073     -0.331      0.297      0.074      0.255      0.115     -0.271      0.033     -0.191     -0.179     -0.454      0.078     -0.955      0.092    151.401   -100.142     -0.284      1.883     -0.318     -2.582      1.751      1.434
+    -0.361      0.066     -0.139      0.167      0.099      0.027      0.384     -0.450     -0.083     -0.257     -0.177      0.310     -0.136      0.287      0.167      0.440     -0.196      0.942     -0.340     -0.932     76.194      0.292     -1.652      0.214      2.491     -0.726     -1.479
+    -0.100      0.178      0.082      0.216     -0.077     -0.049     -0.102     -0.221     -0.109     -0.107     -0.340      0.188     -0.091      0.159      0.186      0.069      0.056      0.060     -0.020     -0.046      0.067      0.250     -0.242     -0.018      0.310     -0.269      0.126
+     0.185     -0.222     -0.107     -0.302      0.115     -0.020      0.089      0.344      0.224      0.263      0.460     -0.151      0.049     -0.054     -0.402     -0.107      0.043     -0.220      0.183      0.210     -0.260     -0.663      0.531     -0.002     -0.645      0.569     -0.134
+    -0.136     -0.011     -0.004     -0.008      0.036      0.120     -0.046     -0.055      0.062     -0.173     -0.053     -0.070      0.072     -0.177      0.239      0.077     -0.031      0.069     -0.030     -0.085      0.081     -0.116     -0.011      0.092      0.013     -0.185     -0.007
+    -0.190      0.203      0.081      0.261     -0.099      0.029     -0.128     -0.287     -0.197     -0.301     -0.359      0.092      0.014     -0.007      0.409      0.082      0.059      0.179     -0.151     -0.168      0.228      0.495     -0.707      0.033      1.567     -1.405      0.032
+     0.182     -0.048     -0.059     -0.039      0.059     -0.099      0.233     -0.008      0.151      0.226      0.151     -0.029     -0.247      0.278     -0.351     -0.015     -0.206     -0.048     -0.082      0.083     -0.049     -0.314      0.457     -0.358     -0.656      2.924     -0.555
+     0.082      0.000     -0.047     -0.161      0.046     -0.015     -0.189      0.202     -0.101      0.070     -0.062     -0.088      0.076     -0.135      0.055     -0.070      0.218     -0.188      0.250      0.149     -0.216      0.321     -0.234     -0.029      0.033     -0.414      0.615
+
+Derivative matrix of expected statistics X by parameters and
+covariance/correlation matrix of X can be found using
+summary(ans) within R, or by using the 'verbose' option in Siena07.
+ 
+Total computation time 17.18 seconds.
+
+
+-----------------------------------
+New Analysis started.
+Date and time: 10/04/2020 18:06:35
+New results follow.
+-----------------------------------
+
+RSiena version 1.2-23 (12 Jan 20)
+
+
+@1
+Estimation by stochastic approximation algorithm.
+=================================================
+
+Current random number seed is 500.
+Effects object used: eff 
+Model Type:
+ 
+Behavioral Model Type:
+Behavior 1 smokingbeh : 
+Behavior 2 drinkingbeh : 
+Estimation method: unconditional moment estimation.
+
+Time duration for simulations is 1.0.
+Standard errors are estimated with the likelihood ratio method.
+Dolby method (regression on scores) is used.
+Initial value of gain parameter is  0.5291503.
+Reduction factor for gain parameter is  0.5000000.
+Number of subphases in Phase 2 is 4.
+
+Initial parameter values are 
+  1. rate:  basic rate parameter friendship                 3.2445
+  2. eval:  outdegree (density)                            -1.4604
+  3. eval:  reciprocity                                     0.0000
+  4. eval:  transitive triplets                             0.0000
+  5. eval:  transitive recipr. triplets                     0.0000
+  6. eval:  3-cycles                                        0.0000
+  7. eval:  indegree - popularity (sqrt)                    0.0000
+  8. eval:  outdegree - activity (sqrt)                     0.0000
+  9. eval:  same gender                                     0.0000
+ 10. eval:  smokingbeh alter                                0.0000
+ 11. eval:  smokingbeh ego                                  0.0000
+ 12. eval:  smokingbeh ego x smokingbeh alter               0.0000
+ 13. eval:  drinkingbeh alter                               0.0000
+ 14. eval:  drinkingbeh ego                                 0.0000
+ 15. eval:  drinkingbeh ego x drinkingbeh alter             0.0000
+ 16. rate:  rate smokingbeh period 1                        0.8881
+ 17. eval:  smokingbeh linear shape                        -0.9853
+ 18. eval:  smokingbeh quadratic shape                      0.0000
+ 19. eval:  smokingbeh average alter                        0.0000
+ 20. eval:  smokingbeh: effect from gender                  0.0000
+ 21. eval:  smokingbeh: effect from drinkingbeh             0.0000
+ 22. rate:  rate drinkingbeh period 1                       0.6082
+ 23. eval:  drinkingbeh linear shape                        0.5806
+ 24. eval:  drinkingbeh quadratic shape                     0.0000
+ 25. eval:  drinkingbeh average alter                       0.0000
+ 26. eval:  drinkingbeh: effect from gender                 0.0000
+ 27. eval:  drinkingbeh: effect from smokingbeh             0.0000
+
+
+Observed values of target statistics are
+  1. Amount of network change                                            47.0000
+  2. Number of ties                                                      52.0000
+  3. Number of reciprocated ties                                         36.0000
+  4. Number of transitive triplets                                       43.0000
+  5. Number of transitive recipr. triplets                               25.0000
+  6. 3-cycles                                                            13.0000
+  7. Sum of indegrees x sqrt(indegree)                                   86.6710
+  8. Sum of outdegrees^(1.5)                                             84.4310
+  9. Same values on gender                                               38.0000
+ 10. Sum indegrees x smokingbeh                                         -10.8000
+ 11. Sum outdegrees x smokingbeh                                        -10.8000
+ 12. Sum smokingbeh ego x smokingbeh alter                                4.3200
+ 13. Sum indegrees x drinkingbeh                                        -13.2408
+ 14. Sum outdegrees x drinkingbeh                                       -14.1767
+ 15. Sum drinkingbeh ego x drinkingbeh alter                             26.4964
+ 16. Amount of behavioral change                                          6.0000
+ 17. smokingbeh centered sum                                              0.0000
+ 18. smokingbeh sum of cent. squares                                     13.2000
+ 19. smokingbeh average alters                                            2.7600
+ 20. smokingbeh x gender                                                  4.4000
+ 21. smokingbeh x drinkingbeh                                             6.4053
+ 22. Amount of behavioral change                                         13.0000
+ 23. drinkingbeh centered sum                                             5.4117
+ 24. drinkingbeh sum of cent. squares                                    28.6039
+ 25. drinkingbeh average alters                                           6.0437
+ 26. drinkingbeh x gender                                                 6.3087
+ 27. drinkingbeh x smokingbeh                                             5.6053
+
+ 27 parameters, 27 statistics
+
+Estimation of derivatives by the LR method (type 1).
+
+
+@2
+End of stochastic approximation algorithm, phase 3.
+---------------------------------------------------
+
+Total of 2298 iterations.
+Parameter estimates based on 1297 iterations,
+convergence diagnostics, covariance and derivative matrices based on 1001 iterations.
+
+Information for convergence diagnosis.
+Averages, standard deviations, and t-ratios for deviations from targets:
+  1.  -0.2328   5.7242  -0.0407 
+  2.  -0.1888   7.4789  -0.0252 
+  3.  -0.1938   6.1304  -0.0316 
+  4.  -0.9121  23.5948  -0.0387 
+  5.  -0.6683  15.1284  -0.0442 
+  6.  -0.3127   7.4406  -0.0420 
+  7.  -0.5466  17.9098  -0.0305 
+  8.  -0.5838  17.4261  -0.0335 
+  9.  -0.0460   6.0712  -0.0076 
+ 10.   0.1814   4.1823   0.0434 
+ 11.   0.0446   3.7745   0.0118 
+ 12.   0.0147   2.7187   0.0054 
+ 13.   0.0845   7.0161   0.0120 
+ 14.  -0.0701   6.4547  -0.0109 
+ 15.   0.1945   6.9514   0.0280 
+ 16.   0.0040   2.1666   0.0018 
+ 17.  -0.0519   2.0850  -0.0249 
+ 18.  -0.0424   2.6406  -0.0160 
+ 19.   0.0555   2.1607   0.0257 
+ 20.   0.0252   1.1074   0.0228 
+ 21.   0.0078   2.4286   0.0032 
+ 22.  -0.0619   3.1180  -0.0199 
+ 23.   0.0759   3.4889   0.0218 
+ 24.  -0.0362   5.6308  -0.0064 
+ 25.   0.4637   4.7309   0.0980 
+ 26.   0.0735   1.7932   0.0410 
+ 27.   0.1365   2.7879   0.0489 
+
+Good convergence is indicated by the t-ratios being close to zero.
+
+Overall maximum convergence ratio =  0.1728 .
+
+
+
+@2
+Estimation Results.
+-------------------
+
+Regular end of estimation algorithm.
+Total of 2298 iteration steps.
+
+
+@3
+Estimates and standard errors
+                             
+Network Dynamics
+ 1. rate:  basic rate parameter friendship                         3.3561  (   0.9011)
+ 2. eval:  outdegree (density)                                    -1.6686  (   2.1728)
+ 3. eval:  reciprocity                                             4.2429  (   1.3351)
+ 4. eval:  transitive triplets                                     1.7591  (   0.7572)
+ 5. eval:  transitive recipr. triplets                            -2.1810  (   1.0271)
+ 6. eval:  3-cycles                                                0.6877  (   0.5808)
+ 7. eval:  indegree - popularity (sqrt)                           -0.5369  (   1.0321)
+ 8. eval:  outdegree - activity (sqrt)                            -1.1041  (   1.3192)
+ 9. eval:  same gender                                             0.4129  (   0.6441)
+10. eval:  smokingbeh alter                                       -0.9043  (   1.0660)
+11. eval:  smokingbeh ego                                         -1.1935  (   1.1094)
+12. eval:  smokingbeh ego x smokingbeh alter                      -0.2136  (   1.8971)
+13. eval:  drinkingbeh alter                                       0.3965  (   0.6749)
+14. eval:  drinkingbeh ego                                         0.2010  (   1.0011)
+15. eval:  drinkingbeh ego x drinkingbeh alter                     0.5597  (   0.7806)
+Behavior Dynamics
+
+16. rate:  <1> rate smokingbeh period 1                            0.6164  (   0.3396)
+17. eval:  <1> smokingbeh linear shape                            -1.2427  (   1.9453)
+18. eval:  <1> smokingbeh quadratic shape                         -1.7182  (   6.8171)
+19. eval:  <1> smokingbeh average alter                           -0.9599  (   8.8024)
+20. eval:  <1> smokingbeh: effect from gender                      4.9739  (  12.3045)
+21. eval:  <1> smokingbeh: effect from drinkingbeh                -1.5178  (   8.7289)
+22. rate:  <2> rate drinkingbeh period 1                           1.0847  (   0.5002)
+23. eval:  <2> drinkingbeh linear shape                            0.6931  (   0.7285)
+24. eval:  <2> drinkingbeh quadratic shape                        -0.0691  (   0.3029)
+25. eval:  <2> drinkingbeh average alter                          -0.3955  (   1.2518)
+26. eval:  <2> drinkingbeh: effect from gender                     1.0684  (   1.7101)
+27. eval:  <2> drinkingbeh: effect from smokingbeh                -0.6676  (   0.7845)
+
+
+@3
+Covariance matrices
+                   
+Covariance matrix of estimates (correlations below diagonal):
+     0.812      0.185     -0.043     -0.062      0.061     -0.090      0.088      0.043      0.055      0.477      0.180      0.278     -0.197      0.145     -0.279     -0.066     -0.143     -2.127     -0.276      4.380     -2.838     -0.045      0.121     -0.037     -0.214      0.280      0.058
+     0.095      4.721     -0.554      0.656      0.139     -0.252     -0.923     -1.706     -0.313      0.110     -0.741      0.712     -0.350      0.604     -0.070      0.046     -0.601     -0.094     -5.164      0.893      1.253      0.194     -0.351     -0.008      0.552     -0.180      0.000
+    -0.036     -0.191      1.782      0.601     -1.080      0.196      0.082     -0.329     -0.162     -0.167     -0.268      0.115      0.339     -0.204      0.131     -0.073      0.320     -1.245     -0.122      2.476     -1.625      0.055     -0.104     -0.002      0.136     -0.134     -0.049
+    -0.091      0.399      0.594      0.573     -0.561     -0.035     -0.048     -0.644     -0.110     -0.141     -0.374      0.269      0.013      0.170      0.070      0.004     -0.047      0.523     -1.872     -0.664      1.105      0.082     -0.167     -0.002      0.248     -0.050     -0.095
+     0.066      0.062     -0.788     -0.721      1.055     -0.182      0.075      0.179      0.219      0.099      0.222     -0.151     -0.186      0.069     -0.086      0.030     -0.409      0.679     -0.484     -1.132      0.889     -0.039      0.086      0.011     -0.128      0.104      0.037
+    -0.172     -0.200      0.253     -0.079     -0.304      0.337     -0.031      0.050     -0.006     -0.077     -0.032      0.056      0.121     -0.144      0.107      0.001     -0.017      0.232     -0.173     -0.521      0.137     -0.014     -0.008      0.021      0.021     -0.099     -0.007
+     0.095     -0.412      0.060     -0.062      0.071     -0.051      1.065     -0.421      0.143      0.177      0.025      0.308     -0.196      0.342     -0.186      0.042     -0.414      2.590     -2.357     -4.206      3.461     -0.053      0.067     -0.014     -0.166      0.410     -0.153
+     0.036     -0.595     -0.187     -0.645      0.132      0.066     -0.309      1.740     -0.002      0.171      0.802     -0.670      0.224     -0.576     -0.073     -0.072      0.758     -3.187      6.400      4.815     -5.178     -0.146      0.330     -0.022     -0.474     -0.018      0.209
+     0.096     -0.224     -0.189     -0.226      0.331     -0.016      0.215     -0.002      0.415      0.048      0.026     -0.148     -0.050      0.116     -0.179      0.008     -0.235     -0.228     -0.374      0.583     -0.469     -0.035      0.105      0.012     -0.159      0.167     -0.051
+     0.497      0.048     -0.118     -0.175      0.090     -0.124      0.161      0.121      0.070      1.136      0.368      0.702     -0.274      0.045     -0.376     -0.053     -0.097     -1.690      0.311      3.343     -2.396     -0.057      0.204     -0.056     -0.401      0.412      0.059
+     0.180     -0.307     -0.181     -0.446      0.195     -0.049      0.022      0.548      0.036      0.311      1.231      0.213     -0.041     -0.247     -0.240     -0.072      0.006     -0.867      1.442      1.576     -1.713     -0.188      0.371     -0.018     -0.498      0.287     -0.054
+     0.163      0.173      0.046      0.187     -0.078      0.051      0.157     -0.268     -0.121      0.347      0.101      3.599     -0.305      0.530     -0.131      0.045     -0.816      4.228     -4.288     -6.323      5.135      0.179     -0.208     -0.040      0.219     -0.094     -0.131
+    -0.323     -0.239      0.377      0.026     -0.268      0.308     -0.282      0.252     -0.114     -0.382     -0.055     -0.238      0.455     -0.411      0.110     -0.020      0.396     -0.434      1.927      0.273     -0.799     -0.031      0.024      0.015      0.012     -0.285      0.040
+     0.161      0.278     -0.152      0.224      0.067     -0.248      0.331     -0.436      0.180      0.042     -0.223      0.279     -0.609      1.002     -0.386      0.098     -0.635      1.796     -2.355     -2.347      2.511      0.080     -0.039     -0.054     -0.009      0.476     -0.106
+    -0.397     -0.041      0.126      0.118     -0.107      0.236     -0.231     -0.071     -0.355     -0.452     -0.277     -0.089      0.210     -0.494      0.609     -0.016      0.240      0.737     -0.276     -1.720      1.141      0.073     -0.229      0.056      0.400     -0.469      0.034
+    -0.214      0.062     -0.160      0.016      0.086      0.004      0.120     -0.161      0.035     -0.146     -0.191      0.069     -0.087      0.287     -0.060      0.115     -0.107      1.068      0.292     -1.898      1.305      0.012     -0.026      0.008      0.035     -0.009     -0.019
+    -0.082     -0.142      0.123     -0.032     -0.205     -0.015     -0.206      0.295     -0.188     -0.047      0.003     -0.221      0.302     -0.326      0.158     -0.162      3.784     -3.255     10.055      1.858     -3.332      0.055      0.061     -0.018      0.144     -0.684      0.333
+    -0.346     -0.006     -0.137      0.101      0.097      0.059      0.368     -0.354     -0.052     -0.233     -0.115      0.327     -0.094      0.263      0.139      0.461     -0.245     46.473    -12.431    -80.112     56.059      0.205     -1.092      0.143      1.529     -0.560     -1.005
+    -0.035     -0.270     -0.010     -0.281     -0.054     -0.034     -0.259      0.551     -0.066      0.033      0.148     -0.257      0.324     -0.267     -0.040      0.098      0.587     -0.207     77.482      9.941    -26.098     -0.090      1.173     -0.080     -1.660     -1.230      1.725
+     0.395      0.033      0.151     -0.071     -0.090     -0.073     -0.331      0.297      0.074      0.255      0.115     -0.271      0.033     -0.191     -0.179     -0.454      0.078     -0.955      0.092    151.401   -100.142     -0.284      1.883     -0.318     -2.582      1.751      1.434
+    -0.361      0.066     -0.139      0.167      0.099      0.027      0.384     -0.450     -0.083     -0.257     -0.177      0.310     -0.136      0.287      0.167      0.440     -0.196      0.942     -0.340     -0.932     76.194      0.292     -1.652      0.214      2.491     -0.726     -1.479
+    -0.100      0.178      0.082      0.216     -0.077     -0.049     -0.102     -0.221     -0.109     -0.107     -0.340      0.188     -0.091      0.159      0.186      0.069      0.056      0.060     -0.020     -0.046      0.067      0.250     -0.242     -0.018      0.310     -0.269      0.126
+     0.185     -0.222     -0.107     -0.302      0.115     -0.020      0.089      0.344      0.224      0.263      0.460     -0.151      0.049     -0.054     -0.402     -0.107      0.043     -0.220      0.183      0.210     -0.260     -0.663      0.531     -0.002     -0.645      0.569     -0.134
+    -0.136     -0.011     -0.004     -0.008      0.036      0.120     -0.046     -0.055      0.062     -0.173     -0.053     -0.070      0.072     -0.177      0.239      0.077     -0.031      0.069     -0.030     -0.085      0.081     -0.116     -0.011      0.092      0.013     -0.185     -0.007
+    -0.190      0.203      0.081      0.261     -0.099      0.029     -0.128     -0.287     -0.197     -0.301     -0.359      0.092      0.014     -0.007      0.409      0.082      0.059      0.179     -0.151     -0.168      0.228      0.495     -0.707      0.033      1.567     -1.405      0.032
+     0.182     -0.048     -0.059     -0.039      0.059     -0.099      0.233     -0.008      0.151      0.226      0.151     -0.029     -0.247      0.278     -0.351     -0.015     -0.206     -0.048     -0.082      0.083     -0.049     -0.314      0.457     -0.358     -0.656      2.924     -0.555
+     0.082      0.000     -0.047     -0.161      0.046     -0.015     -0.189      0.202     -0.101      0.070     -0.062     -0.088      0.076     -0.135      0.055     -0.070      0.218     -0.188      0.250      0.149     -0.216      0.321     -0.234     -0.029      0.033     -0.414      0.615
+
+Derivative matrix of expected statistics X by parameters and
+covariance/correlation matrix of X can be found using
+summary(ans) within R, or by using the 'verbose' option in Siena07.
+ 
+Total computation time 15.55 seconds.
