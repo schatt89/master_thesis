@@ -3,3 +3,9 @@
 .RData
 .Ruserdata
 .DS_Store
+model_30.txt
+model_60.txt
+Siena.txt
+Init.txt
+cluster.out
+eff.txt
