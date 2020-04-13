@@ -1,5 +1,5 @@
   effectName             include fix   test  initialValue parm
-1 basic rate parameter X TRUE    FALSE FALSE   37.83547   0   
+1 basic rate parameter X TRUE    FALSE FALSE    5.83547   0   
   effectName          include fix   test  initialValue parm
 1 outdegree (density) TRUE    FALSE FALSE   -2.26948   0   
   effectName  include fix   test  initialValue parm
@@ -48,7 +48,7 @@
 1 Z2: effect from Z1 TRUE    FALSE FALSE   -0.01778   0   
 siena07 will create an output file Init.txt .
   effectName             include fix   test  initialValue parm
-1 basic rate parameter X TRUE    FALSE FALSE    3.78355   0   
+1 basic rate parameter X TRUE    FALSE FALSE    0.58355   0   
   effectName       include fix   test  initialValue parm
 1 rate Z1 period 1 TRUE    FALSE FALSE    2.51735   0   
   effectName       include fix   test  initialValue parm

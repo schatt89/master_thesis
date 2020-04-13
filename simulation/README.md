@@ -79,5 +79,5 @@ Both models converge.
 This model will be used for the paper.
 
 To do:
-- [ ] Edit object names in `save()` function for both datasets
-- [ ] Edit missing simulation part for bigger dataset in Simulation4.R
+- [x] Edit object names in `save()` function for both datasets
+- [x] Edit missing simulation part for bigger dataset in Simulation4.R
