@@ -2,6 +2,11 @@ library(RSiena) # or RSienaTest
 source("./simulation/SimulateNetworksBehavior_v4.R")
 source("./simulation/siena07ToConvergence.R")
 
+Nnodes = 31
+M = 2 # number of waves
+D = 50 # number of imputations
+S = 100 # number of dataSet
+
 ################################################################################
 #######                                                                   ######
 #######                      Data preparation                             ######
@@ -58,7 +63,7 @@ sex.F.60 <- sex.F[sample]
 ################################################################################
 
 friendship <- sienaDependent(array(c(fr.30.1, fr.30.2),
-                                   dim = c(30, 30, 2)))
+                                   dim = c(30, 30, M)))
 
 drinkingbeh <- sienaDependent(alco.30, type = "behavior" )
 smokingbeh <- sienaDependent(toba.30, type = "behavior" )
@@ -127,7 +132,7 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model_30", seed = 500)
 
 (ans30 <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
                                eff = myCoEvolutionEff, threshold = 0.25,
-                                nodes = 16))
+                                nodes = Nnodes))
 
 ################################################################################
 #######                                                                   ######
@@ -136,7 +141,7 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model_30", seed = 500)
 ################################################################################
 
 friendship <- sienaDependent(array(c(fr.60.1, fr.60.2),
-                                   dim = c(60, 60, 2)))
+                                   dim = c(60, 60, M)))
 
 drinkingbeh <- sienaDependent(alco.60, type = "behavior")
 smokingbeh <- sienaDependent(toba.60, type = "behavior")
@@ -202,7 +207,7 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model_60", seed = 300)
 
 (ans60 <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
                                eff = myCoEvolutionEff, threshold = 0.25,
-                               nodes = 16))
+                               nodes = Nnodes))
 
 ################################################################################
 #######                                                                   ######
@@ -210,7 +215,6 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model_60", seed = 300)
 #######                                                                   ######
 ################################################################################
 
-M <- 2
 
 net.w1 = fr.30.1
 covar = sex.F.30
@@ -253,13 +257,13 @@ avalt.b2 = ans30$theta[25]
 effF.b2.V = ans30$theta[26]
 effF.b2.b1 = ans30$theta[27]
 
-fr.30.2.sim <- array(rep(0, n*n*100), c(n, n, 100))
-fr.30.3.sim <- array(rep(0, n*n*100), c(n, n, 100))
+fr.30.2.sim <- array(rep(0, n*n*S), c(n, n, S))
+fr.30.3.sim <- array(rep(0, n*n*S), c(n, n, S))
 
-alco.30.sim <- array(rep(0, n*100), c(n, 100))
-toba.30.sim <- array(rep(0, n*100), c(n, 100))
+alco.30.sim <- array(rep(0, n*S), c(n, S))
+toba.30.sim <- array(rep(0, n*S), c(n, S))
 
-for (i in 1:100) { 
+for (i in 1:S) { 
   SN <- SimulateNetworksBehavior(net.w1, covar, b1.w1, b2.w1, n, c1, c2,
                        rate, dens, rec, tt, tRt, c3, inPopSq, outActSq,
                        Vsame,
@@ -279,8 +283,6 @@ for (i in 1:100) {
 #######             Bigger dataset simulation                             ######
 #######                                                                   ######
 ################################################################################
-
-M <- 2
 
 net.w1 = fr.60.1
 covar = sex.F.60
@@ -324,13 +326,13 @@ effF.b2.V = ans60$theta[26]
 effF.b2.b1 = ans60$theta[27]
 
 
-fr.60.2.sim = array(rep(0, n*n*100), c(n, n, 100))
-fr.60.3.sim = array(rep(0, n*n*100), c(n, n, 100))
+fr.60.2.sim = array(rep(0, n*n*S), c(n, n, S))
+fr.60.3.sim = array(rep(0, n*n*S), c(n, n, S))
 
-alco.60.sim = array(rep(0, n*100), c(n, 100))
-toba.60.sim = array(rep(0, n*100), c(n, 100))
+alco.60.sim = array(rep(0, n*S), c(n, S))
+toba.60.sim = array(rep(0, n*S), c(n, S))
 
-for (i in 1:100) {
+for (i in 1:S) {
   SN <- SimulateNetworksBehavior(net.w1, covar, b1.w1, b2.w1, n, c1, c2,
                                  rate, dens, rec, tt, tRt, c3, inPopSq, outActSq,
                                  Vsame,
@@ -370,7 +372,7 @@ fr.30.2.sim.mis.10.n <- fr.30.2.sim
 alco.30.2.sim.mis.10.n <- alco.30.sim
 toba.30.2.sim.mis.10.n <- toba.30.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 4), 3, replace=F)
   for (j in 1:3) {
     fr.30.2.sim.mis.10.n[,,i][to_remove.2[j],] <- NA
@@ -397,7 +399,7 @@ fr.30.2.sim.mis.20.n <- fr.30.2.sim
 alco.30.2.sim.mis.20.n <- alco.30.sim
 toba.30.2.sim.mis.20.n <- toba.30.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 5), 6, replace=F)
   for (j in 1:6) {
     fr.30.2.sim.mis.20.n[,,i][to_remove.2[j],] <- NA
@@ -424,7 +426,7 @@ fr.30.2.sim.mis.30.n <- fr.30.2.sim
 alco.30.2.sim.mis.30.n <- alco.30.sim
 toba.30.2.sim.mis.30.n <- toba.30.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(rowSums(fr.30.2.sim[,,i]) < 6), 9, replace=F)
   for (j in 1:9) {
     fr.30.2.sim.mis.30.n[,,i][to_remove.2[j],] <- NA
@@ -453,7 +455,7 @@ fr.30.2.sim.mis.10.b <- fr.30.2.sim
 alco.30.2.sim.mis.10.b <- alco.30.sim
 toba.30.2.sim.mis.10.b <- toba.30.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(alco.30.sim[,i] > 3), 3, replace=F)
   for (j in 1:3) {
     fr.30.2.sim.mis.10.b[,,i][to_remove.2[j],] <- NA
@@ -480,7 +482,7 @@ fr.30.2.sim.mis.20.b <- fr.30.2.sim
 alco.30.2.sim.mis.20.b <- alco.30.sim
 toba.30.2.sim.mis.20.b <- toba.30.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(alco.30.sim[,i] > 2), 6, replace=F)
   for (j in 1:6) {
     fr.30.2.sim.mis.20.b[,,i][to_remove.2[j],] <- NA
@@ -507,7 +509,7 @@ fr.30.2.sim.mis.30.b <- fr.30.2.sim
 alco.30.2.sim.mis.30.b <- alco.30.sim
 toba.30.2.sim.mis.30.b <- toba.30.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(alco.30.sim[,i] > 2), 9, replace=F)
   for (j in 1:9) {
     fr.30.2.sim.mis.30.b[,,i][to_remove.2[j],] <- NA
@@ -539,7 +541,7 @@ alco.30.2.sim.mis.10.nb <- alco.30.sim
 toba.30.2.sim.mis.10.nb <- toba.30.sim
 
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(intersect(which(alco.30.sim[,i] > 1),
                                   which(rowSums(fr.30.2.sim[,,i]) < 4)),
                         3, replace = F)
@@ -570,7 +572,7 @@ fr.30.2.sim.mis.20.nb <- fr.30.2.sim
 alco.30.2.sim.mis.20.nb <- alco.30.sim
 toba.30.2.sim.mis.20.nb <- toba.30.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(intersect(which(alco.30.sim[,i] > 1),
                                   which(rowSums(fr.30.2.sim[,,i]) < 6)),
                         6, replace = F)
@@ -601,7 +603,7 @@ fr.30.2.sim.mis.30.nb <- fr.30.2.sim
 alco.30.2.sim.mis.30.nb <- alco.30.sim
 toba.30.2.sim.mis.30.nb <- toba.30.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(intersect(which(alco.30.sim[,i] > 1),
                                   which(rowSums(fr.30.2.sim[,,i]) < 7)),
                         9, replace = F)
@@ -677,7 +679,7 @@ fr.60.2.sim.mis.10.n <- fr.60.2.sim
 alco.60.2.sim.mis.10.n <- alco.60.sim
 toba.60.2.sim.mis.10.n <- toba.60.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(rowSums(fr.60.2.sim[,,i]) < 4), 6, replace=F)
   for (j in 1:6) {
     fr.60.2.sim.mis.10.n[,,i][to_remove.2[j],] <- NA
@@ -704,7 +706,7 @@ fr.60.2.sim.mis.20.n <- fr.60.2.sim
 alco.60.2.sim.mis.20.n <- alco.60.sim
 toba.60.2.sim.mis.20.n <- toba.60.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(rowSums(fr.60.2.sim[,,i]) < 5), 12, replace=F)
   for (j in 1:12) {
     fr.60.2.sim.mis.20.n[,,i][to_remove.2[j],] <- NA
@@ -731,7 +733,7 @@ fr.60.2.sim.mis.30.n <- fr.60.2.sim
 alco.60.2.sim.mis.30.n <- alco.60.sim
 toba.60.2.sim.mis.30.n <- toba.60.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(rowSums(fr.60.2.sim[,,i]) < 6), 18, replace=F)
   for (j in 1:18) {
     fr.60.2.sim.mis.30.n[,,i][to_remove.2[j],] <- NA
@@ -760,7 +762,7 @@ fr.60.2.sim.mis.10.b <- fr.60.2.sim
 alco.60.2.sim.mis.10.b <- alco.60.sim
 toba.60.2.sim.mis.10.b <- toba.60.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(alco.60.sim[,i] > 3), 6, replace=F)
   for (j in 1:6) {
     fr.60.2.sim.mis.10.b[,,i][to_remove.2[j],] <- NA
@@ -787,7 +789,7 @@ fr.60.2.sim.mis.20.b <- fr.60.2.sim
 alco.60.2.sim.mis.20.b <- alco.60.sim
 toba.60.2.sim.mis.20.b <- toba.60.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(alco.60.sim[,i] > 2), 12, replace=F)
   for (j in 1:12) {
     fr.60.2.sim.mis.20.b[,,i][to_remove.2[j],] <- NA
@@ -814,7 +816,7 @@ fr.60.2.sim.mis.30.b <- fr.60.2.sim
 alco.60.2.sim.mis.30.b <- alco.60.sim
 toba.60.2.sim.mis.30.b <- toba.60.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(which(alco.60.sim[,i] > 2), 18, replace=F)
   for (j in 1:18) {
     fr.60.2.sim.mis.30.b[,,i][to_remove.2[j],] <- NA
@@ -846,7 +848,7 @@ alco.60.2.sim.mis.10.nb <- alco.60.sim
 toba.60.2.sim.mis.10.nb <- toba.60.sim
 
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(intersect(which(alco.60.sim[,i] > 1),
                                   which(rowSums(fr.60.2.sim[,,i]) < 4)),
                         6, replace = F)
@@ -877,7 +879,7 @@ fr.60.2.sim.mis.20.nb <- fr.60.2.sim
 alco.60.2.sim.mis.20.nb <- alco.60.sim
 toba.60.2.sim.mis.20.nb <- toba.60.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(intersect(which(alco.60.sim[,i] > 1),
                                   which(rowSums(fr.60.2.sim[,,i]) < 6)),
                         12, replace = F)
@@ -908,7 +910,7 @@ fr.60.2.sim.mis.30.nb <- fr.60.2.sim
 alco.60.2.sim.mis.30.nb <- alco.60.sim
 toba.60.2.sim.mis.30.nb <- toba.60.sim
 
-for (i in 1:100) {
+for (i in 1:S) {
   to_remove.2 <- sample(intersect(which(alco.60.sim[,i] > 1),
                                   which(rowSums(fr.60.2.sim[,,i]) < 7)),
                         18, replace = F)
