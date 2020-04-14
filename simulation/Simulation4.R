@@ -127,7 +127,7 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model_30", seed = 500)
 
 (ans30 <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
                                eff = myCoEvolutionEff, threshold = 0.25,
-                               nodes = 7))
+                                nodes = 16))
 
 ################################################################################
 #######                                                                   ######
@@ -202,7 +202,7 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model_60", seed = 300)
 
 (ans60 <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
                                eff = myCoEvolutionEff, threshold = 0.25,
-                               nodes = 7))
+                               nodes = 16))
 
 ################################################################################
 #######                                                                   ######

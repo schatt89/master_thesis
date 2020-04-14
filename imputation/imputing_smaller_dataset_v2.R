@@ -2,6 +2,8 @@ library(RSiena) # or RSienaTest
 library("mice")
 source("./simulation/siena07ToConvergence.R")
 
+Nnodes = 31
+
 getNet <- function(observedNet,edgeList) {
   # observedNet = observed network as adjacency with missing data
   # edgeList = edgelist that is returned by siena07(...)$sims
@@ -42,19 +44,19 @@ for (i in 1:2) {
   indegree2 <- colSums(fr.30.2.sim.mis.10.n[,,i], na.rm = TRUE)
   
   avgAltA1 <- rowSums(sweep(t(fr.30.1.mis.10.n),
-                            MARGIN = 2, alco.30.1.mis.10.n,'*'), na.rm = TRUE) /
+    MARGIN = 2, alco.30.1.mis.10.n,'*'), na.rm = TRUE) /
     rowSums(t(fr.30.1.mis.10.n), na.rm = TRUE)
   
   avgAltA2 <- rowSums(sweep(t(fr.30.2.sim.mis.10.n[,,i]),
-                            MARGIN = 2, alco.30.2.sim.mis.10.n[,i],'*'), na.rm = TRUE) /
+    MARGIN = 2, alco.30.2.sim.mis.10.n[,i],'*'), na.rm = TRUE) /
     rowSums(t(fr.30.2.sim.mis.10.n[,,i]), na.rm = TRUE)
   
   avgAltT1 <- rowSums(sweep(t(fr.30.1.mis.10.n),
-                            MARGIN = 2, toba.30.1.mis.10.n,'*'), na.rm = TRUE) /
+    MARGIN = 2, toba.30.1.mis.10.n,'*'), na.rm = TRUE) /
     rowSums(t(fr.30.1.mis.10.n), na.rm = TRUE)
   
   avgAltT2 <- rowSums(sweep(t(fr.30.2.sim.mis.10.n[,,i]),
-                            MARGIN = 2, toba.30.2.sim.mis.10.n[,i],'*'), na.rm = TRUE) /
+    MARGIN = 2, toba.30.2.sim.mis.10.n[,i],'*'), na.rm = TRUE) /
     rowSums(t(fr.30.2.sim.mis.10.n[,,i]), na.rm = TRUE)
   
   
@@ -181,11 +183,15 @@ for (i in 1:2) {
                                                 behModelType =
                                                 c(drinkingbeh=2, smokingbeh=2),
                                                 lessMem = TRUE)
-  
+
   period0saom <- siena07ToConvergence(alg = estimation.options.st,
-                                      dat = Data.stationary, nodes = 7,
+                                      dat = Data.stationary, cluster = TRUE,
+                                      nodes = Nnodes,
                                       eff = effects.stationary, threshold=0.25)
+
   
+  # 3 tconv  max: 0.108 
+  # Time difference of 37.08413 mins
   imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
                                              seed = 214,
                                              cond = FALSE, 
@@ -277,10 +283,9 @@ for (i in 1:2) {
   estimation.options <- sienaAlgorithmCreate(useStdInits = FALSE, seed = 214,
                                              n3 = 3000, maxlike = FALSE,
                                              cond = FALSE, diagonalize = 0.3,
-                                             firstg = 0.02, lessMem = TRUE
-                                             #behModelType =
-                                             # c(drinkingbeh=2, smokingbeh=2)
-                                             )
+                                             firstg = 0.02, lessMem = TRUE,
+                                             behModelType =
+                                             c(drinkingbeh=2, smokingbeh=2))
   
   # estimation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
   #                                            seed = 2214,
@@ -348,14 +353,14 @@ for (i in 1:2) {
     
     if (d == 1) {
       period1saom <- siena07ToConvergence(alg = estimation.options,
-                                          dat = Data.w2,nodes = 7,
+                                          dat = Data.w2, nodes = Nnodes,
                                           eff = effects.twoWaves,
                                           threshold = 0.25)
     } else {
       period1saom <- siena07ToConvergence(alg = estimation.options,
                                           dat = Data.w2,
                                           eff = effects.twoWaves,
-                                          threshold = 0.25,nodes = 7,
+                                          threshold = 0.25, nodes = Nnodes,
                                           ans0 = period1saom)
     }
     
@@ -379,14 +384,14 @@ for (i in 1:2) {
     
     if (d == 1) {
       period2saom <- siena07ToConvergence(alg = estimation.options,
-                                          dat = Data.w3,nodes = 7,
+                                          dat = Data.w3,nodes = Nnodes,
                                           eff = effects.twoWaves,
                                           threshold = 0.25)
     } else {
       period2saom <- siena07ToConvergence(alg = estimation.options,
                                           dat = Data.w3,
                                           eff = effects.twoWaves,
-                                          threshold = 0.25,nodes = 7,
+                                          threshold = 0.25,nodes = Nnodes,
                                           ans0 = period2saom)
     }
     
@@ -406,3 +411,4 @@ for (i in 1:2) {
   impAlco.3.30.10.n[[i]] = list(alc3imp)
   
 }
+

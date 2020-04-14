@@ -1,4 +1,4 @@
-siena07ToConvergence <- function(alg, dat, eff, ans0=NULL, threshold,nodes = 3,
+siena07ToConvergence <- function(alg, dat, eff, ans0=NULL, threshold, nodes = 3,
                                  cluster = TRUE, n2startPrev = 1000, ...) {
   # parameters are:
   # alg, dat, eff: Arguments for siena07: algorithm, data, effects object.
