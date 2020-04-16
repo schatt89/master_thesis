@@ -87,7 +87,6 @@ SimulateNetworksBehavior <- function(n, M, c, rate, dens, rec, tt, c3,
                        initialValue = rate.b)
   sink()
   for (m in 1:M){
-    print("In a loop")
     # Note that we start this loop with a previously simulated network.
     # Transform the previously simulated network
     # from edge list into adjacency matrix
