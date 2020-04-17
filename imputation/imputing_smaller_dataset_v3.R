@@ -5,8 +5,8 @@ source("./simulation/siena07ToConvergence.R")
 Nnodes = 31
 M = 2 # number of waves
 N = 30 # number of nodes
-D = 50 # number of imputations
-S = 100 # number of dataSet
+D = 3 # number of imputations
+S = 10 # number of dataSet
 
 getNet <- function(observedNet,edgeList) {
   # observedNet = observed network as adjacency with missing data
@@ -27,15 +27,15 @@ load("./data/simulated/Data30_2waves_v2.RData")
 #########                                                             ##########
 ################################################################################
 
-miceImpAlco30.10.n <- array(rep(NA, N*D*S), c(N, D, S))
+miceImpAlco.30.1.10.n <- array(rep(NA, N*D*S), c(N, D, S))
 
-miceImpAlco2.30.10.n <- array(rep(NA, N*D*S), c(N, D, S))
+miceImpAlco.30.2.10.n <- array(rep(NA, N*D*S), c(N, D, S))
 
-impNets.1.30.10.n <- list()
-impAlco.1.30.10.n <- list()
+impNets.30.1.10.n <- list()
+impAlco.30.1.10.n <- list()
 
-impNets.2.30.10.n <- list()
-impAlco.2.30.10.n <- list()
+impNets.30.2.10.n <- list()
+impAlco.30.2.10.n <- list()
 
 for (i in 1:S) {
   indegree1 <- colSums(fr.30.1.sim.mis.10.n[,,i], na.rm = TRUE)
@@ -63,9 +63,9 @@ for (i in 1:S) {
   set.seed(11019)
   miceImp <- mice(miceData, m = D, defaultMethod = "pmm", maxit = 20)
   for (d in 1:D) {
-    miceImpAlco30.10.n[,d,i] <- complete(miceImp, d)$V1
+    miceImpAlco.30.1.10.n[,d,i] <- complete(miceImp, d)$V1
     
-    miceImpAlco2.30.10.n[,d,i] <- complete(miceImp, d)$V2
+    miceImpAlco.30.2.10.n[,d,i] <- complete(miceImp, d)$V2
 
   }
   
@@ -83,8 +83,8 @@ for (i in 1:S) {
   stationaryDataList <- list()
   
   for (d in 1:D) {
-    drinkingbeh <- sienaDependent(cbind(miceImpAlco30.10.n[,d,i],
-                                        miceImpAlco30.10.n[,d,i]), 
+    drinkingbeh <- sienaDependent(cbind(miceImpAlco.30.1.10.n[,d,i],
+                                        miceImpAlco.30.1.10.n[,d,i]), 
                                   type = "behavior", allowOnly = FALSE)
     
     stationaryDataList[[d]] <- sienaDataCreate(friendship,
@@ -187,7 +187,7 @@ for (i in 1:S) {
     a1 <- alco.30.1.sim.mis.10.n[,i]
     a1.3s <- c(1:N)[a1 == 3 & !is.na(a1)]
     a1c <- sample(a1.3s,1)
-    a1change <- miceImpAlco30.10.n[,d,i]
+    a1change <- miceImpAlco.30.1.10.n[,d,i]
     a1change[a1c] <- sample(c(4,5),1)
     
     drinkingbeh <- sienaDependent(cbind(a1change,a1), type = "behavior",
@@ -217,8 +217,8 @@ for (i in 1:S) {
     alc1imp[,d] = sims[[d]][[1]][[2]]
   }
   
-  impNets.1.30.10.n[[i]] = net1imp
-  impAlco.1.30.10.n[[i]] = alc1imp
+  impNets.30.1.10.n[[i]] = net1imp
+  impAlco.30.1.10.n[[i]] = alc1imp
   
   ########################### later waves imputation ###########################
   
@@ -241,11 +241,11 @@ for (i in 1:S) {
     
     # now impute wave2
     
-    friendship <- sienaDependent(array(c(impNets.1.30.10.n[[i]][[d]],
-                                         fr.30.2.sim.mis.10.n[,,d]),
+    friendship <- sienaDependent(array(c(impNets.30.1.10.n[[i]][[d]],
+                                         fr.30.2.sim.mis.10.n[,,i]),
                                        dim = c(N,N,M)))
     
-    drinkingbeh <- sienaDependent(cbind(impAlco.1.30.10.n[[i]][,d],
+    drinkingbeh <- sienaDependent(cbind(impAlco.30.1.10.n[[i]][,d],
                                         alco.30.2.sim.mis.10.n[,i]),
                                   type = "behavior")
   
@@ -291,13 +291,13 @@ for (i in 1:S) {
                     effects = effects.twoWaves, prevAns = period1saom,
                     returnDeps = TRUE)$sims[[10]]
     
-    net2imp[[d]] <- getNet(impNets.1.30.10.n[[i]][[d]], sims[[1]])
+    net2imp[[d]] <- getNet(impNets.30.1.10.n[[i]][[d]], sims[[1]])
     #a1changelc2imp[,d] <- sims[[2]]
     alc2imp[,d] <- sims[[2]]
     
   }
   save.image('mi.RData')
-  impNets.2.30.10.n[[i]] = list(net2imp)
-  impAlco.2.30.10.n[[i]] = list(alc2imp) 
+  impNets.30.2.10.n[[i]] = list(net2imp)
+  impAlco.30.2.10.n[[i]] = list(alc2imp) 
 }
 

@@ -38,5 +38,20 @@ All selection effects ('altX', 'altSqX', 'egoX', 'egoSqX', 'egoXaltX', 'simX', '
 
 All influence effects ('linear', 'quad', 'avAlt', 'avSim', 'totAlt', 'totSim')
 
+### Plan summary
+
+1. Simulate 100 datasets of 30 and 60 nodes each based on the observed data model estimates. (1st wave may be the real data)
+2. Generate datasets with 10%, 20% and 30% missings based on the 3 hypotheses: (1) missings depend on the network (2) missings depend on the behavior (3) missings depend on both 
+3. Impute each dataset 4 times combining selection yes/no and influence yes/no, where 'yes' is with a parameter value so that the power is high but not extreme e.g. 80% of the power.
+
+### Latests suggestions
+ 
+- [ ] Create dataset with 60 nodes (girls only) from a connected component of 129dataset
+- [ ] Use only 60 nodes dataset
+- [ ] Simplify the model
+- [ ] Use only 20% missings and 30% (optional)
+- [ ] Try out new modified stactionary SAOM imputation procedure for the 1st wave
+- [ ] Try probabilistic missing creation approach
+- [ ] Try range of thetas  
 
 
