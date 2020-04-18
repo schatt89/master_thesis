@@ -2,6 +2,12 @@ library(RSiena) # or RSienaTest
 library("mice")
 source("./simulation/siena07ToConvergence.R")
 
+Nnodes = 31
+M = 2 # number of waves
+N = 30 # number of nodes
+D = 50 # number of imputations
+S = 100 # number of dataSet
+
 getNet <- function(observedNet,edgeList) {
   # observedNet = observed network as adjacency with missing data
   # edgeList = edgelist that is returned by siena07(...)$sims
@@ -21,40 +27,38 @@ load("./data/simulated/Data30_2waves.RData")
 #########                                                             ##########
 ################################################################################
 
-miceImpAlco30.10.n <- array(rep(NA, 30*50*100), c(30, 50, 100))
-miceImpToba30.10.n <- array(rep(NA, 30*50*100), c(30, 50, 100))
+miceImpAlco30.10.n <- array(rep(NA, N*D*S), c(N, D, S))
+miceImpToba30.10.n <- array(rep(NA, N*D*S), c(N, D, S))
 
-miceImpAlco2.30.10.n <- array(rep(NA, 30*50*100), c(30, 50, 100))
-miceImpToba2.30.10.n <- array(rep(NA, 30*50*100), c(30, 50, 100))
+miceImpAlco2.30.10.n <- array(rep(NA, N*D*S), c(N, D, S))
+miceImpToba2.30.10.n <- array(rep(NA, N*D*S), c(N, D, S))
 
 impNets.1.30.10.n <- list()
 impAlco.1.30.10.n <- list()
 impToba.1.30.10.n <- list()
+
 impNets.2.30.10.n <- list()
 impAlco.2.30.10.n <- list()
 impToba.2.30.10.n <- list()
-impNets.3.30.10.n <- list()
-impAlco.3.30.10.n <- list()
-impToba.3.30.10.n <- list()
 
-for (i in 1:2) {
+for (i in 1:S) {
   indegree1 <- colSums(fr.30.1.mis.10.n, na.rm = TRUE)
   indegree2 <- colSums(fr.30.2.sim.mis.10.n[,,i], na.rm = TRUE)
   
   avgAltA1 <- rowSums(sweep(t(fr.30.1.mis.10.n),
-                            MARGIN = 2, alco.30.1.mis.10.n,'*'), na.rm = TRUE) /
+    MARGIN = 2, alco.30.1.mis.10.n,'*'), na.rm = TRUE) /
     rowSums(t(fr.30.1.mis.10.n), na.rm = TRUE)
   
   avgAltA2 <- rowSums(sweep(t(fr.30.2.sim.mis.10.n[,,i]),
-                            MARGIN = 2, alco.30.2.sim.mis.10.n[,i],'*'), na.rm = TRUE) /
+    MARGIN = 2, alco.30.2.sim.mis.10.n[,i],'*'), na.rm = TRUE) /
     rowSums(t(fr.30.2.sim.mis.10.n[,,i]), na.rm = TRUE)
   
   avgAltT1 <- rowSums(sweep(t(fr.30.1.mis.10.n),
-                            MARGIN = 2, toba.30.1.mis.10.n,'*'), na.rm = TRUE) /
+    MARGIN = 2, toba.30.1.mis.10.n,'*'), na.rm = TRUE) /
     rowSums(t(fr.30.1.mis.10.n), na.rm = TRUE)
   
   avgAltT2 <- rowSums(sweep(t(fr.30.2.sim.mis.10.n[,,i]),
-                            MARGIN = 2, toba.30.2.sim.mis.10.n[,i],'*'), na.rm = TRUE) /
+    MARGIN = 2, toba.30.2.sim.mis.10.n[,i],'*'), na.rm = TRUE) /
     rowSums(t(fr.30.2.sim.mis.10.n[,,i]), na.rm = TRUE)
   
   
@@ -71,8 +75,8 @@ for (i in 1:2) {
                     avgAltA1, avgAltA2, avgAltT1, avgAltT2)
   
   set.seed(11019)
-  miceImp <- mice(miceData, m = 50, defaultMethod = "pmm", maxit = 20)
-  for (d in 1:50) {
+  miceImp <- mice(miceData, m = D, defaultMethod = "pmm", maxit = 20)
+  for (d in 1:D) {
     miceImpAlco30.10.n[,d,i] <- complete(miceImp, d)$alco.30.1.mis.10.n
     miceImpToba30.10.n[,d,i] <- complete(miceImp, d)$toba.30.1.mis.10.n
     
@@ -81,7 +85,7 @@ for (i in 1:2) {
   }
   
   friendship <- sienaDependent(array(c(fr.30.1.mis.10.n, fr.30.1.mis.10.n),
-                                     dim = c(30, 30, 2)) ,
+                                     dim = c(N, N, M)) ,
                                allowOnly = FALSE)
   
   w2 <- coDyadCovar(fr.30.2.sim.mis.10.n[,,i]) # the 2nd wave incomplete
@@ -93,7 +97,7 @@ for (i in 1:2) {
   
   stationaryDataList <- list()
   
-  for (d in 1:50) {
+  for (d in 1:D) {
     drinkingbeh <- sienaDependent(cbind(miceImpAlco30.10.n[,d,i],
                                         miceImpAlco30.10.n[,d,i]), 
                                   type = "behavior", allowOnly = FALSE)
@@ -159,7 +163,7 @@ for (i in 1:2) {
                                        name = "smokingbeh",
                                        interaction1 = "drinkingbeh")
   
-  for (d in 1:50) {
+  for (d in 1:D) {
     effects.stationary <- setEffect(effects.stationary, Rate, initialValue = 5,
                                     name = "friendship",fix = TRUE, 
                                     group = d,type = "rate",test = FALSE)
@@ -181,11 +185,15 @@ for (i in 1:2) {
                                                 behModelType =
                                                 c(drinkingbeh=2, smokingbeh=2),
                                                 lessMem = TRUE)
-  
+
   period0saom <- siena07ToConvergence(alg = estimation.options.st,
-                                      dat = Data.stationary, nodes = 7,
+                                      dat = Data.stationary, cluster = TRUE,
+                                      nodes = Nnodes,
                                       eff = effects.stationary, threshold=0.25)
+
   
+  # 3 tconv  max: 0.108 
+  # Time difference of 37.08413 mins
   imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
                                              seed = 214,
                                              cond = FALSE, 
@@ -201,7 +209,7 @@ for (i in 1:2) {
   
   stationaryImpDataList <- list()
   
-  for (d in 1:50) {
+  for (d in 1:D) {
     n1 <- fr.30.1.mis.10.n
     n1 <- n1 + 10
     diag(n1) <- 0
@@ -214,18 +222,18 @@ for (i in 1:2) {
     n1[changedTie] <- 0
     n2[changedTie] <- 1
     
-    friendship <- sienaDependent(array(c(n1,n2), dim = c(30,30, 2)),
+    friendship <- sienaDependent(array(c(n1,n2), dim = c(N, N, M)),
                                  allowOnly = FALSE )
     
     
     a1 <- alco.30.1.mis.10.n
-    a1.3s <- c(1:30)[a1 == 3 & !is.na(a1)]
+    a1.3s <- c(1:N)[a1 == 3 & !is.na(a1)]
     a1c <- sample(a1.3s,1)
     a1change <- miceImpAlco30.10.n[,d,i]
     a1change[a1c] <- sample(c(4,5),1)
     
     t1 <- toba.30.1.mis.10.n
-    t1.3s <- c(1:30)[t1 == 3 & !is.na(t1)]
+    t1.3s <- c(1:N)[t1 == 3 & !is.na(t1)]
     t1c <- sample(t1.3s,1)
     t1change <- miceImpToba30.10.n[,d,i]
     t1change[a1c] <- sample(c(4,5),1)
@@ -253,10 +261,10 @@ for (i in 1:2) {
   
   
   net1imp <- list()
-  alc1imp <- matrix(NA,30,50)
-  toba1imp <- matrix(NA,30,50)
+  alc1imp <- matrix(NA,N,D)
+  toba1imp <- matrix(NA,N,D)
   
-  for (d in 1:50) {
+  for (d in 1:D) {
     net1imp[[d]] = getNet(fr.30.1.mis.10.n, sims[[d]][[1]][[1]]) 
     alc1imp[,d] = sims[[d]][[1]][[2]]
     toba1imp[,d] = sims[[d]][[1]][[3]]
@@ -268,8 +276,8 @@ for (i in 1:2) {
   
   ########################### later waves imputation ###########################
   
-  alc2imp <- matrix(NA,30,50)
-  toba2imp <- matrix(NA,30,50)
+  alc2imp <- matrix(NA,N,D)
+  toba2imp <- matrix(NA,N,D)
   net2imp <- list()
   
   set.seed(1402)
@@ -277,17 +285,12 @@ for (i in 1:2) {
   estimation.options <- sienaAlgorithmCreate(useStdInits = FALSE, seed = 214,
                                              n3 = 3000, maxlike = FALSE,
                                              cond = FALSE, diagonalize = 0.3,
-                                             firstg = 0.02, lessMem = TRUE
-                                             #behModelType =
-                                             # c(drinkingbeh=2, smokingbeh=2)
-                                             )
+                                             firstg = 0.02, lessMem = TRUE,
+                                             behModelType =
+                                             c(drinkingbeh=2, smokingbeh=2))
+
   
-  # estimation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
-  #                                            seed = 2214,
-  #                                            n3 = 1000, maxlike = FALSE,
-  #                                            cond = FALSE)
-  
-  for (d in 1:50) {
+  for (d in 1:D) {
     
     cat('imputation',d,'\n')
     
@@ -295,13 +298,12 @@ for (i in 1:2) {
     
     friendship <- sienaDependent(array(c(impNets.1.30.10.n[[i]][[d]],
                                          fr.30.2.sim.mis.10.n[,,d]),
-                                       dim = c(30,30,2)))
+                                       dim = c(N,N,M)))
     
     drinkingbeh <- sienaDependent(cbind(impAlco.1.30.10.n[[i]][,d],
                                         alco.30.2.sim.mis.10.n[,i]),
                                   type = "behavior")
-    
-    impToba.1.30.10.n[[i]][,d][sample(1:30, 1)] <- 4 # essential
+  
     
     smokingbeh <- sienaDependent(cbind(impToba.1.30.10.n[[i]][,d],
                                        toba.30.2.sim.mis.10.n[,i]),
@@ -348,14 +350,14 @@ for (i in 1:2) {
     
     if (d == 1) {
       period1saom <- siena07ToConvergence(alg = estimation.options,
-                                          dat = Data.w2,nodes = 7,
+                                          dat = Data.w2, nodes = Nnodes,
                                           eff = effects.twoWaves,
                                           threshold = 0.25)
     } else {
       period1saom <- siena07ToConvergence(alg = estimation.options,
                                           dat = Data.w2,
                                           eff = effects.twoWaves,
-                                          threshold = 0.25,nodes = 7,
+                                          threshold = 0.25, nodes = Nnodes,
                                           ans0 = period1saom)
     }
     
@@ -370,7 +372,7 @@ for (i in 1:2) {
     
     friendship <- sienaDependent(array( c(net2imp[[d]],
                                           fr.30.3.sim.mis.10.n[,,d]),
-                                        dim = c(30,30, 2)))
+                                        dim = c(N, N, M)))
     drinkingbeh <- sienaDependent(cbind(alc2imp[,d],
                                         alco.30.sim.mis.10.n[,2,i]),
                                   type = "behavior")
@@ -379,14 +381,14 @@ for (i in 1:2) {
     
     if (d == 1) {
       period2saom <- siena07ToConvergence(alg = estimation.options,
-                                          dat = Data.w3,nodes = 7,
+                                          dat = Data.w3,nodes = Nnodes,
                                           eff = effects.twoWaves,
                                           threshold = 0.25)
     } else {
       period2saom <- siena07ToConvergence(alg = estimation.options,
                                           dat = Data.w3,
                                           eff = effects.twoWaves,
-                                          threshold = 0.25,nodes = 7,
+                                          threshold = 0.25,nodes = Nnodes,
                                           ans0 = period2saom)
     }
     
@@ -401,8 +403,6 @@ for (i in 1:2) {
   }
   save.image('mi.RData')
   impNets.2.30.10.n[[i]] = list(net2imp)
-  impAlco.2.30.10.n[[i]] = list(alc2imp)
-  impNets.3.30.10.n[[i]] = list(net3imp)
-  impAlco.3.30.10.n[[i]] = list(alc3imp)
-  
+  impAlco.2.30.10.n[[i]] = list(alc2imp) 
 }
+
