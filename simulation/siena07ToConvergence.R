@@ -22,7 +22,7 @@ siena07ToConvergence <- function(alg, dat, eff, ans0=NULL, threshold, nodes = 3,
     tm <- ans$tconv.max      # convergence indicator
     cat(numr,"tconv  max:", round(tm,3),"\n")       # report how far we are
     if (tm < threshold) {break}   # success
-    if (tm > 10) {stop()}     # divergence without much hope
+    if (tm > 15) {stop()}     # divergence without much hope
     # of returning to good parameter values
     if (numr > 100) {stop()}  # now it has lasted too long
     alg$nsub <- 1

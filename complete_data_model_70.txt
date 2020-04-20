@@ -1,12 +1,12 @@
 							************************
-									 complete_data_model_60.txt
+									 complete_data_model_70.txt
 							************************
 
-Filename is complete_data_model_60.txt.
+Filename is complete_data_model_70.txt.
 
-This file contains primary output for SIENA project <<complete_data_model_60>>.
+This file contains primary output for SIENA project <<complete_data_model_70>>.
 
-Date and time: 20/04/2020 14:14:18 
+Date and time: 20/04/2020 10:13:42 
 
 RSiena version 1.2-23 (12 01 2020)
 
@@ -175,4 +175,4 @@ Changes
 
 For this variable, the standard initial behavioral tendency parameter is   0.2963
 
-Initialisation of project <<complete_data_model_60>> executed succesfully.
+Initialisation of project <<complete_data_model_70>> executed succesfully.
