@@ -125,7 +125,8 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model", seed = 300)
                              nodes = Nnodes))
 
 SimulateNetworksBehavior <- function(net.w1, b1.w1, n, c1,
-                                     rate, dens, rec, tt, tRt, c3, inPopSq, outActSq,
+                                     rate, dens, rec, tt, tRt, c3, inPopSq,
+                                     outActSq,
                                      altX.b1, egoX.b1, egoXaltX.b1,
                                      rate.b1, lin.b1, qu.b1, avalt.b1){
   b1.w1[is.na(b1.w1)] <- 1
@@ -264,7 +265,7 @@ b1.w1 = alco[,1]
 n = 60
 c1 = 5
 rate = 2
-dens = ans60$theta[2]
+dens = ans60$theta[2] - 2
 rec = ans60$theta[3]
 tt = ans60$theta[4]
 tRt = ans60$theta[5]
@@ -279,7 +280,7 @@ lin.b1 = ans60$theta[13]
 qu.b1 = ans60$theta[14]
 avalt.b1 = ans60$theta[15]
 
-S = 100
+S = 10
 
 fr.60.2.sim <- array(rep(0, n*n*S), c(n, n, S))
 alco.60.2.sim <- array(rep(0, n*S), c(n, S))
@@ -399,7 +400,7 @@ Jaccard = function (x, y) {
 
 ########   fr.60.2.sim.mis.20.n, alco.60.2.sim.mis.20.n
 
-D = 50
+D = 10
 
 miceImpAlco.60.1.20.n <- array(rep(NA, N*D), c(N, D))
 miceImpAlco.60.2.20.n <- array(rep(NA, N*D*S), c(N, D, S))
@@ -592,6 +593,9 @@ for (i in 1:S) {
     print(a)
   }
   
+  impNets.60.1.20.n[[i]] <- net1imp
+  impAlco.60.1.20.n[[i]] <- alc1imp
+  
   ########################### later waves imputation ###########################
   
   alc2imp <- matrix(NA,N,D)
@@ -607,7 +611,7 @@ for (i in 1:S) {
                                                c(drinkingbeh=2))
   
   
-  for (d in D:1) {
+  for (d in 1:D) {
     
     cat('imputation',d,'\n')
     
@@ -638,7 +642,7 @@ for (i in 1:S) {
                                        interaction1 =  "friendship")
     effects.twoWaves
   
-    if (d == 50) {
+    if (d == 1) {
       period1saom <- siena07ToConvergence(alg = estimation.options,
                                           dat = Data.w2, nodes = Nnodes,
                                           eff = effects.twoWaves,
@@ -660,7 +664,8 @@ for (i in 1:S) {
     alc2imp[,d] <- sims[[1]][[2]]$`1`
     
   }
-  save.image('mi.RData')
-  impNets.30.2.10.n[[i]] = list(net2imp)
-  impAlco.30.2.10.n[[i]] = list(alc2imp) 
+  impNets.60.2.20.n[[i]] <- net2imp
+  impAlco.60.2.20.n[[i]] <- alc2imp
 }
+
+save.image('mi.RData')
