@@ -1,3 +1,6 @@
+# install.packages('RSiena', repos='http://cran.us.r-project.org')
+# conda install -c conda-forge r-mice
+
 library(RSiena) # or RSienaTest
 source('./simulation/SimulateNetworksBehavior.R')
 source('./simulation/siena07ToConvergence.R')
@@ -8,9 +11,9 @@ source('./simulation/siena07ToConvergence.R')
 #######                                                                   ######
 ################################################################################
 
-load('./data/Glasgow_data/Glasgow-friendship.RData')
-load('./data/Glasgow_data/Glasgow-substances.RData')
-load('./data/Glasgow_data/Glasgow-demographic.RData')
+load("./data/Glasgow_data/Glasgow-friendship.RData")
+load("./data/Glasgow_data/Glasgow-substances.RData")
+load("./data/Glasgow_data/Glasgow-demographic.RData")
 
 sex.F <- sex.F - 1
 
@@ -68,12 +71,6 @@ fr.2 <- fr.2[, (colnames(fr.2) %in% names)]
 
 alco <- subset(alcohol, rownames(alcohol) %in% names)
 
-g1 <- graph_from_adjacency_matrix(fr.1)
-g2 <- graph_from_adjacency_matrix(fr.2)
-
-plot(g1)
-plot(g2)
-
 ################################################################################
 #######                                                                   ######
 #######                   Model Estimation                                ######
@@ -82,7 +79,7 @@ plot(g2)
 
 N = 60
 M = 2
-Nnodes = 8
+Nnodes = 32
 
 friendship <- sienaDependent(array(c(fr.1, fr.2),
                                    dim = c(N, N, M)))
@@ -284,7 +281,7 @@ lin.b1 = ans60$theta[13]
 qu.b1 = ans60$theta[14]
 avalt.b1 = ans60$theta[15]
 
-S = 10
+S = 100
 
 fr.60.2.sim <- array(rep(0, n*n*S), c(n, n, S))
 alco.60.2.sim <- array(rep(0, n*S), c(n, S))
@@ -298,10 +295,7 @@ for (i in 1:S) {
   fr.60.2.sim[,,i] <- SN$networks
   alco.60.2.sim[,i] <- SN$behavior
   print(i)
-  print(which(rowSums(fr.60.2.sim[,,i]) == 0 & colSums(fr.60.2.sim[,,i]) == 0))
-  g <- graph_from_adjacency_matrix(fr.60.2.sim[,,i])
-  plot(g)
-  
+  print(which(rowSums(fr.60.2.sim[,,i]) == 0 & colSums(fr.60.2.sim[,,i]) == 0)) 
 }
 
 
@@ -404,7 +398,7 @@ Jaccard = function (x, y) {
 
 ########   fr.60.2.sim.mis.20.n, alco.60.2.sim.mis.20.n
 
-D = 10
+D = 50
 
 miceImpAlco.60.1.20.n <- array(rep(NA, N*D), c(N, D))
 miceImpAlco.60.2.20.n <- array(rep(NA, N*D*S), c(N, D, S))
@@ -415,7 +409,7 @@ impAlco.60.1.20.n <- list()
 impNets.60.2.20.n <- list()
 impAlco.60.2.20.n <- list()
 
-for (i in 1:S) {
+for (i in 2:S) {
   indegree1 <- colSums(fr.1.mis.20.n, na.rm = TRUE)
   indegree2 <- colSums(fr.60.2.sim.mis.20.n[,,i], na.rm = TRUE)
   
@@ -514,6 +508,7 @@ for (i in 1:S) {
                                                 behModelType =
                                                   c(drinkingbeh=2),
                                                 lessMem = TRUE)
+  source('./simulation/siena07ToConvergence.R')
   
   period0saom <- siena07ToConvergence(alg = estimation.options.st,
                                       dat = Data.stationary, cluster = TRUE,
