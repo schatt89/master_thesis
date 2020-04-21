@@ -2,7 +2,6 @@
 # conda install -c conda-forge r-mice
 
 library(RSiena) # or RSienaTest
-source('./simulation/SimulateNetworksBehavior.R')
 source('./simulation/siena07ToConvergence.R')
 
 ################################################################################
@@ -281,7 +280,7 @@ lin.b1 = ans60$theta[13]
 qu.b1 = ans60$theta[14]
 avalt.b1 = ans60$theta[15]
 
-S = 100
+S = 10
 
 fr.60.2.sim <- array(rep(0, n*n*S), c(n, n, S))
 alco.60.2.sim <- array(rep(0, n*S), c(n, S))
@@ -642,14 +641,13 @@ for (i in 2:S) {
                                        interaction1 =  "friendship")
     effects.twoWaves
     
-    failed.imps = list()
-    
     tryCatch({
       if (d == 1) {
         period1saom <- siena07ToConvergence(alg = estimation.options,
                                             dat = Data.w2, nodes = Nnodes,
                                             eff = effects.twoWaves,
                                             threshold = 0.25)
+                        
       } else {
         period1saom <- siena07ToConvergence(alg = estimation.options,
                                             dat = Data.w2,
