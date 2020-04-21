@@ -42,19 +42,23 @@ friendship.3 <- friendship.3[sex.F == 0, sex.F == 0]
 
 alcohol <- alcohol[sex.F == 0, ]
 
-library(igraph)
+# library(igraph)
+# 
+# g1 <- graph_from_adjacency_matrix(friendship.1)
+# lcc1 <- decompose.graph(g1)[[1]]
+# lcc1_nodes <- V(lcc1)$name
+# 
+# g2 <- graph_from_adjacency_matrix(friendship.2)
+# lcc2 <- decompose.graph(g2)[[1]]
+# lcc2_nodes <- V(lcc2)$name
+# 
+# names70 <- intersect(lcc1_nodes, lcc2_nodes)
+# set.seed(151) # seed that creates one connected component
+# names <- sample(names70, 60, replace = F)
+# 
+# save(names, file = "./data/names60.Rdata")
 
-g1 <- graph_from_adjacency_matrix(friendship.1)
-lcc1 <- decompose.graph(g1)[[1]]
-lcc1_nodes <- V(lcc1)$name
-
-g2 <- graph_from_adjacency_matrix(friendship.2)
-lcc2 <- decompose.graph(g2)[[1]]
-lcc2_nodes <- V(lcc2)$name
-
-names70 <- intersect(lcc1_nodes, lcc2_nodes)
-set.seed(151) # seed that creates one connected component
-names <- sample(names70, 60, replace = F)
+load("./data/names60.Rdata")
 
 fr.1 <- subset(friendship.1, rownames(friendship.1) %in% names)
 fr.1 <- fr.1[, (colnames(fr.1) %in% names)]
