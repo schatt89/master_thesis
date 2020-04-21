@@ -610,6 +610,7 @@ for (i in 1:S) {
                                              behModelType =
                                                c(drinkingbeh=2))
   
+  source('./simulation/siena07ToConvergence_v2.R')
   
   for (d in 1:D) {
     
@@ -625,7 +626,7 @@ for (i in 1:S) {
                                         alco.60.2.sim.mis.20.n[,i]),
                                   type = "behavior")
     
-
+    
     Data.w2  <- sienaDataCreate(friendship, drinkingbeh)
     
     effects.twoWaves <- getEffects(Data.w2)
@@ -641,27 +642,32 @@ for (i in 1:S) {
                                        name = 'drinkingbeh',
                                        interaction1 =  "friendship")
     effects.twoWaves
-  
-    if (d == 1) {
-      period1saom <- siena07ToConvergence(alg = estimation.options,
-                                          dat = Data.w2, nodes = Nnodes,
-                                          eff = effects.twoWaves,
-                                          threshold = 0.25)
-    } else {
-      period1saom <- siena07ToConvergence(alg = estimation.options,
-                                          dat = Data.w2,
-                                          eff = effects.twoWaves,
-                                          threshold = 0.25, nodes = Nnodes,
-                                          ans0 = period1saom)
-    }
     
-    sims <- siena07(imputation.options, data = Data.w2,
-                    effects = effects.twoWaves, prevAns = period1saom,
-                    returnDeps = TRUE)$sims[[10]]
+    failed.imps = list()
     
-    net2imp[[d]] <- getNet(fr.60.2.sim.mis.20.n[,,i], sims[[1]][[1]]$`1`)
-    #a1changelc2imp[,d] <- sims[[2]]
-    alc2imp[,d] <- sims[[1]][[2]]$`1`
+    tryCatch({
+      if (d == 1) {
+        period1saom <- siena07ToConvergence(alg = estimation.options,
+                                            dat = Data.w2, nodes = Nnodes,
+                                            eff = effects.twoWaves,
+                                            threshold = 0.25)
+      } else {
+        period1saom <- siena07ToConvergence(alg = estimation.options,
+                                            dat = Data.w2,
+                                            eff = effects.twoWaves,
+                                            threshold = 0.25, nodes = Nnodes,
+                                            ans0 = period1saom)
+      }
+      sims <- siena07(imputation.options, data = Data.w2,
+                      effects = effects.twoWaves, prevAns = period1saom,
+                      returnDeps = TRUE)$sims[[10]]
+      net2imp[[d]] <- getNet(fr.60.2.sim.mis.20.n[,,i], sims[[1]][[1]]$`1`)
+      #a1changelc2imp[,d] <- sims[[2]]
+      alc2imp[,d] <- sims[[1]][[2]]$`1`
+      
+    }, error = function(e) {
+      print(e)
+    })
     
   }
   impNets.60.2.20.n[[i]] <- net2imp
