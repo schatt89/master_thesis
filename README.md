@@ -46,12 +46,20 @@ All influence effects ('linear', 'quad', 'avAlt', 'avSim', 'totAlt', 'totSim')
 
 ### Latests suggestions
  
-- [ ] Create dataset with 60 nodes (girls only) from a connected component of 129dataset
-- [ ] Use only 60 nodes dataset
-- [ ] Simplify the model
-- [ ] Use only 20% missings and 30% (optional)
-- [ ] Try out new modified stactionary SAOM imputation procedure for the 1st wave
-- [ ] Try probabilistic missing creation approach
+- [x] Create dataset with 60 nodes (girls only) from a connected component of 129dataset
+- [x] Use only 60 nodes dataset
+- [x] Simplify the model (see current model in one_60_dataset.R)
+- [x] Use only 20% missings and 30% (optional)
+- [x] Try out new modified stactionary SAOM imputation procedure for the 1st wave
+- [x] Try probabilistic missing creation approach
 - [ ] Try range of thetas  
+
+### Things to do
+
+- [ ] Move simulation function in a separate script
+- [ ] Modify imputation parts so it imputes with different thetas (egoX of covar)
+- [ ] Add imputed data model estimation (save only estimation results)
+- [ ] Separate the scripts considering missing data mechanism and the percentage
+- [ ] Research google cloud rent opportunity
 
 
