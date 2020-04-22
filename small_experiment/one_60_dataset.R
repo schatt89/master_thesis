@@ -78,7 +78,7 @@ alco <- subset(alcohol, rownames(alcohol) %in% names)
 
 N = 60
 M = 2
-Nnodes = 7
+Nnodes = 31
 
 friendship <- sienaDependent(array(c(fr.1, fr.2),
                                    dim = c(N, N, M)))
@@ -410,7 +410,7 @@ impAlco.60.1.20.n <- list()
 impNets.60.2.20.n <- list()
 impAlco.60.2.20.n <- list()
 
-for (i in 2:S) {
+for (i in 1:S) {
   indegree1 <- colSums(fr.1.mis.20.n, na.rm = TRUE)
   indegree2 <- colSums(fr.60.2.sim.mis.20.n[,,i], na.rm = TRUE)
   
@@ -509,7 +509,7 @@ for (i in 2:S) {
                                                 behModelType =
                                                   c(drinkingbeh=2),
                                                 lessMem = TRUE)
-  #source('./simulation/siena07ToConvergence.R')
+  source('./simulation/siena07ToConvergence.R')
   
   period0saom <- siena07ToConvergence(alg = estimation.options.st,
                                       dat = Data.stationary, cluster = TRUE,
@@ -573,7 +573,7 @@ for (i in 2:S) {
   imp.ans <- siena07(imputation.options, data = Data.stationary.imp,
                      effects = effects.stationary, prevAns = period0saom,
                      returnChains = TRUE,
-                     returnDeps = TRUE)
+                     returnDeps = FALSE)
   
   sims <- imp.ans$sims[[10]]
   
