@@ -25,7 +25,7 @@ friendship.2[friendship.2 == 10] <- NA
 friendship.3[friendship.3 == 10] <- NA
 
 not_missing <- rowSums(is.na(friendship.1) | is.na(friendship.2) | 
-                      is.na(friendship.3)) != ncol(friendship.1)
+                         is.na(friendship.3)) != ncol(friendship.1)
 
 friendship.1 <- friendship.1[not_missing, not_missing]
 friendship.2 <- friendship.2[not_missing, not_missing]
@@ -78,7 +78,7 @@ alco <- subset(alcohol, rownames(alcohol) %in% names)
 
 N = 60
 M = 2
-Nnodes = 32
+Nnodes = 7
 
 friendship <- sienaDependent(array(c(fr.1, fr.2),
                                    dim = c(N, N, M)))
@@ -121,16 +121,16 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model", seed = 300)
 # to have the results printed directly to the screen.
 
 (ans60 <- siena07ToConvergence(alg = myCoEvAlgorithm, dat = myCoEvolutionData,
-                             eff = myCoEvolutionEff, threshold = 0.25,
-                             nodes = Nnodes))
+                               eff = myCoEvolutionEff, threshold = 0.25,
+                               nodes = Nnodes))
 
 SimulateNetworksBehavior <- function(net.w1, b1.w1, n, c1,
-                                     rate, dens, rec, tt, tRt, c3, inPopSq,
-                                     outActSq,
+                                     rate, dens, rec, tt, tRt, c3, 
+                                     outActSq, inPopSq,
                                      altX.b1, egoX.b1, egoXaltX.b1,
                                      rate.b1, lin.b1, qu.b1, avalt.b1){
   b1.w1[is.na(b1.w1)] <- 1
-
+  
   # Create initial 2-wave data to get a suitable data structure.
   # arbitrarily, this initial network has an expected average degree of 3
   X0 <- matrix(rbinom(n * n, 1, 3 / (n - 1)), n, n)
@@ -162,6 +162,8 @@ SimulateNetworksBehavior <- function(net.w1, b1.w1, n, c1,
   InitEff0 <- setEffect(InitEff0, recip, initialValue = rec)
   InitEff0 <- setEffect(InitEff0, transTrip, initialValue = tt)
   InitEff0 <- setEffect(InitEff0, cycle3, initialValue = c3)
+  InitEff0 <- setEffect(InitEff0, outActSqrt, initialValue = outActSq)  
+  InitEff0 <- setEffect(InitEff0, inPopSqrt, initialValue = inPopSq)
   
   # altX, egoX, egoXaltX
   
@@ -197,7 +199,7 @@ SimulateNetworksBehavior <- function(net.w1, b1.w1, n, c1,
   InitEff <- setEffect(InitEff, Rate, type = "rate", initialValue = rate)
   InitEff <- setEffect(InitEff, name = "Z1", Rate, type = "rate",
                        initialValue = rate.b1)
-
+  
   sink()
   for (m in 1:M) {
     # Note that we start this loop with a previously simulated network.
@@ -264,8 +266,8 @@ net.w1 = fr.1
 b1.w1 = alco[,1]
 n = 60
 c1 = 5
-rate = 2
-dens = ans60$theta[2] - 2
+rate = ans60$theta[1] #2
+dens = ans60$theta[2] 
 rec = ans60$theta[3]
 tt = ans60$theta[4]
 tRt = ans60$theta[5]
@@ -273,8 +275,8 @@ c3 = ans60$theta[6]
 inPopSq = ans60$theta[7]
 outActSq = ans60$theta[8]
 altX.b1 = ans60$theta[9] 
-egoX.b1 = ans60$theta[10] + 1
-egoXaltX.b1 = ans60$theta[11] + 1
+egoX.b1 = ans60$theta[10] #+ 1
+egoXaltX.b1 = ans60$theta[11] #+ 1
 rate.b1 = ans60$theta[12]
 lin.b1 = ans60$theta[13]
 qu.b1 = ans60$theta[14]
@@ -287,7 +289,7 @@ alco.60.2.sim <- array(rep(0, n*S), c(n, S))
 
 for (i in 1:S) { 
   SN <- SimulateNetworksBehavior(net.w1, b1.w1, n, c1,
-                                 rate, dens, rec, tt, tRt, c3, inPopSq, outActSq,
+                                 rate, dens, rec, tt, tRt, c3, outActSq, inPopSq, 
                                  altX.b1, egoX.b1, egoXaltX.b1,
                                  rate.b1, lin.b1, qu.b1, avalt.b1)
   
@@ -330,7 +332,7 @@ alco.60.2.sim.mis.20.n <- alco.60.2.sim
 for (i in 1:S) {
   probs <- ((rowSums(fr.60.2.sim[,,i])-max(rowSums(fr.60.2.sim[,,i])))*-1)/n
   to_remove.2 <- sample(1:n, N_miss, prob = probs, replace=F)
-
+  
   fr.60.2.sim.mis.20.n[,,i][to_remove.2,] <- NA
   alco.60.2.sim.mis.20.n[,i][to_remove.2] <- NA
 }
@@ -417,7 +419,7 @@ for (i in 2:S) {
     rowSums(t(fr.1.mis.20.n), na.rm = TRUE)
   
   avgAltA2 <- rowSums(sweep(t(fr.60.2.sim.mis.20.n[,,i]),
-                  MARGIN = 2, alco.60.2.sim.mis.20.n[,i],'*'), na.rm = TRUE) /
+                            MARGIN = 2, alco.60.2.sim.mis.20.n[,i],'*'), na.rm = TRUE) /
     rowSums(t(fr.60.2.sim.mis.20.n[,,i]), na.rm = TRUE)
   
   
@@ -450,7 +452,7 @@ for (i in 2:S) {
   # missing data covariate
   m1 <- coCovar(missing.20, center = F)
   
-
+  
   stationaryDataList <- list()
   
   for (d in 1:D) {
@@ -476,7 +478,7 @@ for (i in 2:S) {
   
   effects.stationary <- includeEffects(effects.stationary, effFrom, 
                                        name = "drinkingbeh", interaction1 ="a2")
-
+  
   # influence
   effects.stationary <- includeEffects(effects.stationary, name = "drinkingbeh",
                                        avAlt,
@@ -507,7 +509,7 @@ for (i in 2:S) {
                                                 behModelType =
                                                   c(drinkingbeh=2),
                                                 lessMem = TRUE)
-  source('./simulation/siena07ToConvergence.R')
+  #source('./simulation/siena07ToConvergence.R')
   
   period0saom <- siena07ToConvergence(alg = estimation.options.st,
                                       dat = Data.stationary, cluster = TRUE,
@@ -647,7 +649,7 @@ for (i in 2:S) {
                                             dat = Data.w2, nodes = Nnodes,
                                             eff = effects.twoWaves,
                                             threshold = 0.25)
-                        
+        
       } else {
         period1saom <- siena07ToConvergence(alg = estimation.options,
                                             dat = Data.w2,
