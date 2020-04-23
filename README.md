@@ -56,7 +56,7 @@ All influence effects ('linear', 'quad', 'avAlt', 'avSim', 'totAlt', 'totSim')
 
 ### Things to do
 
-- [ ] Move simulation function in a separate script
+- [x] Move simulation function in a separate script
 - [ ] Modify imputation parts so it imputes with different thetas (egoX of covar)
 - [ ] Add imputed data model estimation (save only estimation results)
 - [ ] Separate the scripts considering missing data mechanism and the percentage
