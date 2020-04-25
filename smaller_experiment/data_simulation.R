@@ -61,6 +61,7 @@ alco <- subset(alcohol, rownames(alcohol) %in% names)
 #######                                                                   ######
 ################################################################################
 
+S = 100
 N = 60
 M = 2
 Nnodes = 31
@@ -77,8 +78,7 @@ myCoEvolutionEff <- getEffects(myCoEvolutionData)
 
 print01Report(myCoEvolutionData, modelname = "complete_data_model_60")
 
-myCoEvolutionEff <- includeEffects(myCoEvolutionEff, dens, recip,
-                                   transTrip, transRecTrip, cycle3,
+myCoEvolutionEff <- includeEffects(myCoEvolutionEff, gwespFF,
                                    outActSqrt, inPopSqrt)
 
 myCoEvolutionEff <- includeEffects(myCoEvolutionEff, altX, egoX, egoXaltX,
@@ -109,44 +109,100 @@ myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model", seed = 300)
                                eff = myCoEvolutionEff, threshold = 0.25,
                                nodes = Nnodes))
 
+################################################################################
+#######                                                                   ######
+#######                   Goodness of fit check                           ######
+#######                                                                   ######
+################################################################################
 
-net.w1 = fr.1
-b1.w1 = alco[,1]
-n = 60
-c1 = 5
-rate = ans60$theta[1] #2
-dens = ans60$theta[2] 
-rec = ans60$theta[3]
-tt = ans60$theta[4]
-tRt = ans60$theta[5]
-c3 = ans60$theta[6]
-inPopSq = ans60$theta[7]
-outActSq = ans60$theta[8]
-altX.b1 = ans60$theta[9] 
-egoX.b1 = ans60$theta[10] #+ 1
-egoXaltX.b1 = ans60$theta[11] #+ 1
-rate.b1 = ans60$theta[12]
-lin.b1 = ans60$theta[13]
-qu.b1 = ans60$theta[14]
-avalt.b1 = ans60$theta[15]
+gof1.id <- sienaGOF(ans60, verbose=TRUE,
+                    varName="friendship", IndegreeDistribution)
+gof1.id
+plot(gof1.id)
 
-S = 100
+gof1.od <- sienaGOF(ans60, verbose=TRUE, varName="friendship",
+                    OutdegreeDistribution)
+gof1.od
+plot(gof1.od)
 
-fr.60.2.sim <- array(rep(0, n*n*S), c(n, n, S))
-alco.60.2.sim <- array(rep(0, n*S), c(n, S))
-
-for (i in 1:S) { 
-  SN <- SimulateNetworksBehavior(net.w1, b1.w1, n, c1,
-                                 rate, dens, rec, tt, tRt, c3, outActSq, inPopSq, 
-                                 altX.b1, egoX.b1, egoXaltX.b1,
-                                 rate.b1, lin.b1, qu.b1, avalt.b1)
-  
-  fr.60.2.sim[,,i] <- SN$networks
-  alco.60.2.sim[,i] <- SN$behavior
-  print(i)
-  print(which(rowSums(fr.60.2.sim[,,i]) == 0 & colSums(fr.60.2.sim[,,i]) == 0)) 
+TriadCensus <- function(i, data, sims, wave, groupName, varName, levls=1:16){
+  unloadNamespace("igraph") # to avoid package clashes
+  require(sna)
+  require(network)
+  x <- networkExtraction(i, data, sims, wave, groupName, varName)
+  if (network.edgecount(x) <= 0){x <- symmetrize(x)}
+  # because else triad.census(x) will lead to an error
+  tc <- sna::triad.census(x)[1,levls]
+  # triad names are transferred automatically
+  tc
 }
 
+gof1.tc <- sienaGOF(ans60, verbose=TRUE,
+                    varName="friendship", TriadCensus)
+
+gof1.tc
+
+plot(gof1.tc, scale=TRUE, center=TRUE)
+
+################################################################################
+#######                                                                   ######
+#######                   Datasets simulation                             ######
+#######                                                                   ######
+################################################################################
+
+getNet <- function(observedNet,edgeList) {
+  # observedNet = observed network as adjacency with missing data
+  # edgeList = edgelist that is returned by siena07(...)$sims
+  observedNet[is.na(observedNet)] <- 0
+  for (i in 1:nrow(edgeList)) {
+    observedNet[edgeList[i,1],edgeList[i,2]] <- 1
+  }
+  return(observedNet)
+}
+
+
+sims = ans60$sims
+
+fr.60.2.sim <- array(rep(NA, N*N*S), c(N,N,S))
+edgelists <- list()
+shape <- fr.1
+shape[1:N,] <- 0
+
+i <- 1
+j <- 1
+while (i <= 100) {
+  edgelist = sims[[j]]$Data1$friendship$`1`
+  avdegree = mean(table(edgelist[,1]))
+  print(j)
+  if (avdegree >= 3 & avdegree < 3.2) {
+    fr.60.2.sim[,,i] = getNet(shape, edgelist)
+    i <- i + 1
+    j <- j + 1
+  } else {
+    j <- j + 1
+  }
+}
+
+alco.60.2.sim <- array(rep(NA, N*S), c(N, S))
+
+i <- 1
+j <- 1
+while (i <= 100) {
+  alcosim = sims[[j]]$Data1$drinkingbeh$`1`
+  avalco = mean(alcosim)
+  print(j)
+  print(avalco)
+  if (avalco >= 2.7 & avalco <= 3) {
+    alco.60.2.sim[,i] = alcosim
+    i <- i + 1
+    j <- j + 1
+  } else {
+    j <- j + 1
+  }
+}
+
+
+
 save(fr.1, alco,
-fr.60.2.sim, alco.60.2.sim,
-ans60, file = "./data/simulated/smaller_exp.RData")
+     fr.60.2.sim, alco.60.2.sim,
+     ans60, file = "./data/simulated/smaller_exp.RData")
