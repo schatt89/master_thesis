@@ -4,8 +4,8 @@ library(RSiena) # or RSienaTest
 source('./simulation/siena07ToConvergence.R')
 source('./smaller_experiment/simulateNetworkBehavior.R')
 
-load("./data/simulated/smaller_exp.RData")
-# load("./data/results/wave1imp-20-n.RData")
+# load("./data/simulated/smaller_exp.RData")
+load("./data/results/wave1imp-20-n.RData")
 
 Nnodes = 8 # n of cores
 

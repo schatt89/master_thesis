@@ -143,6 +143,12 @@ m1.inv <- coCovar(missing.20.inv, center = F)
 
 stationaryDataList <- list()
 
+net1imp.t1 <- list()
+alc1imp.t1 <- array(rep(NA,N*D), c(N,D))
+
+net1imp.t2 <- list()
+alc1imp.t2 <- array(rep(NA,N*D), c(N,D))
+
 for (d in 1:D) {
   drinkingbeh <- sienaDependent(cbind(miceImpAlco.60.1.20.n[,d],
                                       miceImpAlco.60.1.20.n[,d]), 
@@ -277,12 +283,6 @@ for(t in 1:2) {
   
   sims <- imp.ans$sims[[10]]
   
-  net1imp.t1 <- list()
-  alc1imp.t1 <- array(rep(NA,N*D), c(N,D))
-  
-  net1imp.t2 <- list()
-  alc1imp.t2 <- array(rep(NA,N*D), c(N,D))
-  
   if (t == 1) {
     for (d in 1:D) {
       net1imp.t1[[d]] = getNet(fr.1.mis.20.n, sims[[d]][[1]][[1]])
@@ -302,7 +302,7 @@ for(t in 1:2) {
   }
 }
 
-save(net1imp.t1, alco1imp.t1, net1imp.t2, alco1imp.t2,
+save(net1imp.t1, alc1imp.t1, net1imp.t2, alc1imp.t2,
      fr.60.2.sim.mis.20.n,
      alco.60.2.sim.mis.20.n,
      missing.20.2,
