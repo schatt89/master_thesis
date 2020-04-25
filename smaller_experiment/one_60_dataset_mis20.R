@@ -50,6 +50,7 @@ impAlco.60.2.20.n.t2 <- list()
 saom.results.20.n.t1 <- list()
 saom.results.20.n.t2 <- list()
 
+thetas <- c(-2,-1)
 for (i in 1:S) {
 
   ########################### later waves imputation ###########################
@@ -80,7 +81,7 @@ for (i in 1:S) {
                                             fr.60.2.sim.mis.20.n[,,i]),
                                           dim = c(N,N,M)))
         
-        drinkingbeh <- sienaDependent(cbind(alco1imp.t1[,d],
+        drinkingbeh <- sienaDependent(cbind(alc1imp.t1[,d],
                                             alco.60.2.sim.mis.20.n[,i]),
                                                       type = "behavior")
         } else {
@@ -88,7 +89,7 @@ for (i in 1:S) {
                                             fr.60.2.sim.mis.20.n[,,i]),
                                           dim = c(N,N,M)))
         
-        drinkingbeh <- sienaDependent(cbind(alco1imp.t2[,d],
+        drinkingbeh <- sienaDependent(cbind(alc1imp.t2[,d],
                                             alco.60.2.sim.mis.20.n[,i]),
                                                       type = "behavior")
         }
@@ -98,7 +99,8 @@ for (i in 1:S) {
         
         m2.inv <- coCovar(missing.20.2.inv[,i], center = FALSE)
         
-        Data.w2  <- sienaDataCreate(friendship, drinkingbeh, m2, m2.inv)
+        Data.w2  <- sienaDataCreate(friendship, drinkingbeh, m2.inv)
+        # , m2 removed
         
         effects.twoWaves <- getEffects(Data.w2)
         
@@ -132,16 +134,16 @@ for (i in 1:S) {
         }, error = function(e) {
           print(e)
         })
-        effects.twoWaves <- includeEffects(effects.twoWaves, RateX,
-                                             name = "drinkingbeh",
-                                             type = "rate", interaction1 = "m2",
-                                             fix = TRUE,
-                                             test = FALSE)
-        effects.twoWaves <- setEffect(effects.twoWaves, RateX,
-                                        name = "drinkingbeh",
-                                        type = "rate", interaction1 = "m2",
-                                        fix = TRUE,
-                                        initialValue = -1000)     
+        # effects.twoWaves <- includeEffects(effects.twoWaves, RateX,
+        #                                      name = "drinkingbeh",
+        #                                      type = "rate", interaction1 = "m2",
+        #                                      fix = TRUE,
+        #                                      test = FALSE)
+        # effects.twoWaves <- setEffect(effects.twoWaves, RateX,
+        #                                 name = "drinkingbeh",
+        #                                 type = "rate", interaction1 = "m2",
+        #                                 fix = TRUE,
+        #                                 initialValue = -1000)     
         
         
         effects.twoWaves <- includeEffects(effects.twoWaves, egoX,
@@ -156,6 +158,12 @@ for (i in 1:S) {
                                           fix = TRUE,
                                           initialValue = thetas[t])
         
+        imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
+                                   seed = 214,
+                                   cond = FALSE, maxlike = FALSE,
+                                   behModelType = c(drinkingbeh = 2),
+                                   nsub = 0, simOnly = TRUE, n3 = 10)
+        
         sims <- siena07(imputation.options, data = Data.w2,
                       effects = effects.twoWaves, prevAns = period1saom,
                       returnDeps = TRUE)$sims[[10]]
@@ -163,8 +171,8 @@ for (i in 1:S) {
         net2imp[[d]] <- getNet(fr.60.2.sim.mis.20.n[,,i], sims[[1]][[1]]$`1`)
         alc2imp[,d] <- sims[[1]][[2]]$`1`
         
-        changed <- which(((alco.60.2.sim.mis.20.n[,i] - alc2imp[,d]) != 0))[[1]]
-        alc2imp[,d][changed] <- alco.60.2.sim.mis.20.n[,i][changed]
+      # changed <- which(((alco.60.2.sim.mis.20.n[,i] - alc2imp[,d]) != 0))[[1]]
+      # alc2imp[,d][changed] <- alco.60.2.sim.mis.20.n[,i][changed]
         
       }
   if (t == 1) {
@@ -179,20 +187,20 @@ for (i in 1:S) {
   source('./simulation/siena07ToConvergence.R')
   saom.results.t1 <- list()
   saom.results.t2 <- list()
-  for (d in 1:D) {
+  for (d in 12:D) {
     cat('estimation',d,'\n')
     if (t == 1) {
       friendship <- sienaDependent(array(c(net1imp.t1[[d]],
                                            impNets.60.2.20.n.t1[[i]][[d]]),
                                          dim = c(N,N,M)))
-      drinkingbeh <- sienaDependent(cbind(alco1imp.t1[,d],
+      drinkingbeh <- sienaDependent(cbind(alc1imp.t1[,d],
                                           impAlco.60.2.20.n.t1[[i]][,d]),
                                     type = "behavior")
     } else {
       friendship <- sienaDependent(array(c(net1imp.t2[[d]],
                                            impNets.60.2.20.n.t2[[i]][[d]]),
                                          dim = c(N,N,M)))
-      drinkingbeh <- sienaDependent(cbind(alco1imp.t2[,d],
+      drinkingbeh <- sienaDependent(cbind(alc1imp.t2[,d],
                                           impAlco.60.2.20.n.t2[[i]][,d]),
                                     type = "behavior")
     }
@@ -212,7 +220,7 @@ for (i in 1:S) {
                                        name = 'drinkingbeh',
                                        interaction1 =  "friendship")
     
-    options.imputed <- sienaAlgorithmCreate(projname = "model",seed = d+239)
+    options.imputed <- sienaAlgorithmCreate(projname = "model", seed = d+209)
     
     if (t == 1) {
       if (d == 1) {
