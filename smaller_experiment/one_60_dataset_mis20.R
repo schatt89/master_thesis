@@ -50,8 +50,16 @@ impAlco.60.2.20.n.t2 <- list()
 saom.results.20.n.t1 <- list()
 saom.results.20.n.t2 <- list()
 
+skip_imp_iter_t1 <- function() {
+  saom.results.t1[[d]] <- saom.results.t1[[d-1]]
+}
+
+skip_imp_iter_t2 <- function() {
+  saom.results.t2[[d]] <- saom.results.t2[[d-1]]
+}
+
 thetas <- c(-2,-1)
-for (i in 1:S) {
+for (i in 2:S) {
 
   ########################### later waves imputation ###########################
   
@@ -187,7 +195,7 @@ for (i in 1:S) {
   source('./simulation/siena07ToConvergence.R')
   saom.results.t1 <- list()
   saom.results.t2 <- list()
-  for (d in 12:D) {
+  for (d in 1:D) {
     cat('estimation',d,'\n')
     if (t == 1) {
       friendship <- sienaDependent(array(c(net1imp.t1[[d]],
@@ -230,12 +238,17 @@ for (i in 1:S) {
                                             eff = effects.imputed,
                                             threshold = 0.25)
       } else {
-        saom.results.t1[[d]] <- siena07ToConvergence(
-                                      alg = options.imputed,
-                                      dat = Data.imputed, nodes = Nnodes,
-                                      eff = effects.imputed,
-                                      ans0 = saom.results.t1[[d - 1]],
-                                      threshold = 0.25)        
+        tryCatch({
+          saom.results.t1[[d]] <- siena07ToConvergence(
+                                        alg = options.imputed,
+                                        dat = Data.imputed, nodes = Nnodes,
+                                        eff = effects.imputed,
+                                        ans0 = saom.results.t1[[d - 1]],
+                                        threshold = 0.25) 
+        }, error = function(e) {
+            skip_imp_iter_t1()
+        })
+       
       }
 
     } else {
@@ -246,12 +259,17 @@ for (i in 1:S) {
                                             eff = effects.imputed,
                                             threshold = 0.25)
       } else {
-        saom.results.t2[[d]] <- siena07ToConvergence(
-                                      alg = options.imputed,
-                                      dat = Data.imputed, nodes = Nnodes,
-                                      eff = effects.imputed,
-                                      ans0 = saom.results.t2[[d - 1]],
-                                      threshold = 0.25)        
+        tryCatch({
+          saom.results.t2[[d]] <- siena07ToConvergence(
+                                            alg = options.imputed,
+                                            dat = Data.imputed, nodes = Nnodes,
+                                            eff = effects.imputed,
+                                            ans0 = saom.results.t2[[d - 1]],
+                                            threshold = 0.25)    
+        }, error = function(e) {
+            skip_imp_iter_t2()
+        })
+    
       }
     }
 
