@@ -50,16 +50,16 @@ impAlco.60.2.20.n.t2 <- list()
 saom.results.20.n.t1 <- list()
 saom.results.20.n.t2 <- list()
 
-skip_imp_iter_t1 <- function() {
-  saom.results.t1[[d]] <- saom.results.t1[[d-1]]
+skip_imp_iter_t1 <- function(d) {
+  return(saom.results.t1[[d-1]])
 }
 
-skip_imp_iter_t2 <- function() {
-  saom.results.t2[[d]] <- saom.results.t2[[d-1]]
+skip_imp_iter_t2 <- function(d) {
+  return(saom.results.t2[[d-1]])
 }
 
 thetas <- c(-2,-1)
-for (i in 2:S) {
+for (i in 1:S) {
 
   ########################### later waves imputation ###########################
   
@@ -76,6 +76,9 @@ for (i in 2:S) {
                                                c(drinkingbeh=2))
   
   source('./simulation/siena07ToConvergence_v2.R')
+  
+  saom.results.t1 <- list()
+  saom.results.t2 <- list()
 
   for (t in 1:2) {
   
@@ -142,17 +145,6 @@ for (i in 2:S) {
         }, error = function(e) {
           print(e)
         })
-        # effects.twoWaves <- includeEffects(effects.twoWaves, RateX,
-        #                                      name = "drinkingbeh",
-        #                                      type = "rate", interaction1 = "m2",
-        #                                      fix = TRUE,
-        #                                      test = FALSE)
-        # effects.twoWaves <- setEffect(effects.twoWaves, RateX,
-        #                                 name = "drinkingbeh",
-        #                                 type = "rate", interaction1 = "m2",
-        #                                 fix = TRUE,
-        #                                 initialValue = -1000)     
-        
         
         effects.twoWaves <- includeEffects(effects.twoWaves, egoX,
                                           name = "friendship",
@@ -192,10 +184,8 @@ for (i in 2:S) {
   }
     
   ###################### completed models estimation part ######################
-  source('./simulation/siena07ToConvergence.R')
-  saom.results.t1 <- list()
-  saom.results.t2 <- list()
-  for (d in 1:D) {
+
+  for (d in 4:D) {
     cat('estimation',d,'\n')
     if (t == 1) {
       friendship <- sienaDependent(array(c(net1imp.t1[[d]],
@@ -232,42 +222,44 @@ for (i in 2:S) {
     
     if (t == 1) {
       if (d == 1) {
+        source('./simulation/siena07ToConvergence_v2.R')
         saom.results.t1[[d]] <- siena07ToConvergence(
                                             alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
                                             eff = effects.imputed,
                                             threshold = 0.25)
       } else {
-        tryCatch({
-          saom.results.t1[[d]] <- siena07ToConvergence(
+        source('./simulation/siena07ToConvergence.R')
+        saom.results.t1[[d]] <- tryCatch({siena07ToConvergence(
                                         alg = options.imputed,
                                         dat = Data.imputed, nodes = Nnodes,
                                         eff = effects.imputed,
                                         ans0 = saom.results.t1[[d - 1]],
                                         threshold = 0.25) 
         }, error = function(e) {
-            skip_imp_iter_t1()
+            skip_imp_iter_t1(d)
         })
        
       }
 
     } else {
       if (d == 1) {
+        source('./simulation/siena07ToConvergence_v2.R')
         saom.results.t2[[d]] <- siena07ToConvergence(
                                             alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
                                             eff = effects.imputed,
                                             threshold = 0.25)
       } else {
-        tryCatch({
-          saom.results.t2[[d]] <- siena07ToConvergence(
+        source('./simulation/siena07ToConvergence.R')
+        saom.results.t2[[d]] <- tryCatch({siena07ToConvergence(
                                             alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
                                             eff = effects.imputed,
                                             ans0 = saom.results.t2[[d - 1]],
                                             threshold = 0.25)    
         }, error = function(e) {
-            skip_imp_iter_t2()
+            skip_imp_iter_t2(d)
         })
     
       }
