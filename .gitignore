@@ -10,4 +10,4 @@ Init.txt
 cluster.out
 eff.txt
 model.txt
-./data/results/*
+data/results/result-20-n.RData
