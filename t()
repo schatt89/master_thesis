@@ -1,0 +1,387 @@
+siena07                 package:RSiena                 R Documentation
+
+_F_u_n_c_t_i_o_n _t_o _e_s_t_i_m_a_t_e _p_a_r_a_m_e_t_e_r_s _i_n _a _S_i_e_n_a _m_o_d_e_l
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Estimates parameters in a Siena model using method of moments,
+     based on direct simulation, conditional or otherwise; or using
+     Maximum Likelihood by MCMC simulation. Estimation is done using a
+     Robbins-Monro algorithm. Note that the data and particular model
+     to be used must be passed in using named arguments as the ‘...’,
+     and the specification for the algorithm must be passed on as ‘x’,
+     which is a ‘sienaAlgorithm’ object as produced by
+     ‘sienaAlgorithmCreate’ (see examples).
+
+_U_s_a_g_e:
+
+     siena07(x, batch=FALSE, verbose=FALSE, silent=FALSE,
+             useCluster=FALSE, nbrNodes=2,
+             thetaValues = NULL,
+             initC=TRUE,
+             clusterString=rep("localhost", nbrNodes), tt=NULL,
+             parallelTesting=FALSE, clusterIter=!x$maxlike,
+             clusterType=c("PSOCK", "FORK"), cl=NULL, ...)
+     
+_A_r_g_u_m_e_n_t_s:
+
+       x: A control object, of class ‘sienaAlgorithm. ’
+
+   batch: Desired interface: FALSE gives a gui (graphical user
+          interface implemented as a tcl/tk screen), TRUE gives a small
+          (if ‘verbose=FALSE’) amount of printout to the console.
+
+ verbose: Produces various output to the console if TRUE.
+
+  silent: Produces no output to the console if TRUE, even if batch
+          mode.
+
+useCluster: Boolean: whether to use a cluster of processes (useful if
+          multiple processors are available).
+
+nbrNodes: Number of processes to use if useCluster is TRUE.
+
+thetaValues: If not ‘NULL’, this should be a matrix with parameter
+          values to be used in Phase 3. The number of columns must be
+          equal to the number of estimated parameters in the effects
+          object (if conditional estimation is used, without the rate
+          parameters for the conditioning dependent variable). Can only
+          be used if ‘x$simOnly=TRUE’.
+
+   initC: Boolean: set to TRUE if the simulation will use C routines
+          (currently always needed). Only for use if using multiple
+          processors, to ensure all copies are initialised correctly.
+          Ignored otherwise, so is set to TRUE by default.
+
+clusterString: Definitions of clusters. Default set up to use the local
+          machine only.
+
+      tt: A ‘tcltk’ toplevel window. Used if called from the model
+          options screen.
+
+parallelTesting: Boolean. If TRUE, sets up random numbers to parallel
+          those in Siena 3.
+
+clusterIter: Boolean. If TRUE, multiple processes execute complete
+          iterations at each call.  If FALSE, multiple processes
+          execute a single wave at each call.
+
+clusterType: Either "PSOCK" or "FORK". On Windows, must be "PSOCK". On
+          a single non-Windows machine may be "FORK", and subprocesses
+          will be formed by forking. If "PSOCK", subprocesses are
+          formed using R scripts.
+
+      cl: An object of class c("SOCKcluster", "cluster") (see Details).
+
+     ...: Arguments for the simulation function, see ‘simstats0c’: in
+          any case, ‘data’ and ‘effects’, as in the examples below;
+          possibly also ‘prevAns’ if a previous reasonable provisional
+          estimate was obtained for a similar model;
+          possibly also ‘returnDeps’ if the simulated dependent
+          variables (networks, behaviour) should be returned;
+          possibly also ‘returnChains’ if the simulated sequences
+          (chains) of ministeps should be returned; this may produce a
+          very big file.
+
+_D_e_t_a_i_l_s:
+
+     For use of ‘siena07’, it is necessary to specify parameters ‘data’
+     (RSiena data set) and ‘effects’ (effects object), which are
+     required parameters in function ‘simstats0c’.  (These parameters
+     are inserted through '...'.) See the examples.
+
+     ‘siena07’ runs a Robbins-Monro algorithm for parameter estimation
+     according to the Method of Moments using the three-phase
+     implementation in Snijders (2001) and Snijders, Steglich and
+     Schweinberger (2007), with (if ‘x$findiff=FALSE’) derivative
+     estimation as in Schweinberger and Snijders (2007).  Phase 1 does
+     a few iterations to estimate the derivative matrix of the targets
+     with respect to the parameter vector. Phase 2 does the estimation.
+     Phase 3 runs a simulation to estimate standard errors and check
+     convergence of the model. The simulation function is called once
+     for each iteration in these phases and also once to initialise the
+     model fitting and once to complete it.  Unless in batch mode,
+     displays a tcl/tk screen to allow interruption and to show
+     progress.
+
+     If ‘x$maxlike=TRUE’, estimation is done by Maximum Likelihood
+     implemented as in Snijders, Koskinen and Schweinberger (2010);
+     also using the three-phase Robbins-Monro algorithm.
+
+     It is necessary to check that convergence has been achieved.  The
+     rule of thumb is that the all t-ratios for convergence should be
+     in absolute value less than 0.1 and the overall maximum
+     convergence ratio should be less than 0.25.  If this was not
+     achieved, the result can be used to start another estimation run
+     from the estimate obtained, using the parameter ‘prevAns’ as
+     illustrated in the example below.  (This parameter is inserted
+     through '...' into the function ‘initializeFRAN’.)
+
+     Parameters can be tested against zero by dividing the estimate by
+     its standard error and using an approximate standard normal null
+     distribution.  Further, functions ‘Wald.RSiena’ and
+     ‘Multipar.RSiena’ are available for multi-parameter testing.
+     Parameters specified in ‘includeEffects’ or ‘setEffect’ with
+     ‘fix=TRUE, test=TRUE’ will not be estimated; score tests of their
+     hypothesized values are reported in the output file specified in
+     the control (algorithm) object.  These tests can be obtained also
+     using ‘score.Test’.
+
+     If ‘x$simOnly’ is ‘TRUE’, which is meant to go together with
+     ‘x$nsub=0’, the calculation of the standard errors and covariance
+     matrix at the end of Pase 3 is skipped. No estimation is
+     performed.  If ‘thetaValues’ is not ‘NULL’, the parameter values
+     in the rows of this matrix will be used in the consecutive runs of
+     Phase 3.  If ‘x$n3’ is larger than the number of rows times
+     ‘nbrNodes’ (see below), the last row of ‘thetaValues’ will
+     continue to be used.  The parameter values actually used will be
+     stored in the output matrix ‘thetaUsed’.
+
+     In the case of using multiple processors, there are two options
+     for telling ‘siena07’ to use them. By specifying the options
+     ‘useCluster’, ‘nbrNodes’, ‘clusterString’ and ‘initC’, ‘siena07’
+     will create a ‘cluster object’ that will be used by the ‘parallel’
+     package. After finishing the estimation procedure, ‘siena07’ will
+     automatically stop the cluster. Alternatively, instead of having
+     the function to create a cluster, the user may provide its own by
+     specifying the option ‘cl’, similar to what the boot function does
+     in the ‘boot’ package. By using the option ‘cl’ the user may be
+     able to create more complex clusters (see examples below).
+
+     If ‘thetaValues’ is not ‘NULL’ and ‘nbrNodes >= 2’, parameters in
+     Phase 3 will be constant for each set of ‘nbrNodes’ consecutive
+     simulations. This must be noted in the interpretation, and will be
+     visible in ‘thetaUsed’ (see below).
+
+_V_a_l_u_e:
+
+     Returns an object of class ‘sienaFit’, some parts of which are:
+
+      OK: Boolean indicating successful termination
+
+termination : Character string, values: "OK", "Error", or
+          "UserInterrupt". "UserInterrupt" indicates that the user
+          asked for early termination before phase 3.
+
+       f: Various characteristics of the data and model definition.
+
+requestedEffects: The included effects in the effects object.
+
+ effects: The included effects in the effects object to which are added
+          the main effects of the requested interaction effects, if
+          any.
+
+   theta: Estimated value of theta, if ‘x$simOnly=FALSE’.
+
+covtheta: Estimated covariance matrix of theta; this is not available
+          if ‘x$simOnly=TRUE’.
+
+      se: Vector of standard errors of estimated theta, if
+          ‘x$simOnly=FALSE’.
+
+    dfra: Matrix of estimated derivatives.
+
+      sf: Matrix of simulated deviations from targets in phase 3.
+
+     sf2: Array of periodwise deviations from simulations in phase 3.
+          Not included if ‘lessMem=FALSE’ in ‘sienaAlgorithmCreate’.
+
+   tconv: t-statistics for convergence.
+
+    tmax: maximum absolute t-statistic for convergence for non-fixed
+          parameters.
+
+tconv.max: overall maximum convergence ratio.
+
+ targets: Observed statistics; for ML, zero vector.
+
+targets2: Observed statistics by wave, starting with second wave; for
+          ML, zero matrix.
+
+     ssc: Score function contributions for each wave for each
+          simulation in phase 3. Not included if finite difference
+          method is used or if ‘x$lessMem=FALSE’.
+
+  scores: Score functions, added over waves, for each simulation in
+          phase 3. Only included if ‘x$lessMem=FALSE’.
+
+regrCoef: If ‘x$dolby’ and not ‘x$maxlike’: regression coefficients of
+          estimation statistics on score functions.
+
+ regrCor: If ‘x$dolby’ and not ‘x$maxlike’: correlations between
+          estimation statistics and score functions.
+
+estMeans: Estimated means of estimation statistics.
+
+estMeans.sem: If ‘x$simOnly’: Standard errors of the estimated means of
+          estimation statistics.
+
+    sims: If ‘returnDeps=TRUE’: list of simulated dependent variables
+          (networks, behaviour).  Networks are given as a list of
+          edgelists, one for each period.
+
+   chain: If ‘returnChains = TRUE’: list, or data frame, of simulated
+          chains of ministeps.  The chain has the structure
+          ‘chain[[run]][[depvar]][[period]][[ministep]]’.
+
+Phase3nits: Number of iterations actually performed in phase 3.
+
+thetaUsed: If ‘thetaValues’ is not ‘NULL’, the matrix of parameter
+          values actually used in the simulations of Phase 3.
+     Writes text output to the file named "projname.txt", where
+     projname is defined in the ‘sienaAlgorithm’ object ‘x’.
+
+_A_u_t_h_o_r(_s):
+
+     Ruth Ripley, Tom Snijders
+
+_R_e_f_e_r_e_n_c_e_s:
+
+        • Schweinberger, Michael, and Snijders, Tom A.B. (2007). Markov
+          models for digraph panel data: Monte Carlo-based derivative
+          estimation.  _Computational Statistics and Data Analysis_
+          *51*, 4465-4483.
+
+        • Snijders, Tom A.B. (2001).  The statistical evaluation of
+          social network dynamics.  _Sociological Methodology_ 31,
+          361-395.
+
+        • Snijders, Tom A.B. (2017). Stochastic Actor-Oriented Models
+          for Network Dynamics. _Annual Review of Statistics and Its
+          Application_ *4*, 343-363.
+
+        • Snijders, Tom A. B., Koskinen, Johan, and Schweinberger,
+          Michael (2010).  Maximum likelihood estimation for social
+          network dynamics.  _Annals of Applied Statistics_ *4*,
+          567-588.
+
+        • Snijders, Tom A.B., Steglich, Christian E.G., and
+          Schweinberger, Michael (2007). Modeling the co-evolution of
+          networks and behavior.  Pp. 41-71 in _Longitudinal models in
+          the behavioral and related sciences_, edited by Kees van
+          Montfort, Han Oud and Albert Satorra; Lawrence Erlbaum.
+
+        • Steglich, Christian E. G., Snijders, Tom A. B., and Pearson,
+          Michael A. (2010). Dynamic networks and behavior: Separating
+          selection from influence.  _Sociological Methodology_ *40*,
+          329-393.
+
+        • Information about the implementation of the algorithm is in
+          <URL:
+          http://www.stats.ox.ac.uk/~snijders/siena/Siena_algorithms.pdf>.
+
+        • Further see <URL: http://www.stats.ox.ac.uk/~snijders/siena/>
+          .
+
+_S_e_e _A_l_s_o:
+
+     ‘siena’, ‘sienaAlgorithmCreate’, ‘sienaEffects’, ‘Wald.RSiena’,
+     ‘Multipar.RSiena’, ‘score.Test’.
+
+     There are print, summary and xtable methods for ‘sienaFit’
+     objects: ‘xtable’, ‘print.sienaFit’.
+
+_E_x_a_m_p_l_e_s:
+
+     myalgorithm <- sienaAlgorithmCreate(nsub=2, n3=100, seed=1293, projname=NULL)
+     # nsub=2 and n3=100 is used here for having a brief computation, not for practice.
+     mynet1 <- sienaDependent(array(c(tmp3, tmp4), dim=c(32, 32, 2)))
+     mydata <- sienaDataCreate(mynet1)
+     myeff <- getEffects(mydata)
+     ans <- siena07(myalgorithm, data=mydata, effects=myeff, batch=TRUE)
+     
+     # or for non-conditional estimation --------------------------------------------
+     ## Not run:
+     
+     model <- sienaAlgorithmCreate(nsub=2, n3=100, cond=FALSE, seed=1283)
+     ans <- siena07(myalgorithm, data=mydata, effects=myeff, batch=TRUE)
+     ## End(Not run)
+     
+     
+     # or if a previous "on track" result ans was obtained --------------------------
+     ## Not run:
+     
+     ans1 <- siena07(myalgorithm, data=mydata, effects=myeff, prevAns=ans)
+     ## End(Not run)
+     
+     
+     # Running in multiple processors -----------------------------------------------
+     ## Not run:
+     
+     # Not tested because dependent on presence of processors
+     # Find out how many processors there are
+     library(parallel)
+     (n.clus <- detectCores() - 1)
+     # number of cores; 1 is subtracted to keep time for other processes
+     ans2 <- siena07(myalgorithm, data=mydata, effects=myeff, batch=TRUE,
+                     useCluster=TRUE, nbrNodes=n.clus, initC=TRUE)
+     
+     # Suppose 8 processors are going to be used.
+     # Loading the parallel package and creating a cluster
+     # with 8 processors (this should be equivalent)
+     
+     library(parallel)
+     cl <- makeCluster(n.clus)
+     
+     ans3 <- siena07(myalgorithm, data=mydata, effects=myeff, batch=TRUE, cl = cl)
+     
+     # Notice that now -siena07- perhaps won't stop the cluster for you.
+     # stopCluster(cl)
+     
+     # You can create even more complex clusters using several computers. In this
+     # example we are creating a cluster with 3*8 = 24 processors on three
+     # different machines.
+     cl <- makePSOCKcluster(
+         rep(c('localhost', 'machine2.website.com' , 'machine3.website.com'), 8),
+         user='myusername', rshcmd='ssh -p PORTNUMBER')
+     
+     ans4 <- siena07(myalgorithm, data=mydata, effects=myeff, batch=TRUE, cl = cl)
+     stopCluster(cl)
+     ## End(Not run)
+     
+     # Accessing simulated networks for ML ------------------------------------------
+     # The following is an example for accessing the simulated networks for ML,
+     # which makes sense only if there are some missing tie variables;
+     # observed tie variables are identically simulated
+     # at the moment of observation,
+     # missing tie variable are imputed in a model-based way.
+     mat1 <- matrix(c(0,0,1,1,
+                      1,0,0,0,
+                      0,0,0,1,
+                      0,1,0,0),4,4, byrow=TRUE)
+     mat2 <- matrix(c(0,1,1,1,
+                      1,0,0,0,
+                      0,0,0,1,
+                      0,0,1,0),4,4, byrow=TRUE)
+     mat3 <- matrix(c(0,1,0,1,
+                      1,0,0,0,
+                      0,0,0,0,
+                      NA,1,1,0),4,4, byrow=TRUE)
+     mats <- array(c(mat1,mat2,mat3), dim=c(4,4,3))
+     net <- sienaDependent(mats, allowOnly=FALSE)
+     sdat <- sienaDataCreate(net)
+     alg <- sienaAlgorithmCreate(maxlike=TRUE, nsub=3, n3=100, seed=12534, projname=NULL)
+     effs <- getEffects(sdat)
+     (ans <- siena07(alg, data=sdat, effects=effs, returnDeps=TRUE, batch=TRUE))
+     # See manual Section 9.1 for information about the following functions
+     edges.to.adj <- function(x,n){
+     # create empty adjacency matrix
+         adj <- matrix(0, n, n)
+     # put edge values in desired places
+         adj[x[, 1:2]] <- x[, 3]
+         adj
+     }
+     the.edge <- function(x,n,h,k){
+         edges.to.adj(x,n)[h,k]
+     }
+     # Now show the results
+     n <- 4
+     ego <- rep.int(1:n,n)
+     alter <- rep(1:n, each=n)
+     ones <- sapply(1:n^2, function(i)
+         {mean(sapply(ans$sims,
+                function(x){the.edge(x[[1]][[2]][[1]],n,ego[i],alter[i])}))})
+     cbind(ego,alter,ones)
+     matrix(ones,n,n)
+     
+

@@ -4,9 +4,7 @@ library(RSiena) # or RSienaTest
 source('./simulation/siena07ToConvergence.R')
 source('./smaller_experiment/simulateNetworkBehavior.R')
 
-# load("./data/simulated/smaller_exp.RData")
 load("./data/results/wave1imp-20-n.RData")
-load("./data/results/result-20-n.RData")
 
 Nnodes = 8 # n of cores
 
@@ -53,6 +51,7 @@ saom.results.20.n.t2 <- list()
 
 
 thetas <- c(-2,-1)
+
 for (i in 1:S) {
 
   ########################### later waves imputation ###########################
@@ -78,9 +77,11 @@ for (i in 1:S) {
   saom.results.t2 <- list()
 
 ### here was for each theta
-  
+for (t in 1:2) { 
   for (d in 1:D) {
+
     cat('dataset', i, "\n")
+    cat('theta',t,'\n')
     cat('imputation',d,'\n')
     
     # now impute wave2
@@ -143,8 +144,6 @@ for (i in 1:S) {
       })
     }
 
-    
-    for (t in 1:2) {
     effects.twoWaves <- includeEffects(effects.twoWaves, egoX,
                                       name = "friendship",
                                       interaction1 = "m2.inv",
@@ -191,7 +190,7 @@ for (i in 1:S) {
     }
     
   }
-  }
+}
 
   ###################### completed models estimation part ######################
 for (t in 1:2) {
@@ -278,7 +277,9 @@ for (t in 1:2) {
     }
 
   }
-  
+
+  }
+
   thetas.t1 <- list()
   covthetas.t1 <- list()
   
@@ -295,8 +296,6 @@ for (t in 1:2) {
   
   saom.results.20.n.t1[[i]] <- list(thetas.t1, covthetas.t1)
   saom.results.20.n.t2[[i]] <- list(thetas.t2, covthetas.t2)
-
-  }
   
   save(effects.imputed,
        saom.results.20.n.t1, saom.results.20.n.t2, # save after each dataset imp
