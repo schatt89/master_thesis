@@ -32,7 +32,7 @@ alco.1.mis.20.b <- alco[,1]
 nas <- sum(is.na(alco[,1]))
 probs <- ((alco[,1]-max(alco[,1], na.rm = T))/(N-nas))*-1
 probs[is.na(probs)] <- 0
-to_remove.1 <- sample(1:N, N_miss, prob = probs, replace=F)
+to_remove.1 <- sample(1:N, N_miss/2, prob = probs, replace=F)
 
 missing.20 <- rep(1, N)
 missing.20[to_remove.1] <- 0
