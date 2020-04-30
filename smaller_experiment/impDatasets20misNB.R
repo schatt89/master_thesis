@@ -203,12 +203,13 @@ for (t in 1:2) {
 }
 
 save.image("./data/results/20misNB_before_estimation.RData")
+load("./data/results/20misNB_before_estimation.RData")
   ###################### completed models estimation part ######################
 for (t in 1:2) {
-  for (d in D:1) {
+  for (d in 1:D) {
     cat('dataset', i, "\n")
     cat('theta', t, '\n')
-    cat('estimations left',d,'\n')
+    cat('estimation',d,'\n')
     if (t == 1) {
       friendship <- sienaDependent(array(c(net1imp.t1[[d]],
                                            net2imp.t1[[d]]),
@@ -240,10 +241,10 @@ for (t in 1:2) {
                                        name = 'drinkingbeh',
                                        interaction1 =  "friendship")
     
-    options.imputed <- sienaAlgorithmCreate(projname = "model", seed = d+209)
+    options.imputed <- sienaAlgorithmCreate(projname = "model", seed = d+2759)
     
     if (t == 1) {
-      if (d == D) {
+      if (d == 1) {
         source('./simulation/siena07ToConvergence_v2.R')
         saom.results.t1[[d]] <- siena07ToConvergence(
                                             alg = options.imputed,
@@ -256,16 +257,16 @@ for (t in 1:2) {
                                         alg = options.imputed,
                                         dat = Data.imputed, nodes = Nnodes,
                                         eff = effects.imputed,
-                                        ans0 = saom.results.t1[[d + 1]],
+                                        ans0 = saom.results.t1[[d - 1]],
                                         threshold = 0.25) 
         }, error = function(e) {
-          saom.results.t1[[d+1]]
+          saom.results.t1[[d-1]]
         })
        
       }
 
     } else {
-      if (d == D) {
+      if (d == 1) {
         source('./simulation/siena07ToConvergence_v2.R')
         saom.results.t2[[d]] <- siena07ToConvergence(
                                             alg = options.imputed,
@@ -278,10 +279,10 @@ for (t in 1:2) {
                                             alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
                                             eff = effects.imputed,
-                                            ans0 = saom.results.t2[[d + 1]],
+                                            ans0 = saom.results.t2[[d - 1]],
                                             threshold = 0.25)    
         }, error = function(e) {
-          saom.results.t2[[d+1]]
+          saom.results.t2[[d-1]]
         })
     
       }
