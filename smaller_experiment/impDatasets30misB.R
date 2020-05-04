@@ -52,7 +52,7 @@ saom.results.30.b.t2 <- list()
 
 thetas <- c(-2,-1)
 
-for (i in 1:S) {
+for (i in 2:S) {
 
   ########################### later waves imputation ###########################
   
@@ -78,11 +78,11 @@ for (i in 1:S) {
 
 ### here was for each theta
 for (t in 1:2) { 
-  for (d in 1:D) {
+  for (d in D:1) {
 
     cat('dataset', i, "\n")
     cat('theta',t,'\n')
-    cat('imputation',d,'\n')
+    cat('imputations left',d,'\n')
     
     # now impute wave2
     if (t == 1) {
@@ -126,7 +126,7 @@ for (t in 1:2) {
                                       interaction1 =  "friendship")
     effects.twoWaves
     
-    if (d == 1) {
+    if (d == D) {
       period1saom <- siena07ToConvergence(alg = estimation.options,
                                           dat = Data.w2, nodes = Nnodes,
                                           eff = effects.twoWaves,

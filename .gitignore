@@ -11,3 +11,4 @@ cluster.out
 eff.txt
 model.txt
 data/results/result-20-n.RData
+data/results/result-20-b.RData
