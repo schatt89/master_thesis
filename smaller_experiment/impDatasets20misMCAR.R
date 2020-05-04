@@ -200,22 +200,16 @@ for (d in 1:D) {
 thetas <- list()
 covthetas <- list()
 
-thetas <- list()
-covthetas <- list()
   
 for (d in 1:D) {
-    thetas[[d]] <- saom.results[[d]]$theta
-    covthetas[[d]] <- saom.results[[d]]$covtheta
-    
     thetas[[d]] <- saom.results[[d]]$theta
     covthetas[[d]] <- saom.results[[d]]$covtheta
 }
   
   saom.results.20.mcar[[i]] <- list(thetas, covthetas)
-  saom.results.20.mcar[[i]] <- list(thetas, covthetas)
   
   save(effects.imputed,
-       saom.results.20.mcar, saom.results.20.mcar, # save after each dataset imp
+       saom.results.20.mcar, # save after each dataset imp
        file = './data/results/result-20-mcar.RData')
 
 }
