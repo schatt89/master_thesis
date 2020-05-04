@@ -92,6 +92,9 @@ myCoEvolutionEff <- includeEffects(myCoEvolutionEff,
                                    name = "drinkingbeh", avAlt,
                                    interaction1 = "friendship")
 
+#myCoEvolutionEff <- setEffect(myCoEvolutionEff, outTrunc, parameter = 7,
+#                                            test = FALSE, fix = TRUE,          #initialValue = -1000)
+
 # Check what effects you have decided to include:
 
 myCoEvolutionEff
@@ -164,35 +167,24 @@ getNet <- function(observedNet,edgeList) {
 sims = ans60$sims
 
 fr.60.2.sim <- array(rep(NA, N*N*S), c(N,N,S))
+alco.60.2.sim <- array(rep(NA, N*S), c(N, S))
 edgelists <- list()
 shape <- fr.1
 shape[1:N,] <- 0
 
 i <- 1
-j <- 1
+j <- 100
 while (i <= 100) {
   edgelist = sims[[j]]$Data1$friendship$`1`
   avdegree = mean(table(edgelist[,1]))
-  print(j)
-  if (avdegree >= 3 & avdegree < 3.2) {
-    fr.60.2.sim[,,i] = getNet(shape, edgelist)
-    i <- i + 1
-    j <- j + 1
-  } else {
-    j <- j + 1
-  }
-}
-
-alco.60.2.sim <- array(rep(NA, N*S), c(N, S))
-
-i <- 1
-j <- 1
-while (i <= 100) {
+  maxdegree = max(table(edgelist[,1]))
   alcosim = sims[[j]]$Data1$drinkingbeh$`1`
   avalco = mean(alcosim)
+  alcounique = length(unique(alcosim))
   print(j)
-  print(avalco)
-  if (avalco >= 2.7 & avalco <= 3) {
+  if (avdegree >= 3 & avdegree < 3.2 & maxdegree < 7 &
+  avalco >= 2.7 & avalco <= 3 & alcounique  == 5) {
+    fr.60.2.sim[,,i] = getNet(shape, edgelist)
     alco.60.2.sim[,i] = alcosim
     i <- i + 1
     j <- j + 1
@@ -200,8 +192,6 @@ while (i <= 100) {
     j <- j + 1
   }
 }
-
-
 
 save(fr.1, alco,
      fr.60.2.sim, alco.60.2.sim,
