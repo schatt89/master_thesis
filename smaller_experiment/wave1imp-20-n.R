@@ -6,7 +6,7 @@ source('./smaller_experiment/simulateNetworkBehavior.R')
 
 load("./data/simulated/smaller_exp.RData")
 
-Nnodes = 8 # n of cores
+Nnodes = 16 # n of cores
 
 S = 100 # number of datasets (can be set to 10 for speed)
 N = 60 # number of nodes
@@ -203,7 +203,7 @@ estimation.options.st <- sienaAlgorithmCreate(useStdInits = FALSE,
                                               behModelType =
                                                 c(drinkingbeh=2),
                                               lessMem = TRUE)
-source('./simulation/siena07ToConvergence.R')
+source('./simulation/siena07ToConvergence_v3.R')
 
 period0saom <- siena07ToConvergence(alg = estimation.options.st,
                                     dat = Data.stationary, cluster = TRUE,
@@ -233,7 +233,8 @@ effects.stationary <- includeEffects(effects.stationary, egoX,
                                      interaction1 = "m1.inv",
                                      fix = TRUE,
                                      test = FALSE)
-
+# effects.stationary <- setEffect(effects.stationary, outTrunc, parameter = 7,
+#                                  test = FALSE, fix = TRUE, initialValue = -10)
 thetas <- c(-2, -1)
 for(t in 1:2) {
   effects.stationary <- setEffect(effects.stationary, egoX,

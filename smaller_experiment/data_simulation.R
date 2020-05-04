@@ -65,6 +65,7 @@ S = 100
 N = 60
 M = 2
 Nnodes = 31
+c = 6
 
 friendship <- sienaDependent(array(c(fr.1, fr.2),
                                    dim = c(N, N, M)))
@@ -103,7 +104,8 @@ myCoEvolutionEff
 # The defaults are adequate. You only have to specify the filename
 # that will receive the results in text format.
 
-myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model", seed = 300)
+myCoEvAlgorithm <- sienaAlgorithmCreate(projname = "model", seed = 300,
+MaxDegree = c(friendship = 6))
 
 # Finally, estimate the model; the whole command is put in parentheses
 # to have the results printed directly to the screen.
@@ -177,13 +179,12 @@ j <- 100
 while (i <= 100) {
   edgelist = sims[[j]]$Data1$friendship$`1`
   avdegree = mean(table(edgelist[,1]))
-  maxdegree = max(table(edgelist[,1]))
   alcosim = sims[[j]]$Data1$drinkingbeh$`1`
   avalco = mean(alcosim)
   alcounique = length(unique(alcosim))
   print(j)
-  if (avdegree >= 3 & avdegree < 3.2 & maxdegree < 7 &
-  avalco >= 2.7 & avalco <= 3 & alcounique  == 5) {
+  if (avdegree >= 3 & avdegree < 3.2 &
+      avalco >= 2.7 & avalco <= 3 & alcounique  == 5) {
     fr.60.2.sim[,,i] = getNet(shape, edgelist)
     alco.60.2.sim[,i] = alcosim
     i <- i + 1
