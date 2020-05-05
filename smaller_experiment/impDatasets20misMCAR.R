@@ -73,10 +73,10 @@ for (i in 1:S) {
 
 ### here was for each theta
 
-for (d in 1:D) {
+for (d in D:1) {
 
 cat('dataset', i, "\n")
-cat('imputation',d,'\n')
+cat('imputations left',d,'\n')
 
 # now impute wave2
 
@@ -107,7 +107,7 @@ effects.twoWaves <- includeEffects(effects.twoWaves, avAlt,
                                     interaction1 =  "friendship")
 effects.twoWaves
 
-if (d == 1) {
+if (d == D) {
     period1saom <- siena07ToConvergence(alg = estimation.options,
                                         dat = Data.w2, nodes = Nnodes,
                                         eff = effects.twoWaves,

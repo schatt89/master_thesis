@@ -192,7 +192,7 @@ for (t in 1:2) {
 }
 
 save(net1imp.t1, net2imp.t1, net1imp.t2, net2imp.t2,
-alc1imp.t1, alc2mp.t1, alc1imp.t2, alc2imp.t2,
+alc1imp.t1, alc2imp.t1, alc1imp.t2, alc2imp.t2,
 file = "./data/results/20misN_before_estimation.RData")
 
 ###################### completed models estimation part ######################

@@ -29,6 +29,7 @@ N_miss = 12
 fr.1.mis.20.mcar <- fr.1
 alco.1.mis.20.mcar <- alco[,1]
 
+set.seed(512)
 to_remove.1 <- sample(1:N, N_miss, replace=F)
 
 missing.20 <- rep(1, N)
@@ -47,6 +48,7 @@ missing.20.2.inv <- array(rep(NA, N*S), c(N, S))
 missing.20.2 <- array(rep(NA, N*S), c(N, S))
 
 for (i in 1:S) {
+  set.seed(487*i)
   to_remove.2 <- sample(1:N, N_miss, replace=F)
   
   fr.60.2.sim.mis.20.mcar[,,i][to_remove.2,] <- NA
