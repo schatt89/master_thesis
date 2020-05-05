@@ -6,7 +6,7 @@ source('./smaller_experiment/simulateNetworkBehavior.R')
 
 load("./data/results/wave1imp-20-b.RData")
 
-Nnodes = 8 # n of cores
+Nnodes = 12 # n of cores
 
 S = 100 # number of datasets (can be set to 10 for speed)
 N = 60 # number of nodes
@@ -103,8 +103,10 @@ for (t in 1:2) {
                                         alco.60.2.sim.mis.20.b[,i]),
                                                   type = "behavior")
     }
+
+    m2.inv <- coCovar(missing.20.2.inv[,i], center = FALSE)
     
-    Data.w2  <- sienaDataCreate(friendship, drinkingbeh)
+    Data.w2  <- sienaDataCreate(friendship, drinkingbeh, m2.inv)
     # , m2 removed
     
     effects.twoWaves <- getEffects(Data.w2)
@@ -165,7 +167,7 @@ for (t in 1:2) {
                       returnDeps = TRUE)$sims[[10]]
       
       net2imp.t1[[d]] <- getNet(fr.60.2.sim.mis.20.b[,,i], sims[[1]])
-      alc2imp.t1[,d] <- sims[[1]]
+      alc2imp.t1[,d] <- sims[[2]]
     } else {
       effects.twoWaves <- setEffect(effects.twoWaves, effFrom,
                                     name = "drinkingbeh",
@@ -184,14 +186,14 @@ for (t in 1:2) {
                       returnDeps = TRUE)$sims[[10]]
       
       net2imp.t2[[d]] <- getNet(fr.60.2.sim.mis.20.b[,,i], sims[[1]])
-      alc2imp.t2[,d] <- sims[[1]]
+      alc2imp.t2[,d] <- sims[[2]]
     }
     
   }
 }
 
 save(net1imp.t1, net2imp.t1, net1imp.t2, net2imp.t2,
-alc1imp.t1, alc2mp.t1, alc1imp.t2, alc2imp.t2,
+alc1imp.t1, alc2imp.t1, alc1imp.t2, alc2imp.t2,
 file = "./data/results/20misB_before_estimation.RData")
 
   ###################### completed models estimation part ######################

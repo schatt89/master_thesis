@@ -6,7 +6,7 @@ source('./smaller_experiment/simulateNetworkBehavior.R')
 
 load("./data/simulated/smaller_exp.RData")
 
-Nnodes = 8 # n of cores
+Nnodes = 13 # n of cores
 
 S = 100 # number of datasets (can be set to 10 for speed)
 N = 60 # number of nodes
@@ -215,7 +215,7 @@ source('./simulation/siena07ToConvergence_v3.R')
 
 period0saom <- siena07ToConvergence(alg = estimation.options.st,
                                     dat = Data.stationary, cluster = TRUE,
-                                    nodes = Nnodes - 1,
+                                    nodes = Nnodes,
                                     eff = effects.stationary, threshold=0.25)
 
 # 3 tconv  max: 0.108 

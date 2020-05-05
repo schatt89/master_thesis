@@ -6,7 +6,7 @@ source('./smaller_experiment/simulateNetworkBehavior.R')
 
 load("./data/simulated/smaller_exp.RData")
 
-Nnodes = 8 # n of cores
+Nnodes = 16 # n of cores
 
 S = 100 # number of datasets (can be set to 10 for speed)
 N = 60 # number of nodes
@@ -30,9 +30,9 @@ fr.1.mis.30.b <- fr.1
 alco.1.mis.30.b <- alco[,1]
 
 nas <- sum(is.na(alco[,1]))
-alco[is.na(alco[,1]), 1] <- sample(1:5, nas, replace = TRUE)
 probs <- ((alco[,1]-max(alco[,1], na.rm = T))/(N-nas))*-1
-to_remove.1 <- sample(1:N, N_miss, prob = probs, replace=F)
+probs[is.na(probs)] <- 0
+to_remove.1 <- sample(1:N, N_miss/2, prob = probs, replace=F)
 
 missing.30 <- rep(1, N)
 missing.30[to_remove.1] <- 0
@@ -51,8 +51,8 @@ missing.30.2 <- array(rep(NA, N*S), c(N, S))
 
 for (i in 1:S) {
   nas <- sum(is.na(alco[,2]))
-  alco[is.na(alco[,2]), 2] <- sample(1:5, nas, replace = TRUE)
   probs <- ((alco[,2]-max(alco[,2], na.rm = T))/(N-nas))*-1
+  probs[is.na(probs)] <- 0
   to_remove.2 <- sample(1:N, N_miss, prob = probs, replace=F)
   
   fr.60.2.sim.mis.30.b[,,i][to_remove.2,] <- NA
@@ -204,6 +204,7 @@ estimation.options.st <- sienaAlgorithmCreate(useStdInits = FALSE,
                                               n3 = 3000, maxlike = FALSE,
                                               cond = FALSE, diagonalize = 0.6,
                                               firstg = 0.02,
+                                              MaxDegree = c(friendship = 6),
                                               behModelType =
                                                 c(drinkingbeh=2),
                                               lessMem = TRUE)
@@ -211,13 +212,14 @@ source('./simulation/siena07ToConvergence_v3.R')
 
 period0saom <- siena07ToConvergence(alg = estimation.options.st,
                                     dat = Data.stationary, cluster = TRUE,
-                                    nodes = Nnodes - 1,
+                                    nodes = Nnodes,
                                     eff = effects.stationary, threshold=0.25)
 
 # 3 tconv  max: 0.108 
 # Time difference of 37.08413 mins
 imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE, seed = 214,
                                            cond = FALSE, maxlike = FALSE,
+                                           MaxDegree = c(friendship = 6),
                                            behModelType = c(drinkingbeh = 2),
                                            nsub = 0, simOnly = TRUE, n3 = 10)
 
