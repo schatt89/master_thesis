@@ -6,7 +6,7 @@ source('./smaller_experiment/simulateNetworkBehavior.R')
 
 load("./data/simulated/smaller_exp.RData")
 
-Nnodes = 8 # n of cores
+Nnodes = 16 # n of cores
 
 S = 100 # number of datasets (can be set to 10 for speed)
 N = 60 # number of nodes
@@ -124,7 +124,6 @@ miceData <- cbind(alco.1.mis.30.n, alco.60.2.sim.mis.30.n[,i],
 
 set.seed(11019)
 miceImp <- mice(miceData, m = D, defaultMethod = "pmm", maxit = 30)
-
 for (d in 1:D) {
   miceImpAlco.60.1.30.n[,d] <- complete(miceImp, d)$alco.1.mis.30.n
 }
@@ -201,6 +200,7 @@ estimation.options.st <- sienaAlgorithmCreate(useStdInits = FALSE,
                                               n3 = 3000, maxlike = FALSE,
                                               cond = FALSE, diagonalize = 0.6,
                                               firstg = 0.02,
+                                              MaxDegree = c(friendship = 6),
                                               behModelType =
                                                 c(drinkingbeh=2),
                                               lessMem = TRUE)
@@ -215,6 +215,7 @@ period0saom <- siena07ToConvergence(alg = estimation.options.st,
 # Time difference of 37.08413 mins
 imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE, seed = 214,
                                            cond = FALSE, maxlike = FALSE,
+                                           MaxDegree = c(friendship = 6),
                                            behModelType = c(drinkingbeh = 2),
                                            nsub = 0, simOnly = TRUE, n3 = 10)
 
@@ -234,7 +235,8 @@ effects.stationary <- includeEffects(effects.stationary, egoX,
                                      interaction1 = "m1.inv",
                                      fix = TRUE,
                                      test = FALSE)
-
+# effects.stationary <- setEffect(effects.stationary, outTrunc, parameter = 7,
+#                                  test = FALSE, fix = TRUE, initialValue = -10)
 thetas <- c(-2, -1)
 for(t in 1:2) {
   effects.stationary <- setEffect(effects.stationary, egoX,
@@ -309,3 +311,4 @@ save(net1imp.t1, alc1imp.t1, net1imp.t2, alc1imp.t2,
      missing.30.2,
      missing.30.2.inv,
      file = "./data/results/wave1imp-30-n.RData")
+

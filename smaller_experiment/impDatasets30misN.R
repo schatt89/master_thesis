@@ -1,12 +1,11 @@
 # rm(list = ls())
 
 library(RSiena) # or RSienaTest
-source('./simulation/siena07ToConvergence.R')
 source('./smaller_experiment/simulateNetworkBehavior.R')
 
 load("./data/results/wave1imp-30-n.RData")
 
-Nnodes = 8 # n of cores
+Nnodes = 16 # n of cores
 
 S = 100 # number of datasets (can be set to 10 for speed)
 N = 60 # number of nodes
@@ -68,10 +67,9 @@ for (i in 1:S) {
                                              n3 = 3000, maxlike = FALSE,
                                              cond = FALSE, diagonalize = 0.6,
                                              firstg = 0.02, lessMem = TRUE,
+                                             MaxDegree = c(friendship = 6),
                                              behModelType =
                                                c(drinkingbeh=2))
-  
-  source('./simulation/siena07ToConvergence.R')
   
   saom.results.t1 <- list()
   saom.results.t2 <- list()
@@ -102,7 +100,6 @@ for (t in 1:2) {
                                         alco.60.2.sim.mis.30.n[,i]),
                                                   type = "behavior")
     }
-    missing.30.2.inv
     
     m2 <- coCovar(missing.30.2[,i], center = FALSE)
     
@@ -127,12 +124,14 @@ for (t in 1:2) {
     effects.twoWaves
     
     if (d == 1) {
+      source('./simulation/siena07ToConvergence.R')
       period1saom <- siena07ToConvergence(alg = estimation.options,
                                           dat = Data.w2, nodes = Nnodes,
                                           eff = effects.twoWaves,
                                           threshold = 0.25)
       
     } else {
+      source('./simulation/siena07ToConvergence_v2.R')
       period1saom <- tryCatch({
         siena07ToConvergence(alg = estimation.options,
                              dat = Data.w2,
@@ -158,7 +157,7 @@ for (t in 1:2) {
       
       imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
                                              seed = 214,
-                                             cond = FALSE, maxlike = FALSE,
+                                             cond = FALSE, maxlike = TRUE,
                                              behModelType = c(drinkingbeh = 2),
                                              nsub = 0, simOnly = TRUE, n3 = 10)
       
@@ -166,8 +165,8 @@ for (t in 1:2) {
                       effects = effects.twoWaves, prevAns = period1saom,
                       returnDeps = TRUE)$sims[[10]]
       
-      net2imp.t1[[d]] <- getNet(fr.60.2.sim.mis.30.n[,,i], sims[[1]][[1]]$`1`)
-      alc2imp.t1[,d] <- sims[[1]][[2]]$`1`
+      net2imp.t1[[d]] <- getNet(fr.60.2.sim.mis.30.n[,,i], sims[[1]])
+      alc2imp.t1[,d] <- sims[[2]]
     } else {
       effects.twoWaves <- setEffect(effects.twoWaves, egoX,
                                     name = "friendship",
@@ -177,7 +176,7 @@ for (t in 1:2) {
       
       imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
                                              seed = 214,
-                                             cond = FALSE, maxlike = FALSE,
+                                             cond = FALSE, maxlike = TRUE,
                                              behModelType = c(drinkingbeh = 2),
                                              nsub = 0, simOnly = TRUE, n3 = 10)
       
@@ -185,14 +184,18 @@ for (t in 1:2) {
                       effects = effects.twoWaves, prevAns = period1saom,
                       returnDeps = TRUE)$sims[[10]]
       
-      net2imp.t2[[d]] <- getNet(fr.60.2.sim.mis.30.n[,,i], sims[[1]][[1]]$`1`)
-      alc2imp.t2[,d] <- sims[[1]][[2]]$`1`
+      net2imp.t2[[d]] <- getNet(fr.60.2.sim.mis.30.n[,,i], sims[[1]])
+      alc2imp.t2[,d] <- sims[[2]]
     }
     
   }
 }
 
-  ###################### completed models estimation part ######################
+save(net1imp.t1, net2imp.t1, net1imp.t2, net2imp.t2,
+alc1imp.t1, alc2imp.t1, alc1imp.t2, alc2imp.t2,
+file = "./data/results/30misN_before_estimation.RData")
+
+###################### completed models estimation part ######################
 for (t in 1:2) {
   for (d in 1:D) {
     cat('dataset', i, "\n")
@@ -233,14 +236,14 @@ for (t in 1:2) {
     
     if (t == 1) {
       if (d == 1) {
-        source('./simulation/siena07ToConvergence_v2.R')
+        source('./simulation/siena07ToConvergence.R')
         saom.results.t1[[d]] <- siena07ToConvergence(
                                             alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
                                             eff = effects.imputed,
                                             threshold = 0.25)
       } else {
-        source('./simulation/siena07ToConvergence.R')
+        source('./simulation/siena07ToConvergence_v2.R')
         saom.results.t1[[d]] <- tryCatch({siena07ToConvergence(
                                         alg = options.imputed,
                                         dat = Data.imputed, nodes = Nnodes,
@@ -255,14 +258,14 @@ for (t in 1:2) {
 
     } else {
       if (d == 1) {
-        source('./simulation/siena07ToConvergence_v2.R')
+        source('./simulation/siena07ToConvergence.R')
         saom.results.t2[[d]] <- siena07ToConvergence(
                                             alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
                                             eff = effects.imputed,
                                             threshold = 0.25)
       } else {
-        source('./simulation/siena07ToConvergence.R')
+        source('./simulation/siena07ToConvergence_v2.R')
         saom.results.t2[[d]] <- tryCatch({siena07ToConvergence(
                                             alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
@@ -279,7 +282,7 @@ for (t in 1:2) {
   }
 
   }
-  
+
   thetas.t1 <- list()
   covthetas.t1 <- list()
   
@@ -296,7 +299,7 @@ for (t in 1:2) {
   
   saom.results.30.n.t1[[i]] <- list(thetas.t1, covthetas.t1)
   saom.results.30.n.t2[[i]] <- list(thetas.t2, covthetas.t2)
-
+  
   save(effects.imputed,
        saom.results.30.n.t1, saom.results.30.n.t2, # save after each dataset imp
        file = './data/results/result-30-n.RData')

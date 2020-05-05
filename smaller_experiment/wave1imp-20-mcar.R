@@ -29,7 +29,7 @@ N_miss = 12
 fr.1.mis.20.mcar <- fr.1
 alco.1.mis.20.mcar <- alco[,1]
 
-set.seed(512)
+set.seed(653) # 653
 to_remove.1 <- sample(1:N, N_miss, replace=F)
 
 missing.20 <- rep(1, N)
@@ -41,6 +41,7 @@ missing.20.inv[to_remove.1] <- 1
 fr.1.mis.20.mcar[to_remove.1,] <- NA
 alco.1.mis.20.mcar[to_remove.1] <- NA
 
+
 fr.60.2.sim.mis.20.mcar <- fr.60.2.sim
 alco.60.2.sim.mis.20.mcar <- alco.60.2.sim
 
@@ -48,7 +49,6 @@ missing.20.2.inv <- array(rep(NA, N*S), c(N, S))
 missing.20.2 <- array(rep(NA, N*S), c(N, S))
 
 for (i in 1:S) {
-  set.seed(487*i)
   to_remove.2 <- sample(1:N, N_miss, replace=F)
   
   fr.60.2.sim.mis.20.mcar[,,i][to_remove.2,] <- NA
@@ -198,6 +198,7 @@ estimation.options.st <- sienaAlgorithmCreate(useStdInits = FALSE,
                                               n3 = 3000, maxlike = FALSE,
                                               cond = FALSE, diagonalize = 0.6,
                                               firstg = 0.02,
+                                              MaxDegree = c(friendship = 6),
                                               behModelType =
                                                 c(drinkingbeh=2),
                                               lessMem = TRUE)
@@ -212,8 +213,20 @@ period0saom <- siena07ToConvergence(alg = estimation.options.st,
 # Time difference of 37.08413 mins
 imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE, seed = 214,
                                            cond = FALSE, maxlike = FALSE,
+                                           MaxDegree = c(friendship = 6),
                                            behModelType = c(drinkingbeh = 2),
                                            nsub = 0, simOnly = TRUE, n3 = 10)
+
+effects.stationary <- includeEffects(effects.stationary, RateX,
+                                     name = "drinkingbeh",
+                                     type = "rate", interaction1 = "m1",
+                                     fix = TRUE,
+                                     test = FALSE)
+effects.stationary <- setEffect(effects.stationary, RateX,
+                                name = "drinkingbeh",
+                                type = "rate", interaction1 = "m1",
+                                fix = TRUE,
+                                initialValue = -1000)
 
 
 set.seed(142)

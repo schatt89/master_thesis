@@ -45,7 +45,6 @@ impAlco.60.2.20.mcar <- list()
 
 saom.results.20.mcar <- list()
 
-
 for (i in 1:S) {
 
   ########################### later waves imputation ###########################
@@ -58,25 +57,24 @@ for (i in 1:S) {
 
   set.seed(1402)
   
-  estimation.options <- sienaAlgorithmCreate(useStdInits = FALSE, seed = 2149,
+  estimation.options <- sienaAlgorithmCreate(useStdInits = FALSE, seed = 49,
                                              n3 = 3000, maxlike = FALSE,
                                              cond = FALSE, diagonalize = 0.6,
                                              firstg = 0.02, lessMem = TRUE,
                                              MaxDegree = c(friendship = 6),
                                              behModelType =
                                                c(drinkingbeh=2))
-  
-  source('./simulation/siena07ToConvergence.R')
+
   
   saom.results <- list()
   saom.results <- list()
 
 ### here was for each theta
 
-for (d in D:1) {
+for (d in 1:D) {
 
 cat('dataset', i, "\n")
-cat('imputations left',d,'\n')
+cat('imputation',d,'\n')
 
 # now impute wave2
 
@@ -87,7 +85,6 @@ friendship <- sienaDependent(array(c(net1imp[[d]],
 drinkingbeh <- sienaDependent(cbind(alc1imp[,d],
                                     alco.60.2.sim.mis.20.mcar[,i]),
                                                 type = "behavior")
-
 
 Data.w2  <- sienaDataCreate(friendship, drinkingbeh)
 # , m2 removed
@@ -107,13 +104,15 @@ effects.twoWaves <- includeEffects(effects.twoWaves, avAlt,
                                     interaction1 =  "friendship")
 effects.twoWaves
 
-if (d == D) {
+if (d == 1) {
+    source('./simulation/siena07ToConvergence.R')
     period1saom <- siena07ToConvergence(alg = estimation.options,
                                         dat = Data.w2, nodes = Nnodes,
                                         eff = effects.twoWaves,
                                         threshold = 0.25)
     
 } else {
+    source('./simulation/siena07ToConvergence_v2.R')
     period1saom <- tryCatch({
     siena07ToConvergence(alg = estimation.options,
                             dat = Data.w2,
@@ -173,14 +172,14 @@ for (d in 1:D) {
     
 
     if (d == 1) {
-    source('./simulation/siena07ToConvergence_v2.R')
+    source('./simulation/siena07ToConvergence.R')
     saom.results[[d]] <- siena07ToConvergence(
                                         alg = options.imputed,
                                         dat = Data.imputed, nodes = Nnodes,
                                         eff = effects.imputed,
                                         threshold = 0.25)
     } else {
-    source('./simulation/siena07ToConvergence.R')
+    source('./simulation/siena07ToConvergence_v2.R')
     saom.results[[d]] <- tryCatch({siena07ToConvergence(
                                     alg = options.imputed,
                                     dat = Data.imputed, nodes = Nnodes,
