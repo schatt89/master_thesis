@@ -51,7 +51,7 @@ saom.results.20.n.t2 <- list()
 
 thetas <- c(-2,-1)
 
-for (i in 1:S) {
+for (i in 4:S) {
 
   ########################### later waves imputation ###########################
   
@@ -195,6 +195,8 @@ save(net1imp.t1, net2imp.t1, net1imp.t2, net2imp.t2,
 alc1imp.t1, alc2imp.t1, alc1imp.t2, alc2imp.t2,
 file = "./data/results/20misN_before_estimation.RData")
 
+load("./data/results/20misN_before_estimation.RData")
+
 ###################### completed models estimation part ######################
 for (t in 1:2) {
   for (d in 1:D) {
@@ -232,7 +234,7 @@ for (t in 1:2) {
                                        name = 'drinkingbeh',
                                        interaction1 =  "friendship")
     
-    options.imputed <- sienaAlgorithmCreate(projname = "model", seed = d+209)
+    options.imputed <- sienaAlgorithmCreate(projname = "model", seed = d+2563)
     
     if (t == 1) {
       if (d == 1) {
@@ -297,6 +299,8 @@ for (t in 1:2) {
       covthetas.t2[[d]] <- saom.results.t2[[d]]$covtheta
     }
   
+  load('./data/results/result-20-n.RData')
+
   saom.results.20.n.t1[[i]] <- list(thetas.t1, covthetas.t1)
   saom.results.20.n.t2[[i]] <- list(thetas.t2, covthetas.t2)
   
