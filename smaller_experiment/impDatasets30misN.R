@@ -48,12 +48,12 @@ impAlco.60.2.30.n.t2 <- list()
 saom.results.30.n.t1 <- list()
 saom.results.30.n.t2 <- list()
 
-fr.60.2.sim.mis.30.n[,,2:50] <- fr.60.2.sim.mis.30.n[,,32:80]
-alco.60.2.sim.mis.30.n[,2:50] <- alco.60.2.sim.mis.30.n[,32:80]
+fr.60.2.sim.mis.30.n[,,3] <- fr.60.2.sim.mis.30.n[,,19]
+alco.60.2.sim.mis.30.n[,3] <- alco.60.2.sim.mis.30.n[,19]
 
 thetas <- c(-2,-1)
 
-for (i in 2:S) {
+for (i in 3:S) {
 
   ########################### later waves imputation ###########################
   

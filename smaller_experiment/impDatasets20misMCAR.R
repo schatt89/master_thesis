@@ -45,7 +45,10 @@ impAlco.60.2.20.mcar <- list()
 
 saom.results.20.mcar <- list()
 
-for (i in 1:S) {
+fr.60.2.sim.mis.20.mcar[,,3] <- fr.60.2.sim.mis.20.mcar[,,18]
+alco.60.2.sim.mis.20.mcar[,3] <- alco.60.2.sim.mis.20.mcar[,18]
+
+for (i in 3:S) {
 
   ########################### later waves imputation ###########################
   
@@ -205,6 +208,8 @@ for (d in 1:D) {
     covthetas[[d]] <- saom.results[[d]]$covtheta
 }
   
+load('./data/results/result-20-mcar.RData')
+
   saom.results.20.mcar[[i]] <- list(thetas, covthetas)
   
   save(effects.imputed,
