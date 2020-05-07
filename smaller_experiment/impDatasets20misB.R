@@ -49,6 +49,8 @@ impAlco.60.2.20.b.t2 <- list()
 saom.results.20.b.t1 <- list()
 saom.results.20.b.t2 <- list()
 
+fr.60.2.sim.mis.20.b[,,4] <- fr.60.2.sim.mis.20.b[,,57]
+alco.60.2.sim.mis.20.b[,4] <- alco.60.2.sim.mis.20.b[,57]
 
 thetas <- c(-2,-1)
 
@@ -297,6 +299,8 @@ for (t in 1:2) {
       thetas.t2[[d]] <- saom.results.t2[[d]]$theta
       covthetas.t2[[d]] <- saom.results.t2[[d]]$covtheta
     }
+  
+  load('./data/results/result-20-b.RData')
   
   saom.results.20.b.t1[[i]] <- list(thetas.t1, covthetas.t1)
   saom.results.20.b.t2[[i]] <- list(thetas.t2, covthetas.t2)
