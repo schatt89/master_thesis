@@ -4,7 +4,7 @@ library(RSiena) # or RSienaTest
 source('./simulation/siena07ToConvergence.R')
 source('./smaller_experiment/simulateNetworkBehavior.R')
 
-load("./data/results/wave1imp-20-mcar.RData")
+load("./data/results/wave1imp-30-mcar.RData")
 
 Nnodes = 16 # n of cores
 
@@ -37,16 +37,16 @@ Jaccard = function (x, y) {
 #########                                                             ##########
 ################################################################################
 
-########   fr.60.2.sim.mis.20.mcar, alco.60.2.sim.mis.20.mcar
+########   fr.60.2.sim.mis.30.mcar, alco.60.2.sim.mis.30.mcar
 
 
-impNets.60.2.20.mcar <- list()
-impAlco.60.2.20.mcar <- list()
+impNets.60.2.30.mcar <- list()
+impAlco.60.2.30.mcar <- list()
 
-saom.results.20.mcar <- list()
+saom.results.30.mcar <- list()
 
-fr.60.2.sim.mis.20.mcar[,,3] <- fr.60.2.sim.mis.20.mcar[,,18]
-alco.60.2.sim.mis.20.mcar[,3] <- alco.60.2.sim.mis.20.mcar[,18]
+fr.60.2.sim.mis.30.mcar[,,3] <- fr.60.2.sim.mis.30.mcar[,,25]
+alco.60.2.sim.mis.30.mcar[,3] <- alco.60.2.sim.mis.30.mcar[,25]
 
 for (i in 3:S) {
 
@@ -82,11 +82,11 @@ cat('imputation',d,'\n')
 # now impute wave2
 
 friendship <- sienaDependent(array(c(net1imp[[d]],
-                                    fr.60.2.sim.mis.20.mcar[,,i]),
+                                    fr.60.2.sim.mis.30.mcar[,,i]),
                                     dim = c(N,N,M)))
 
 drinkingbeh <- sienaDependent(cbind(alc1imp[,d],
-                                    alco.60.2.sim.mis.20.mcar[,i]),
+                                    alco.60.2.sim.mis.30.mcar[,i]),
                                                 type = "behavior")
 
 Data.w2  <- sienaDataCreate(friendship, drinkingbeh)
@@ -138,7 +138,7 @@ sims <- siena07(imputation.options, data = Data.w2,
                 effects = effects.twoWaves, prevAns = period1saom,
                 returnDeps = TRUE)$sims[[10]]
 
-net2imp[[d]] <- getNet(fr.60.2.sim.mis.20.mcar[,,i], sims[[1]])
+net2imp[[d]] <- getNet(fr.60.2.sim.mis.30.mcar[,,i], sims[[1]])
 alc2imp[,d] <- sims[[2]]
     
 }
@@ -171,7 +171,7 @@ for (d in 1:D) {
                                        name = 'drinkingbeh',
                                        interaction1 =  "friendship")
     
-    options.imputed <- sienaAlgorithmCreate(projname = "model", seed = d+209)
+    options.imputed <- sienaAlgorithmCreate(projname = "model", seed = d+309)
     
 
     if (d == 1) {
@@ -207,13 +207,13 @@ for (d in 1:D) {
     thetas[[d]] <- saom.results[[d]]$theta
     covthetas[[d]] <- saom.results[[d]]$covtheta
 }
+   
+  load('./data/results/result-30-mcar.RData')
   
-load('./data/results/result-20-mcar.RData')
-
-  saom.results.20.mcar[[i]] <- list(thetas, covthetas)
+  saom.results.30.mcar[[i]] <- list(thetas, covthetas)
   
   save(effects.imputed,
-       saom.results.20.mcar, # save after each dataset imp
-       file = './data/results/result-20-mcar.RData')
+       saom.results.30.mcar, # save after each dataset imp
+       file = './data/results/result-30-mcar.RData')
 
 }
