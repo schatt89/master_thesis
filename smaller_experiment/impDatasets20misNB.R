@@ -48,10 +48,13 @@ impAlco.60.2.20.nb.t2 <- list()
 saom.results.20.nb.t1 <- list()
 saom.results.20.nb.t2 <- list()
 
+fr.60.2.sim.mis.20.nb[,,6] <- fr.60.2.sim.mis.20.nb[,,36]
+alco.60.2.sim.mis.20.nb[,6] <- alco.60.2.sim.mis.20.nb[,36]
+
 
 thetas <- c(-2,-1)
 
-for (i in 1:S) {
+for (i in 6:S) {
 
   ########################### later waves imputation ###########################
   
@@ -306,6 +309,8 @@ for (t in 1:2) {
       thetas.t2[[d]] <- saom.results.t2[[d]]$theta
       covthetas.t2[[d]] <- saom.results.t2[[d]]$covtheta
     }
+  
+  load('./data/results/result-20-nb.RData')
   
   saom.results.20.nb.t1[[i]] <- list(thetas.t1, covthetas.t1)
   saom.results.20.nb.t2[[i]] <- list(thetas.t2, covthetas.t2)

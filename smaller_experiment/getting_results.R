@@ -1,10 +1,51 @@
-load('./data/results/result-20-b.RData')
-
+library(tidyr)
 D = 50
-# Now we have D RSiena results and all that is left is to combine them
 
-# We need to extract all parameter and standard error estimates from the models
-# and combine them using Rubin's Rules.
+N = length(saom.results.20.b.t1)
+
+load("./data/results/result-20-b.RData")
+
+thetas.t1 <- c()
+covthetas.t1 <- c()
+thetas.t2 <- c()
+covthetas.t2 <- c()
+for (i in 1:length(saom.results.20.b.t1)) {
+  all_thetas.t1 = saom.results.20.b.t1[[i]][[1]]
+  all_covthetas.t1 = saom.results.20.b.t1[[i]][[2]]
+  all_thetas.t2 = saom.results.20.b.t2[[i]][[1]]
+  all_covthetas.t2 = saom.results.20.b.t2[[i]][[2]]
+  for (j in 1:D) {
+    thetas.t1 <- c(thetas.t1, list(all_thetas.t1[[j]]))
+    covthetas.t1 <- c(covthetas.t1, list(all_covthetas.t1[[j]]))
+    thetas.t2 <- c(thetas.t2, list(all_thetas.t2[[j]]))
+    covthetas.t2 <- c(covthetas.t2, list(all_covthetas.t2[[j]]))
+  }
+}
+
+SE.t1 = map(covthetas.t1, ~ sqrt(diag(.x)))
+SE.t2 = map(covthetas.t2, ~ sqrt(diag(.x)))
+
+bad.SE.t1 = rep(FALSE, length(SE.t1))
+for(i in 1:length(SE.t1)) {
+  bad.SE.t1[i] = sum(SE.t1[[i]] > 10) > 0
+}
+
+bad.SE.t2 = rep(FALSE, length(SE.t2))
+for(i in 1:length(SE.t2)) {
+  bad.SE.t2[i] = sum(SE.t2[[i]] > 10) > 0
+}
+
+thetas.t1 = thetas.t1[!bad.SE.t1]
+thetas.t2 = thetas.t2[!bad.SE.t2]
+
+covthetas.t1 = covthetas.t1[!bad.SE.t1]
+covthetas.t2 = covthetas.t2[!bad.SE.t2]
+
+################################################################################
+##############                                                     #############
+##############                general functions                    #############
+##############                                                     #############
+################################################################################
 
 npar <- sum(effects.imputed$include)
 
@@ -12,183 +53,145 @@ rowVar <- function(x) {
   rowSums((x - rowMeans(x))^2)/(dim(x)[2] - 1)
 }
 
+################################################################################
+##############                                                     #############
+##############                 for theta 1                         #############
+##############                                                     #############
+################################################################################
+
+D = length(thetas.t1)
+
 MIResults <- as.data.frame(matrix(NA,npar,(2 * D)))
 
 for (i in 1:D) {
   names(MIResults)[i * 2 - 1] <- paste("imp" , "mean", sep = as.character(i))
   names(MIResults)[i * 2] <- paste("imp" , "se", sep = as.character(i))
-  MIResults[,i * 2 - 1] <- saom.results.20.b.t2[[1]][[1]][[i]]  # estimates
-  MIResults[,i * 2] <-  sqrt(diag(saom.results.20.b.t2[[1]][[2]][[i]]))  # standard errors
+  MIResults[,i * 2 - 1] <- thetas.t1[[i]]  # estimates
+  MIResults[,i * 2] <-  sqrt(diag(covthetas.t1[[i]]))  # standard errors
 }
 
 # Now we get the average covariance structure between the parameters
 WDMIs <- matrix(0,npar,npar)
 
 for (i in 1:D) {
-  WDMIs <- WDMIs + saom.results.20.b.t2[[1]][[2]][[i]]
+  WDMIs <- WDMIs + covthetas.t1[[i]]
 }
 
 WDMIs <- (1/D) * WDMIs
 
 # Using Rubin's Rules we combine the parameters and standard errors and
 # complete the procedure
-finalResults <- as.data.frame(matrix(NA,npar,2))
-names(finalResults) <- c("combinedEstimate", "combinedSE")
-rownames(finalResults) <- effects.imputed$effectName[effects.imputed$include]
+res20mis.b.t1 <- as.data.frame(matrix(NA,npar,2))
+names(res20mis.b.t1) <- c("20misB.t1.Est.", "20misB.t1.SE")
+rownames(res20mis.b.t1) <- effects.imputed$effectName[effects.imputed$include]
 
-finalResults$combinedEstimate <- rowMeans(MIResults[,seq(1,2*D,2)])
-finalResults$combinedSE <- sqrt(diag(WDMIs) + ((D + 1)/D) *
+res20mis.b.t1[,1]<- rowMeans(MIResults[,seq(1,2*D,2)])
+res20mis.b.t1[,2] <- sqrt(diag(WDMIs) + ((D + 1)/D) *
                                   rowVar(MIResults[,seq(1,2*D,2)]))
 
-finalResults$completeTheta <- model.1$theta
-finalResults$completeSE <- sqrt(diag(model.1$covtheta))
-
-finalResults$defaultTheta <- model.2$theta
-finalResults$defaultSE <- sqrt(diag(model.2$covtheta))
-
-
-round(finalResults, 4)
-# the names of user specified interactions have to be set manually
-
-print(xtable(round(finalResults, 4), type = "latex"), file = "BdTdRound.tex")
-
-save.image('mi.RData') # 100 MB
-```
-
-
-
-```{r}
-###############################################################################
-# proportion of variance due to imputation
-BdTd <- as.data.frame(matrix(,npar,1))
-
-names(BdTd) <- c("parameter")
-
-BdTd$parameter <- finalResults$parameter
-
-BdTd$MIsaom <- round(((51/50) * rowVar(MIResults[,seq(1,100,2)])) / (finalResults$combinedSE ** 2),2)
-
-View(BdTd)
-
-print(xtable(BdTd, type = "latex"), file = "BdTdRound.tex")
-
-```
-
-
-```{r}
 ################################################################################
-#
-# Plots
-#
-finalResults$parameter <- c("Friend rate 1",
-                          "Density",
-                          "Reciprocity",
-                          "transTrip",
-                          "transRecTrip",
-                          "3-cycles",
-                          "Indeg. Pop. sqrt.",
-                          "Indeg. Act. sqrt.",
-                          "Same sex",
-                          "Alter drinking",
-                          "Ego drinking",
-                          "Ego x alt drinking",
-                          "Alter smokimg",
-                          "Ego smoking",
-                          "Ego x alt smoking",
-                          "Drinking rate 1",
-                          "Drink. linear",
-                          "Drink. quadratic",
-                          "Avg. Alter Drink.",
-                          "Drink: eff. from sex",
-                          "Drink: eff. from smoke.",
-                          "Smoking rate 1",
-                          "Smoke. linear",
-                          "Smoke. quadratic",
-                          "Avg. Alter Smoke.",
-                          "Smoke: eff. from sex",
-                          "Smoke: eff. from drink.")
+##############                                                     #############
+##############                 for theta 2                         #############
+##############                                                     #############
+################################################################################
 
+D = length(thetas.t2)
 
+MIResults <- as.data.frame(matrix(NA,npar,(2 * D)))
 
-# lognformat - dirty
+for (i in 1:D) {
+  names(MIResults)[i * 2 - 1] <- paste("imp" , "mean", sep = as.character(i))
+  names(MIResults)[i * 2] <- paste("imp" , "se", sep = as.character(i))
+  MIResults[,i * 2 - 1] <- thetas.t2[[i]]  # estimates
+  MIResults[,i * 2] <-  sqrt(diag(covthetas.t2[[i]]))  # standard errors
+}
 
-ld <- as.data.frame(matrix(NA,81,3))
+# Now we get the average covariance structure between the parameters
+WDMIs <- matrix(0,npar,npar)
 
-ld[,1] <- rep(finalResults$parameter,3)
-ld[1:27,c(2,3)] <- finalResults[,c(1,2)]
-ld[28:54,c(2,3)] <- finalResults[,c(3,4)]
-ld[55:81,c(2,3)] <- finalResults[,c(5,6)]
+for (i in 1:D) {
+  WDMIs <- WDMIs + covthetas.t2[[i]]
+}
 
+WDMIs <- (1/D) * WDMIs
 
-ld[,4] <- c(rep("MI-SAOM",27),
-            rep("Complete Data",27),
-            rep("Default SIENA",27)
-            )
+# Using Rubin's Rules we combine the parameters and standard errors and
+# complete the procedure
+res20mis.b.t2 <- as.data.frame(matrix(NA,npar,2))
+names(res20mis.b.t2) <- c("20misB.t2.Est.", "20misB.t2.SE")
+rownames(res20mis.b.t2) <- effects.imputed$effectName[effects.imputed$include]
+
+res20mis.b.t2[,1]<- rowMeans(MIResults[,seq(1,2*D,2)])
+res20mis.b.t2[,2] <- sqrt(diag(WDMIs) + ((D + 1)/D) *
+                           rowVar(MIResults[,seq(1,2*D,2)]))
+
+################################################################################
+##############                                                     #############
+##############                 plotting results                    #############
+##############                                                     #############
+################################################################################
+
+res20mis.b <- cbind(res20mis.b.t1, res20mis.b.t2)
+
+res20mis.b$parameter <- c("Friend rate 1",
+                            "Density",
+                            "Reciprocity",
+                            "gwespFF",
+                            "Indeg. Pop. sqrt.",
+                            "Outdeg. Act. sqrt.",
+                            "Alter drinking",
+                            "Ego drinking",
+                            "Ego x alt drinking",
+                            "Drinking rate 1",
+                            "Drink. linear",
+                            "Drink. quadratic",
+                            "Avg. Alter Drink.")
+
+ld <- as.data.frame(matrix(NA,13*2,2))
+
+ld[,1] <- rep(res20mis.b$parameter,2)
+ld[1:13,c(2,3)] <- res20mis.b[,c(1,2)]
+ld[14:26,c(2,3)] <- res20mis.b[,c(3,4)]
+
+ld[,4] <- c(rep("mis20beh.t1",13),
+            rep("mis20beh.t2",13)
+)
 
 names(ld) <- c("parameter","Theta","SE","model")
 
-ld$model = factor(ld$model, levels = c("MI-SAOM", "Default SIENA", "Complete Data" )[3:1]) # ,"Default SIENA"
+ld$model = factor(ld$model, levels = c("mis20beh.t1", "mis20beh.t2")[2:1])
 
 ld$parameter = factor(ld$parameter,
-                          levels = c("Friend rate 1",
-                          "Density",
-                          "Reciprocity",
-                          "transTrip",
-                          "transRecTrip",
-                          "3-cycles",
-                          "Indeg. Pop. sqrt.",
-                          "Indeg. Act. sqrt.",
-                          "Same sex",
-                          "Alter drinking",
-                          "Ego drinking",
-                          "Ego x alt drinking",
-                          "Alter smokimg",
-                          "Ego smoking",
-                          "Ego x alt smoking",
-                          "Drinking rate 1",
-                          "Drink. linear",
-                          "Drink. quadratic",
-                          "Avg. Alter Drink.",
-                          "Drink: eff. from sex",
-                          "Drink: eff. from smoke.",
-                          "Smoking rate 1",
-                          "Smoke. linear",
-                          "Smoke. quadratic",
-                          "Avg. Alter Smoke.",
-                          "Smoke: eff. from sex",
-                          "Smoke: eff. from drink.")[27:1])
-
-
+                      levels = c("Friend rate 1",
+                                 "Density",
+                                 "Reciprocity",
+                                 "gwespFF",
+                                 "Indeg. Pop. sqrt.",
+                                 "Outdeg. Act. sqrt.",
+                                 "Alter drinking",
+                                 "Ego drinking",
+                                 "Ego x alt drinking",
+                                 "Drinking rate 1",
+                                 "Drink. linear",
+                                 "Drink. quadratic",
+                                 "Avg. Alter Drink.")[13:1])
 
 g1 <- c("Friend rate 1",
-                          "Density",
-                          "Reciprocity",
-                          "transTrip",
-                          "transRecTrip",
-                          "3-cycles",
-                          "Indeg. Pop. sqrt.",
-                          "Indeg. Act. sqrt.",
-                          "Same sex")
+        "Density",
+        "Reciprocity",
+        "gwespFF",
+        "Indeg. Pop. sqrt.",
+        "Outdeg. Act. sqrt.")
 
 
 g2 <- c("Alter drinking",
-                          "Ego drinking",
-                          "Ego x alt drinking",
-                          "Alter smokimg",
-                          "Ego smoking",
-                          "Ego x alt smoking")
+       "Ego drinking",
+       "Ego x alt drinking")
+
 g3 <- c("Drinking rate 1",
-                          "Drink. linear",
-                          "Drink. quadratic",
-                          "Avg. Alter Drink.",
-                          "Drink: eff. from sex",
-                          "Drink: eff. from smoke.",
-                          "Smoking rate 1",
-                          "Smoke. linear",
-                          "Smoke. quadratic",
-                          "Avg. Alter Smoke.",
-                          "Smoke: eff. from sex",
-                          "Smoke: eff. from drink.")
+        "Drink. linear",
+        "Drink. quadratic",
+        "Avg. Alter Drink.")
 
 ld$g[ld$parameter %in% g1] <- "Structure"
 ld$g[ld$parameter %in% g2] <- "Selection"
@@ -197,47 +200,6 @@ ld$g[ld$parameter %in% g3] <- "Behavior"
 ld$g <- factor(ld$g, levels = c("Structure","Selection","Behavior"))
 
 library(ggplot2)
-p5 <- ggplot(ld, aes(x = parameter, y = Theta, group = model, colour = model,
-                     shape = model)) +
-         geom_point( size = 2.2 , position = position_dodge(width = .75)) +
-         geom_hline(yintercept = 0, size = 1, color = "black") +
-         geom_errorbar(size = .7, aes(ymin = Theta - SE, ymax = Theta + SE),
-                        position = position_dodge(width = .75)) +
-         theme_classic() +
-         theme(axis.text.x = element_text(angle = 0, hjust = 1),
-                axis.text.y = element_text(angle = 0, hjust = 1),
-                legend.title = element_blank(),
-                legend.position = "bottom",
-                legend.direction = "vertical",
-                legend.key.height = unit(1,"line"),
-                legend.key.width = unit(1,"line"),
-                text = element_text(size = 20),
-                axis.title.x = element_blank()) +
-         ylab("") + xlab("") + coord_flip()
-p5
-
-
-p6 <- ggplot(ld, aes(x = parameter, y = Theta, group = model, colour = model,
-                     shape = model)) + scale_color_manual(values = c(
-                    "grey75","grey60","grey45","grey30","grey15","grey0" )) +
-  facet_wrap(facets = ~g, scales = "free", nrow = 3) +
-  geom_point( size = 2.2 , position = position_dodge(width = .75)) +
-  geom_hline(yintercept = 0, size = .25, color = "black") +
-  geom_errorbar(size = .7, aes(ymin = Theta - SE, ymax = Theta + SE),
-                position = position_dodge(width = .75)) +
-  theme_classic() + theme(
-    axis.text.x = element_text(angle = 0, hjust = 1),
-    axis.text.y = element_text(angle = 0, hjust = 1),
-    legend.title = element_blank(),
-    legend.position = "bottom",
-    legend.direction = "horizontal",
-    legend.key.height = unit(3,"line"), legend.key.width = unit(3,"line"),
-    text = element_text(size = 20),
-    axis.title.x = element_blank()) + ylab("") + xlab("") + coord_flip()
-p6
-
-
-## 2 standard errors
 p6 <- ggplot(ld, aes(x = parameter, y = Theta, group = model, colour = model,
                      shape = model)) +
   facet_wrap(facets = ~g, scales = "free", nrow = 1) +
@@ -255,74 +217,3 @@ p6 <- ggplot(ld, aes(x = parameter, y = Theta, group = model, colour = model,
     text = element_text(size = 20),
     axis.title.x = element_blank()) + ylab("") + xlab("") + coord_flip()
 p6
-
-
-
-a <- saom.results.20.b.t2[[2]]
-same <- rep(NA, D)
-
-for (i in 1:D) {
-     if (i > 1) {
-        if (sum(a[[1]][[i]] ==  a[[1]][[i-1]]) > 0) {
-            same[i-1] = TRUE
-            same[i] = TRUE
-        } else {
-            same[i] = FALSE
-        }
-     }
- }
-
-print(which(same))
-not_same = which(!same)
-
-b <- list()
-for (i in 1:length(not_same)) {
-    b[[i]] = list(a[[1]][[not_same[i]]], a[[2]][[not_same[i]]])
-}
-
-
-
-npar <- sum(effects.imputed$include)
-
-rowVar <- function(x) {
-  rowSums((x - rowMeans(x))^2)/(dim(x)[2] - 1)
-}
-
-MIResults <- as.data.frame(matrix(NA,npar,(2 * D)))
-
-for (i in 1:29) {
-  names(MIResults)[i * 2 - 1] <- paste("imp" , "mean", sep = as.character(i))
-  names(MIResults)[i * 2] <- paste("imp" , "se", sep = as.character(i))
-  MIResults[,i * 2 - 1] <- b[[i]][[1]]  # estimates
-  MIResults[,i * 2] <-  sqrt(diag(b[[i]][[2]]))  # standard errors
-}
-
-# Now we get the average covariance structure between the parameters
-WDMIs <- matrix(0,npar,npar)
-
-for (i in 1:29) {
-  WDMIs <- WDMIs + b[[i]][[2]]
-}
-
-WDMIs <- (1/29) * WDMIs
-
-# Using Rubin's Rules we combine the parameters and standard errors and
-# complete the procedure
-finalResults <- as.data.frame(matrix(NA,npar,2))
-names(finalResults) <- c("combinedEstimate", "combinedSE")
-rownames(finalResults) <- effects.imputed$effectName[effects.imputed$include]
-
-finalResults$combinedEstimate <- rowMeans(MIResults[,seq(1,2*29,2)])
-finalResults$combinedSE <- sqrt(diag(WDMIs) + ((29 + 1)/29) *
-                                  rowVar(MIResults[,seq(1,2*29,2)]))
-
-
-
-clean_results <- function(soam.result.list) {
-
-}
-
-library(sm)
-
-
-diag(b[[i]][[2]])

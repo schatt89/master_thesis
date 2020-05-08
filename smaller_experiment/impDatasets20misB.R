@@ -49,12 +49,12 @@ impAlco.60.2.20.b.t2 <- list()
 saom.results.20.b.t1 <- list()
 saom.results.20.b.t2 <- list()
 
-fr.60.2.sim.mis.20.b[,,4] <- fr.60.2.sim.mis.20.b[,,57]
-alco.60.2.sim.mis.20.b[,4] <- alco.60.2.sim.mis.20.b[,57]
+fr.60.2.sim.mis.20.b[,,4] <- fr.60.2.sim.mis.20.b[,,47]
+alco.60.2.sim.mis.20.b[,4] <- alco.60.2.sim.mis.20.b[,47]
 
 thetas <- c(-2,-1)
 
-for (i in 1:S) {
+for (i in 4:S) {
 
   ########################### later waves imputation ###########################
   
@@ -142,7 +142,15 @@ for (t in 1:2) {
                              threshold = 0.25,nodes = Nnodes,
                              ans0 = period1saom)       
       }, error = function(e) {
-        period1saom
+        tryCatch({
+            source('./simulation/siena07ToConvergence.R')
+            siena07ToConvergence(alg = estimation.options,
+                                          dat = Data.w2, nodes = Nnodes,
+                                          eff = effects.twoWaves,
+                                          threshold = 0.25)         
+        }, error = function(e) {
+            period1saom
+        })
       })
     }
 
@@ -254,7 +262,15 @@ for (t in 1:2) {
                                         ans0 = saom.results.t1[[d - 1]],
                                         threshold = 0.25) 
         }, error = function(e) {
-          saom.results.t1[[d-1]]
+          tryCatch({
+              source('./simulation/siena07ToConvergence.R')
+              siena07ToConvergence(alg = options.imputed,
+                                            dat = Data.imputed, nodes = Nnodes,
+                                            eff = effects.imputed,
+                                            threshold = 0.25)
+          }, error = function(e) {
+              saom.results.t1[[d-1]]
+          })
         })
        
       }
@@ -276,7 +292,15 @@ for (t in 1:2) {
                                             ans0 = saom.results.t2[[d - 1]],
                                             threshold = 0.25)    
         }, error = function(e) {
-          saom.results.t2[[d-1]]
+          tryCatch({
+              source('./simulation/siena07ToConvergence.R')
+              siena07ToConvergence(alg = options.imputed,
+                                            dat = Data.imputed, nodes = Nnodes,
+                                            eff = effects.imputed,
+                                            threshold = 0.25)
+          }, error = function(e) {
+              saom.results.t2[[d-1]]
+          })
         })
     
       }
