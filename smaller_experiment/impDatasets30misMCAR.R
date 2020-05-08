@@ -45,10 +45,10 @@ impAlco.60.2.30.mcar <- list()
 
 saom.results.30.mcar <- list()
 
-fr.60.2.sim.mis.30.mcar[,,3] <- fr.60.2.sim.mis.30.mcar[,,25]
-alco.60.2.sim.mis.30.mcar[,3] <- alco.60.2.sim.mis.30.mcar[,25]
+fr.60.2.sim.mis.30.mcar[,,4] <- fr.60.2.sim.mis.30.mcar[,,48]
+alco.60.2.sim.mis.30.mcar[,4] <- alco.60.2.sim.mis.30.mcar[,48]
 
-for (i in 3:S) {
+for (i in 4:S) {
 
   ########################### later waves imputation ###########################
   
@@ -116,14 +116,21 @@ if (d == 1) {
     
 } else {
     source('./simulation/siena07ToConvergence_v2.R')
-    period1saom <- tryCatch({
-    siena07ToConvergence(alg = estimation.options,
+    period1saom <- tryCatch({siena07ToConvergence(alg = estimation.options,
                             dat = Data.w2,
                             eff = effects.twoWaves,
                             threshold = 0.25,nodes = Nnodes,
                             ans0 = period1saom)       
     }, error = function(e) {
-    period1saom
+      tryCatch({
+        source('./simulation/siena07ToConvergence_v4.R')
+        siena07ToConvergence(alg = estimation.options,
+                                        dat = Data.w2, nodes = Nnodes,
+                                        eff = effects.twoWaves,
+                                        threshold = 0.25)
+      }, error = function(e) {
+           period1saom
+      })
     })
 }
 
@@ -190,7 +197,15 @@ for (d in 1:D) {
                                     ans0 = saom.results[[d - 1]],
                                     threshold = 0.25) 
     }, error = function(e) {
+      tryCatch({
+        source('./simulation/siena07ToConvergence_v4.R')
+        siena07ToConvergence(alg = options.imputed,
+                                        dat = Data.imputed, nodes = Nnodes,
+                                        eff = effects.imputed,
+                                        threshold = 0.25)
+      }, error = function(e) {
         saom.results[[d-1]]
+      })
     })
     }
 

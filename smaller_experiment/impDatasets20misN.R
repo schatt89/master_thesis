@@ -51,7 +51,7 @@ saom.results.20.n.t2 <- list()
 
 thetas <- c(-2,-1)
 
-for (i in 4:S) {
+for (i in 3:S) {
 
   ########################### later waves imputation ###########################
   
@@ -309,7 +309,6 @@ for (t in 1:2) {
        file = './data/results/result-20-n.RData')
 
 }
-
 
 
 

@@ -51,7 +51,10 @@ saom.results.30.b.t2 <- list()
 
 thetas <- c(-2,-1)
 
-for (i in 4:S) {
+fr.60.2.sim.mis.30.b[,,3] <- fr.60.2.sim.mis.30.b[,,44]
+alco.60.2.sim.mis.30.b[,3] <- alco.60.2.sim.mis.30.b[,44]
+
+for (i in 3:S) {
 
   ########################### later waves imputation ###########################
   
