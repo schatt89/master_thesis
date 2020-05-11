@@ -1,7 +1,7 @@
 # rm(list = ls())
 
 library(RSiena) # or RSienaTest
-source('./simulation/siena07ToConvergence.R')
+
 source('./smaller_experiment/simulateNetworkBehavior.R')
 
 load("./data/results/wave1imp-30-nb.RData")
@@ -172,7 +172,7 @@ for (t in 1:2) {
                                     initialValue = thetas[t] * -1)
       imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
                                              seed = 214,
-                                             cond = FALSE, maxlike = FALSE,
+                                             cond = FALSE, maxlike = TRUE,
                                              behModelType = c(drinkingbeh = 2),
                                              nsub = 0, simOnly = TRUE, n3 = 10)
       
@@ -180,8 +180,8 @@ for (t in 1:2) {
                       effects = effects.twoWaves, prevAns = period1saom,
                       returnDeps = TRUE)$sims[[10]]
       
-      net2imp.t1[[d]] <- getNet(fr.60.2.sim.mis.30.nb[,,i], sims[[1]][[1]]$`1`)
-      alc2imp.t1[,d] <- sims[[1]][[2]]$`1`
+      net2imp.t1[[d]] <- getNet(fr.60.2.sim.mis.30.nb[,,i], sims[[1]])
+      alc2imp.t1[,d] <- sims[[2]]
     } else {
       effects.twoWaves <- setEffect(effects.twoWaves, effFrom,
                                     name = "drinkingbeh",
@@ -189,9 +189,15 @@ for (t in 1:2) {
                                     fix = TRUE,
                                     initialValue = thetas[t])
       
+      effects.twoWaves <- setEffect(effects.twoWaves, egoX,
+                                    name = "friendship",
+                                    interaction1 = "m2.inv",
+                                    fix = TRUE,
+                                    initialValue = thetas[t] * -1)
+      
       imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
                                              seed = 214,
-                                             cond = FALSE, maxlike = FALSE,
+                                             cond = FALSE, maxlike = TRUE,
                                              behModelType = c(drinkingbeh = 2),
                                              nsub = 0, simOnly = TRUE, n3 = 10)
       
@@ -199,8 +205,8 @@ for (t in 1:2) {
                       effects = effects.twoWaves, prevAns = period1saom,
                       returnDeps = TRUE)$sims[[10]]
       
-      net2imp.t2[[d]] <- getNet(fr.60.2.sim.mis.30.nb[,,i], sims[[1]][[1]]$`1`)
-      alc2imp.t2[,d] <- sims[[1]][[2]]$`1`
+      net2imp.t2[[d]] <- getNet(fr.60.2.sim.mis.30.nb[,,i], sims[[1]])
+      alc2imp.t2[,d] <- sims[[2]]
     }
     
   }

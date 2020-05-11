@@ -53,7 +53,7 @@ alco.60.2.sim.mis.20.nb[,7] <- alco.60.2.sim.mis.20.nb[,98]
 
 thetas <- c(-2,-1)
 
-for (i in 7:S) {
+for (i in 8:S) {
 
   ########################### later waves imputation ###########################
   
@@ -185,6 +185,12 @@ for (t in 1:2) {
                                     interaction1 = "m2.inv",
                                     fix = TRUE,
                                     initialValue = thetas[t])
+            
+      effects.twoWaves <- setEffect(effects.twoWaves, egoX,
+                                    name = "friendship",
+                                    interaction1 = "m2.inv",
+                                    fix = TRUE,
+                                    initialValue = thetas[t] * -1)
       
       imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE,
                                              seed = 214,
@@ -271,7 +277,7 @@ for (t in 1:2) {
                                             eff = effects.imputed,
                                             threshold = 0.25)
           }, error = function(e) {
-              saom.results.t1[[d-1]]
+              saom.results.t1[[d+1]]
           })
         })
        
@@ -301,7 +307,7 @@ for (t in 1:2) {
                                             eff = effects.imputed,
                                             threshold = 0.25)
           }, error = function(e) {
-              saom.results.t2[[d-1]]
+              saom.results.t2[[d+1]]
           })
         })
     
