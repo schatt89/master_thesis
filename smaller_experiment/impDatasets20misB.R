@@ -49,12 +49,12 @@ impAlco.60.2.20.b.t2 <- list()
 saom.results.20.b.t1 <- list()
 saom.results.20.b.t2 <- list()
 
-fr.60.2.sim.mis.20.b[,,4] <- fr.60.2.sim.mis.20.b[,,47]
-alco.60.2.sim.mis.20.b[,4] <- alco.60.2.sim.mis.20.b[,47]
+fr.60.2.sim.mis.20.b[,,5] <- fr.60.2.sim.mis.20.b[,,39]
+alco.60.2.sim.mis.20.b[,5] <- alco.60.2.sim.mis.20.b[,39]
 
 thetas <- c(-2,-1)
 
-for (i in 4:S) {
+for (i in 5:S) {
 
   ########################### later waves imputation ###########################
   
@@ -142,15 +142,7 @@ for (t in 1:2) {
                              threshold = 0.25,nodes = Nnodes,
                              ans0 = period1saom)       
       }, error = function(e) {
-        tryCatch({
-            source('./simulation/siena07ToConvergence.R')
-            siena07ToConvergence(alg = estimation.options,
-                                          dat = Data.w2, nodes = Nnodes,
-                                          eff = effects.twoWaves,
-                                          threshold = 0.25)         
-        }, error = function(e) {
-            period1saom
-        })
+        period1saom
       })
     }
 
@@ -263,7 +255,7 @@ for (t in 1:2) {
                                         threshold = 0.25) 
         }, error = function(e) {
           tryCatch({
-              source('./simulation/siena07ToConvergence.R')
+              source('./simulation/siena07ToConvergence_v4.R')
               siena07ToConvergence(alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
                                             eff = effects.imputed,
@@ -293,7 +285,7 @@ for (t in 1:2) {
                                             threshold = 0.25)    
         }, error = function(e) {
           tryCatch({
-              source('./simulation/siena07ToConvergence.R')
+              source('./simulation/siena07ToConvergence_v4.R')
               siena07ToConvergence(alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
                                             eff = effects.imputed,

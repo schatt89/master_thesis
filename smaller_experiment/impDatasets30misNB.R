@@ -49,10 +49,12 @@ impAlco.60.2.30.nb.t2 <- list()
 saom.results.30.nb.t1 <- list()
 saom.results.30.nb.t2 <- list()
 
+fr.60.2.sim.mis.30.nb[,,6] <- fr.60.2.sim.mis.30.nb[,,96]
+alco.60.2.sim.mis.30.nb[,6] <- alco.60.2.sim.mis.30.nb[,96]
 
 thetas <- c(-2,-1)
 
-for (i in 1:S) {
+for (i in 6:S) {
 
   ########################### later waves imputation ###########################
   
@@ -127,12 +129,14 @@ for (t in 1:2) {
     effects.twoWaves
     
     if (d == 1) {
+        source('./simulation/siena07ToConvergence.R')
       period1saom <- siena07ToConvergence(alg = estimation.options,
                                           dat = Data.w2, nodes = Nnodes,
                                           eff = effects.twoWaves,
                                           threshold = 0.25)
       
     } else {
+      source('./simulation/siena07ToConvergence_v2.R')
       period1saom <- tryCatch({
         siena07ToConvergence(alg = estimation.options,
                              dat = Data.w2,
@@ -244,14 +248,14 @@ for (t in 1:2) {
     
     if (t == 1) {
       if (d == 1) {
-        source('./simulation/siena07ToConvergence_v2.R')
+        source('./simulation/siena07ToConvergence.R')
         saom.results.t1[[d]] <- siena07ToConvergence(
                                             alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
                                             eff = effects.imputed,
                                             threshold = 0.25)
       } else {
-        source('./simulation/siena07ToConvergence.R')
+        source('./simulation/siena07ToConvergence_v2.R')
         saom.results.t1[[d]] <- tryCatch({siena07ToConvergence(
                                         alg = options.imputed,
                                         dat = Data.imputed, nodes = Nnodes,
@@ -259,21 +263,29 @@ for (t in 1:2) {
                                         ans0 = saom.results.t1[[d - 1]],
                                         threshold = 0.25) 
         }, error = function(e) {
-          saom.results.t1[[d-1]]
+          tryCatch({
+              source('./simulation/siena07ToConvergence_v4.R')
+              siena07ToConvergence(alg = options.imputed,
+                                            dat = Data.imputed, nodes = Nnodes,
+                                            eff = effects.imputed,
+                                            threshold = 0.25)
+          }, error = function(e) {
+              saom.results.t1[[d-1]]
+          })
         })
        
       }
 
     } else {
       if (d == 1) {
-        source('./simulation/siena07ToConvergence_v2.R')
+        source('./simulation/siena07ToConvergence.R')
         saom.results.t2[[d]] <- siena07ToConvergence(
                                             alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
                                             eff = effects.imputed,
                                             threshold = 0.25)
       } else {
-        source('./simulation/siena07ToConvergence.R')
+        source('./simulation/siena07ToConvergence_v2.R')
         saom.results.t2[[d]] <- tryCatch({siena07ToConvergence(
                                             alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
@@ -281,7 +293,15 @@ for (t in 1:2) {
                                             ans0 = saom.results.t2[[d - 1]],
                                             threshold = 0.25)    
         }, error = function(e) {
-          saom.results.t2[[d-1]]
+          tryCatch({
+              source('./simulation/siena07ToConvergence_v4.R')
+              siena07ToConvergence(alg = options.imputed,
+                                            dat = Data.imputed, nodes = Nnodes,
+                                            eff = effects.imputed,
+                                            threshold = 0.25)
+          }, error = function(e) {
+              saom.results.t2[[d-1]]
+          })
         })
     
       }
@@ -305,6 +325,8 @@ for (t in 1:2) {
       covthetas.t2[[d]] <- saom.results.t2[[d]]$covtheta
     }
   
+  load('./data/results/result-30-nb.RData')
+
   saom.results.30.nb.t1[[i]] <- list(thetas.t1, covthetas.t1)
   saom.results.30.nb.t2[[i]] <- list(thetas.t2, covthetas.t2)
   

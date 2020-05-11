@@ -48,13 +48,12 @@ impAlco.60.2.20.nb.t2 <- list()
 saom.results.20.nb.t1 <- list()
 saom.results.20.nb.t2 <- list()
 
-fr.60.2.sim.mis.20.nb[,,6] <- fr.60.2.sim.mis.20.nb[,,36]
-alco.60.2.sim.mis.20.nb[,6] <- alco.60.2.sim.mis.20.nb[,36]
-
+fr.60.2.sim.mis.20.nb[,,7] <- fr.60.2.sim.mis.20.nb[,,98]
+alco.60.2.sim.mis.20.nb[,7] <- alco.60.2.sim.mis.20.nb[,98]
 
 thetas <- c(-2,-1)
 
-for (i in 6:S) {
+for (i in 7:S) {
 
   ########################### later waves imputation ###########################
   
@@ -134,7 +133,7 @@ for (t in 1:2) {
                                           threshold = 0.25)
       
     } else {
-        source('./simulation/siena07ToConvergence_v2.R')
+      source('./simulation/siena07ToConvergence_v2.R')
       period1saom <- tryCatch({
         siena07ToConvergence(alg = estimation.options,
                              dat = Data.w2,
@@ -208,12 +207,13 @@ save(net1imp.t1, net2imp.t1, net1imp.t2, net2imp.t2,
 alc1imp.t1, alc2imp.t1, alc1imp.t2, alc2imp.t2,
 file = "./data/results/20misNB_before_estimation.RData")
 
+load("./data/results/20misNB_before_estimation.RData")
   ###################### completed models estimation part ######################
 for (t in 1:2) {
-  for (d in 1:D) {
+  for (d in D:1) {
     cat('dataset', i, "\n")
     cat('theta', t, '\n')
-    cat('estimation',d,'\n')
+    cat('estimations left',d,'\n')
     if (t == 1) {
       friendship <- sienaDependent(array(c(net1imp.t1[[d]],
                                            net2imp.t1[[d]]),
@@ -248,7 +248,7 @@ for (t in 1:2) {
     options.imputed <- sienaAlgorithmCreate(projname = "model", seed = d+2759)
     
     if (t == 1) {
-      if (d == 1) {
+      if (d == D) {
         source('./simulation/siena07ToConvergence.R')
         saom.results.t1[[d]] <- siena07ToConvergence(
                                             alg = options.imputed,
@@ -261,16 +261,24 @@ for (t in 1:2) {
                                         alg = options.imputed,
                                         dat = Data.imputed, nodes = Nnodes,
                                         eff = effects.imputed,
-                                        ans0 = saom.results.t1[[d - 1]],
+                                        ans0 = saom.results.t1[[d + 1]],
                                         threshold = 0.25) 
         }, error = function(e) {
-          saom.results.t1[[d-1]]
+          tryCatch({
+              source('./simulation/siena07ToConvergence_v4.R')
+              siena07ToConvergence(alg = options.imputed,
+                                            dat = Data.imputed, nodes = Nnodes,
+                                            eff = effects.imputed,
+                                            threshold = 0.25)
+          }, error = function(e) {
+              saom.results.t1[[d-1]]
+          })
         })
        
       }
 
     } else {
-      if (d == 1) {
+      if (d == D) {
         source('./simulation/siena07ToConvergence.R')
         saom.results.t2[[d]] <- siena07ToConvergence(
                                             alg = options.imputed,
@@ -283,10 +291,18 @@ for (t in 1:2) {
                                             alg = options.imputed,
                                             dat = Data.imputed, nodes = Nnodes,
                                             eff = effects.imputed,
-                                            ans0 = saom.results.t2[[d - 1]],
+                                            ans0 = saom.results.t2[[d + 1]],
                                             threshold = 0.25)    
         }, error = function(e) {
-          saom.results.t2[[d-1]]
+          tryCatch({
+              source('./simulation/siena07ToConvergence_v4.R')
+              siena07ToConvergence(alg = options.imputed,
+                                            dat = Data.imputed, nodes = Nnodes,
+                                            eff = effects.imputed,
+                                            threshold = 0.25)
+          }, error = function(e) {
+              saom.results.t2[[d-1]]
+          })
         })
     
       }

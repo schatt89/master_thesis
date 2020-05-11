@@ -51,10 +51,10 @@ saom.results.30.b.t2 <- list()
 
 thetas <- c(-2,-1)
 
-fr.60.2.sim.mis.30.b[,,3] <- fr.60.2.sim.mis.30.b[,,44]
-alco.60.2.sim.mis.30.b[,3] <- alco.60.2.sim.mis.30.b[,44]
+fr.60.2.sim.mis.30.b[,,5] <- fr.60.2.sim.mis.30.b[,,25]
+alco.60.2.sim.mis.30.b[,5] <- alco.60.2.sim.mis.30.b[,25]
 
-for (i in 3:S) {
+for (i in 5:S) {
 
   ########################### later waves imputation ###########################
   
@@ -142,14 +142,7 @@ for (t in 1:2) {
                              threshold = 0.25,nodes = Nnodes,
                              ans0 = period1saom)       
       }, error = function(e) {
-        tryCatch({source('./simulation/siena07ToConvergence_v4.R')
-                siena07ToConvergence(alg = estimation.options,
-                                    dat = Data.w2, nodes = Nnodes,
-                                    eff = effects.twoWaves,
-                                    threshold = 0.25)          
-        }, error = function(e) {
-              period1saom
-        })
+           period1saom
       })
     }
 
