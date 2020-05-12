@@ -204,6 +204,7 @@ estimation.options.st <- sienaAlgorithmCreate(useStdInits = FALSE,
                                               n3 = 3000, maxlike = FALSE,
                                               cond = FALSE, diagonalize = 0.6,
                                               firstg = 0.02,
+                                              MaxDegree = c(friendship = 6),
                                               behModelType =
                                                 c(drinkingbeh=2),
                                               lessMem = TRUE)
@@ -218,6 +219,7 @@ period0saom <- siena07ToConvergence(alg = estimation.options.st,
 # Time difference of 37.08413 mins
 imputation.options <- sienaAlgorithmCreate(useStdInits = FALSE, seed = 214,
                                            cond = FALSE, maxlike = FALSE,
+                                           MaxDegree = c(friendship = 6),
                                            behModelType = c(drinkingbeh = 2),
                                            nsub = 0, simOnly = TRUE, n3 = 10)
 

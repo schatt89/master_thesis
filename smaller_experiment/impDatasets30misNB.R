@@ -49,8 +49,8 @@ impAlco.60.2.30.nb.t2 <- list()
 saom.results.30.nb.t1 <- list()
 saom.results.30.nb.t2 <- list()
 
-fr.60.2.sim.mis.30.nb[,,6] <- fr.60.2.sim.mis.30.nb[,,96]
-alco.60.2.sim.mis.30.nb[,6] <- alco.60.2.sim.mis.30.nb[,96]
+fr.60.2.sim.mis.30.nb[,,6] <- fr.60.2.sim.mis.30.nb[,,92]
+alco.60.2.sim.mis.30.nb[,6] <- alco.60.2.sim.mis.30.nb[,92]
 
 thetas <- c(-2,-1)
 
