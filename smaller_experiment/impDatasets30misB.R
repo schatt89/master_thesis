@@ -51,10 +51,10 @@ saom.results.30.b.t2 <- list()
 
 thetas <- c(1, 2)
 
-fr.60.2.sim.mis.30.b[,,7] <- fr.60.2.sim.mis.30.b[,,98]
-alco.60.2.sim.mis.30.b[,7] <- alco.60.2.sim.mis.30.b[,98]
+fr.60.2.sim.mis.30.b[,,9] <- fr.60.2.sim.mis.30.b[,,39]
+alco.60.2.sim.mis.30.b[,9] <- alco.60.2.sim.mis.30.b[,39]
 
-for (i in 7:S) {
+for (i in 9:S) {
 
   ########################### later waves imputation ###########################
   
@@ -194,11 +194,13 @@ for (t in 1:2) {
   }
 }
 
+file_name <- paste0("./data/results/30misB_before_estimation_",i, ".RData") 
+
 save(net1imp.t1, net2imp.t1, net1imp.t2, net2imp.t2,
 alc1imp.t1, alc2imp.t1, alc1imp.t2, alc2imp.t2,
-file = "./data/results/30misB_before_estimation.RData")
+file = file_name)
 
-load("./data/results/30misB_before_estimation.RData")
+load(file_name)
 
   ###################### completed models estimation part ######################
 for (t in 1:2) {

@@ -49,12 +49,12 @@ impAlco.60.2.20.b.t2 <- list()
 saom.results.20.b.t1 <- list()
 saom.results.20.b.t2 <- list()
 
-fr.60.2.sim.mis.20.b[,,7] <- fr.60.2.sim.mis.20.b[,,13]
-alco.60.2.sim.mis.20.b[,7] <- alco.60.2.sim.mis.20.b[,13]
+fr.60.2.sim.mis.20.b[,,9] <- fr.60.2.sim.mis.20.b[,,72]
+alco.60.2.sim.mis.20.b[,9] <- alco.60.2.sim.mis.20.b[,72]
 
 thetas <- c(1, 2)
 
-for (i in 7:S) {
+for (i in 9:S) {
 
   ########################### later waves imputation ###########################
   
@@ -194,9 +194,13 @@ for (t in 1:2) {
   }
 }
 
+file_name <- paste0("./data/results/20misB_before_estimation_",i, ".RData") 
+
 save(net1imp.t1, net2imp.t1, net1imp.t2, net2imp.t2,
 alc1imp.t1, alc2imp.t1, alc1imp.t2, alc2imp.t2,
-file = "./data/results/20misB_before_estimation.RData")
+file = file_name)
+
+load(file_name)
 
   ###################### completed models estimation part ######################
 for (t in 1:2) {
